@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f0e8; font-family: 'Kalam', cursive; padding: 0; }
+
+  .page {
+    width: 100%; max-width: 1100px; margin: 0 auto;
+    background: #fefdf8; border: 3px solid #888;
+    position: relative; overflow: hidden;
+  }
+  .page::before {
+    content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(transparent, transparent 27px, #d0e4f0 27px, #d0e4f0 28px);
+    opacity: 0.3; pointer-events: none; z-index: 0;
+  }
+  .page::after {
+    content: ''; position: absolute; top:0; bottom:0; left:72px;
+    border-left: 2px solid rgba(220,80,80,0.3); pointer-events: none; z-index: 0;
+  }
+  .content { position: relative; z-index: 1; padding: 12px 14px 16px 14px; }
+
+  .header { display:flex; align-items:flex-start; justify-content:space-between; border-bottom:2.5px solid #333; padding-bottom:8px; margin-bottom:10px; }
+  .lec-badge { border:2.5px solid #c0392b; color:#c0392b; font-family:'Caveat',cursive; font-size:13px; font-weight:700; padding:2px 8px; border-radius:3px; }
+  .main-title { font-family:'Caveat',cursive; font-size:22px; font-weight:700; text-align:center; color:#111; letter-spacing:1px; text-transform:uppercase; flex:1; padding:0 12px; }
+  .header-info { font-family:'Kalam',cursive; font-size:10.5px; color:#333; text-align:right; line-height:1.5; }
+  .header-info .course { color:#1a5276; font-weight:700; }
+  .header-info .date { color:#c0392b; }
+
+  .grid { display:grid; gap:8px; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns:2fr 1fr; }
+
+  .box { border:2px solid #333; border-radius:4px; padding:7px 9px; background:rgba(255,255,255,0.6); }
+  .box-blue { border-color:#1a5276; background:rgba(214,234,248,0.4); }
+  .box-green { border-color:#1e8449; background:rgba(212,239,223,0.4); }
+  .box-red { border-color:#c0392b; background:rgba(253,228,226,0.4); }
+  .box-purple { border-color:#6c3483; background:rgba(232,218,239,0.4); }
+  .box-orange { border-color:#e67e22; background:rgba(253,235,208,0.4); }
+  .box-yellow { border-color:#d4ac0d; background:rgba(254,249,231,0.6); }
+  .box-teal { border-color:#117a65; background:rgba(212,246,238,0.4); }
+  .box-dark { border-color:#222; background:rgba(240,240,235,0.6); }
+
+  .sec-title { font-family:'Caveat',cursive; font-size:13.5px; font-weight:700; text-transform:uppercase; border-bottom:1.5px solid currentColor; margin-bottom:5px; padding-bottom:2px; letter-spacing:0.5px; }
+  .box-blue .sec-title { color:#1a5276; }
+  .box-green .sec-title { color:#1e8449; }
+  .box-red .sec-title { color:#c0392b; }
+  .box-purple .sec-title { color:#6c3483; }
+  .box-teal .sec-title { color:#117a65; }
+  .box-orange .sec-title { color:#e67e22; }
+  .box-dark .sec-title { color:#111; }
+  .box-yellow .sec-title { color:#7d5a00; }
+  .box .sec-title { color:#333; }
+
+  p, li { font-size:11px; line-height:1.55; color:#222; }
+  ul { padding-left:14px; }
+  li { list-style:disc; }
+  ol { padding-left:16px; }
+  ol li { list-style:decimal; font-size:11px; line-height:1.5; }
+
+  .formula { background:rgba(255,255,230,0.9); border:2px solid #c9a100; border-radius:4px; padding:4px 8px; font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#333; margin:4px 0; text-align:center; }
+  .formula-sm { font-size:11px; padding:3px 6px; }
+
+  table { border-collapse:collapse; width:100%; font-size:10.5px; font-family:'Kalam',cursive; }
+  th { background:rgba(52,73,94,0.15); border:1.5px solid #555; padding:2px 5px; font-weight:700; font-size:10.5px; text-align:center; font-family:'Caveat',cursive; }
+  td { border:1px solid #888; padding:2px 5px; text-align:center; font-size:10.5px; }
+  .td-hl { background:rgba(255,255,150,0.6); font-weight:700; }
+  .td-x { color:#aaa; }
+  .td-warn { background:rgba(253,228,226,0.8); color:#c0392b; font-weight:700; }
+
+  .hl-red { color:#c0392b; font-weight:700; }
+  .hl-blue { color:#1a5276; font-weight:700; }
+  .hl-green { color:#1e8449; font-weight:700; }
+  .hl-purple { color:#6c3483; font-weight:700; }
+  .hl-orange { color:#e67e22; font-weight:700; }
+  .hl-teal { color:#117a65; font-weight:700; }
+
+  .mb4 { margin-bottom:4px; }
+  .mb6 { margin-bottom:6px; }
+  .sep { border:none; border-top:1px dashed #aaa; margin:4px 0; }
+
+  .ex-box { background:rgba(255,255,240,0.8); border:1.5px solid #c9a100; border-radius:3px; padding:4px 7px; margin:3px 0; }
+  .ex-title { font-family:'Caveat',cursive; font-size:11px; font-weight:700; color:#8a6d00; margin-bottom:2px; }
+
+  .notes-box { background:rgba(255,253,220,0.7); border:1.5px dashed #c9a100; border-radius:3px; padding:5px 8px; margin-top:4px; }
+  .notes-title { font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#7d5a00; margin-bottom:3px; }
+
+  .key-box { background:rgba(240,248,255,0.7); border:2px solid #2980b9; border-radius:4px; padding:6px 9px; }
+  .key-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#2980b9; border-bottom:1.5px solid #2980b9; margin-bottom:5px; padding-bottom:2px; }
+
+  .step { display:flex; gap:6px; align-items:flex-start; margin-bottom:3px; }
+  .step-num { min-width:18px; height:18px; background:#2980b9; color:#fff; font-family:'Caveat',cursive; font-size:11px; font-weight:700; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .step-text { font-size:11px; line-height:1.5; }
+
+  .warn-box {
+    background: rgba(253,228,226,0.7);
+    border: 2px solid #c0392b;
+    border-radius: 4px;
+    padding: 6px 9px;
+  }
+  .warn-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#c0392b; border-bottom:1.5px solid #c0392b; margin-bottom:4px; padding-bottom:2px; }
+
+  .state-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border: 2px solid #1a5276;
+    border-radius: 50%;
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a5276;
+    background: rgba(214,234,248,0.5);
+    margin: 2px;
+  }
+  .state-circle.red { border-color:#c0392b; color:#c0392b; background:rgba(253,228,226,0.5); }
+  .state-circle.green { border-color:#1e8449; color:#1e8449; background:rgba(212,239,223,0.5); }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LEC 13</div>
+    <div class="main-title">Up/Down Counters, Hang-up States &amp; FSM</div>
+    <div class="header-info">
+      <span class="course">ECEG-3161 Digital Logic Design</span><br>
+      AAIT — Dept. of ECE<br>
+      <span class="date">Getachew T.</span>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L12_notes_sync_counter_design.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 12</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <span style="font-size:14px; color:#aaa;">Next →</span>
+</div>
+
+  <!-- ROW 1: Up Counter + Down Counter + Up/Down Counter -->
+  <div class="grid grid-3 mb6">
+
+    <!-- Up Counters -->
+    <div class="box box-green">
+      <div class="sec-title">① Up Counters (Single-Mode)</div>
+      <p class="mb4">A counter is <span class="hl-green">single-mode</span> if: the only external input is the <strong>clock</strong>, and the only outputs are the flip-flop states.</p>
+      <div class="notes-box mb4">
+        <div class="notes-title">Count Sequences</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive; line-height:1.8;">
+          <strong>2-bit:</strong> 00 → 01 → 10 → 11 → 00<br>
+          <strong>3-bit:</strong> 000 → 001 → 010 → 011 → 100 → 101 → 110 → 111 → 000<br>
+          <strong>4-bit:</strong> 0000 → … → 1111 → 0000
+        </p>
+      </div>
+      <div class="ex-box">
+        <div class="ex-title">4-bit Decade Counter (mod-10)</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive; line-height:1.7;">
+          Counts: 0000 → 0001 → … → 1001 → 0000<br>
+          Skips states 1010–1111 (unused!)<br>
+          Used in BCD applications
+        </p>
+      </div>
+    </div>
+
+    <!-- Down Counters -->
+    <div class="box box-red">
+      <div class="sec-title">② Down Counters (Single-Mode)</div>
+      <p class="mb4">Counts <span class="hl-red">downward</span> with each clock pulse. Still a single-mode counter (only clock as input).</p>
+      <div class="notes-box mb4">
+        <div class="notes-title">4-bit Down Sequence</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive; line-height:1.8;">
+          1111 → 1110 → 1101 → … → 0001 → 0000 → 1111
+        </p>
+      </div>
+      <ul>
+        <li>Designed same way as up counter (7 steps)</li>
+        <li>Next-state table counts in reverse order</li>
+        <li>JK/D inputs derived by same procedure</li>
+      </ul>
+      <div class="ex-box" style="margin-top:4px;">
+        <div class="ex-title">Class Exercise</div>
+        <p style="font-size:10.5px;">Design 2-bit and 3-bit down counters using <strong>JK flip-flops</strong> — follow all 7 design steps!</p>
+      </div>
+    </div>
+
+    <!-- Up/Down Counter -->
+    <div class="box box-purple">
+      <div class="sec-title">③ Up/Down Counter (Multi-Mode)</div>
+      <p class="mb4">Can count in <span class="hl-purple">either direction</span> — also called a <strong>bidirectional counter</strong>.</p>
+      <div class="formula formula-sm">Multi-mode = has additional external inputs besides clock</div>
+      <ul class="mb4">
+        <li>Control input <span class="hl-purple">UP/DOWN</span> selects direction</li>
+        <li>UP/DOWN = 1 → counts up</li>
+        <li>UP/DOWN = 0 → counts down</li>
+      </ul>
+      <div class="notes-box">
+        <div class="notes-title">3-bit Up/Down Counter Logic</div>
+        <p style="font-size:10px; line-height:1.6;">Each T flip-flop input depends on both the current state AND the UP/DOWN control signal. Two separate next-state sequences are merged into one excitation table using the control variable.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Enable/Clear + Hang-Up States -->
+  <div class="grid grid-2 mb6">
+
+    <!-- Enable & Clear -->
+    <div class="box box-blue">
+      <div class="sec-title">④ Enable &amp; Clear Control</div>
+      <div class="grid grid-2" style="gap:5px;">
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:3px;">Enable Control</div>
+          <ul class="mb4">
+            <li>Allows counting to be <span class="hl-blue">inhibited</span> (paused)</li>
+            <li>If <span class="hl-red">Enable = 0</span>: all T inputs = 0 → counter holds present state</li>
+            <li>If <span class="hl-green">Enable = 1</span>: counter counts normally</li>
+          </ul>
+          <div class="formula formula-sm">T_i = Enable · (counter logic)</div>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:3px;">Clear Control</div>
+          <ul>
+            <li>Resets <span class="hl-red">all flip-flops</span> to 0</li>
+            <li>Asynchronous clear: happens immediately</li>
+            <li>Synchronous clear: happens on next clock edge</li>
+          </ul>
+          <div class="notes-box" style="margin-top:4px;">
+            <div class="notes-title">Combined truth</div>
+            <table>
+              <tr><th>Enable</th><th>Clear</th><th>Action</th></tr>
+              <tr><td>0</td><td>0</td><td>Hold</td></tr>
+              <tr><td>1</td><td>0</td><td>Count</td></tr>
+              <tr><td class="td-x">X</td><td class="td-hl">1</td><td style="color:#c0392b;">Clear all</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hang-up States -->
+    <div class="warn-box">
+      <div class="warn-title">⑤ Hang-Up States ⚠️</div>
+      <p class="mb4">What happens if a ring/Johnson counter enters an <span class="hl-red">unused state</span>?</p>
+      <div class="grid grid-2" style="gap:5px;">
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#117a65; margin-bottom:2px;">Safe Recovery</div>
+          <p style="font-size:10.5px; margin-bottom:3px;">If the next state is a <span class="hl-green">valid</span> state → counter eventually returns to the counting sequence. Nothing harmful happens.</p>
+          <div class="ex-box">
+            <div class="ex-title">Good: unused → valid → sequence</div>
+            <p style="font-size:10px; font-family:'Caveat',cursive;">Unused state next→ valid state → normal counting resumes ✓</p>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:2px;">Hang-Up (Defective!)</div>
+          <p style="font-size:10.5px; margin-bottom:3px;">If unused states keep transitioning to each other → counter is <span class="hl-red">stuck forever</span> — never returns to valid counting sequence!</p>
+          <div class="ex-box" style="border-color:#c0392b;">
+            <div class="ex-title" style="color:#c0392b;">⚠️ 3-bit Johnson Hang-up</div>
+            <p style="font-size:10px; font-family:'Caveat',cursive; line-height:1.6;">
+              Unused states: 010 and 101<br>
+              If enters 010 → next = 101<br>
+              If enters 101 → next = 010<br>
+              <span class="hl-red">Cycles between 010↔101 forever!</span><br>
+              Counter is <strong>worthless</strong> in this condition.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">Fix: Self-Starting Design</div>
+        <p style="font-size:10.5px;">Design the counter so that ALL unused states transition to a valid state on the next clock pulse. This ensures the counter always recovers — no hang-up possible.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: FSM -->
+  <div class="grid grid-2-1 mb6">
+
+    <!-- FSM Main -->
+    <div class="box box-teal">
+      <div class="sec-title">⑥ Finite State Machine (FSM)</div>
+      <div class="grid grid-2" style="gap:6px;">
+        <div>
+          <p class="mb4">A <span class="hl-teal">mathematical model of computation</span> used to design both computer programs and sequential logic circuits.</p>
+          <ul class="mb4">
+            <li>Machine is in <strong>one state at a time</strong> (current state)</li>
+            <li>Transitions happen on <span class="hl-teal">triggering events/conditions</span></li>
+            <li>Defined by: list of states + triggering conditions for transitions</li>
+          </ul>
+          <div class="formula formula-sm">FSM = States + Inputs + Transitions + Outputs</div>
+        </div>
+        <div class="box box-orange" style="padding:6px;">
+          <div class="sec-title">Traffic Light FSM Example</div>
+          <p style="font-size:10px; margin-bottom:4px;">4 states with pedestrian button (P) &amp; vehicle sensor (V):</p>
+          <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:4px; margin-bottom:4px;">
+            <div style="text-align:center;">
+              <div class="state-circle red">S</div>
+              <div style="font-size:9px;">00 Stop</div>
+            </div>
+            <div style="font-size:14px; margin-top:8px; color:#e67e22;">→</div>
+            <div style="text-align:center;">
+              <div class="state-circle green">PG</div>
+              <div style="font-size:9px;">01 Prep Go</div>
+            </div>
+            <div style="font-size:14px; margin-top:8px; color:#e67e22;">→</div>
+            <div style="text-align:center;">
+              <div class="state-circle">G</div>
+              <div style="font-size:9px;">10 Go</div>
+            </div>
+            <div style="font-size:14px; margin-top:8px; color:#e67e22;">→</div>
+            <div style="text-align:center;">
+              <div class="state-circle">PS</div>
+              <div style="font-size:9px;">11 Prep Stop</div>
+            </div>
+          </div>
+          <div class="formula formula-sm" style="font-size:10px;">S(00) → PG(01) → G(10) → PS(11) → S(00)</div>
+          <p style="font-size:9.5px; margin-top:3px; color:#555;">P=pedestrian button, V=vehicle present. State may hold if V=0 or P=1!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FSM Expressions + Reading -->
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div class="box box-purple">
+        <div class="sec-title">Traffic Light JK Expressions</div>
+        <p style="font-size:10px; margin-bottom:3px;">After full 7-step design (2 J-K FFs, inputs P and V):</p>
+        <div class="formula formula-sm" style="font-size:10px;">J₁ = P'V + Q₁Q₀'</div>
+        <div class="formula formula-sm" style="font-size:10px;">K₁ = Q₁ + P'V + PV'</div>
+        <div class="formula formula-sm" style="font-size:10px;">J₀ = Q₁V</div>
+        <div class="formula formula-sm" style="font-size:10px;">K₀ = Q₀ + P'V + PV'</div>
+        <div class="ex-box" style="margin-top:4px;">
+          <div class="ex-title">Exercise</div>
+          <p style="font-size:10px;">Draw the complete circuit implementation using the expressions above.</p>
+        </div>
+      </div>
+      <div class="box box-yellow">
+        <div class="sec-title">Week Assignment</div>
+        <div class="ex-box mb4">
+          <div class="ex-title">Design Task</div>
+          <p style="font-size:10.5px;">Design a <strong>3-bit up/down Gray code counter</strong> using JK flip-flops. Counts up when UP/DOWN=1, counts down when UP/DOWN=0.</p>
+        </div>
+        <div class="notes-box">
+          <div class="notes-title">📚 Reading</div>
+          <p style="font-size:10px;"><em>Fundamentals of Digital Logic with Verilog Design</em><br>
+          T Flip-Flops: Section 7.9, pp. 371–382<br>
+          PLDs: Section 3.6, pp. 98–114</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY TAKEAWAYS -->
+  <div class="key-box">
+    <div class="key-title">Key Takeaways — L13</div>
+    <div class="grid grid-3" style="gap:6px;">
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-green">Single-mode counters</span> (up/down): clock is the only external input. Outputs = FF states only</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-purple">Multi-mode counters</span> have additional control inputs (e.g. up/down direction, enable, clear)</div></div>
+      </div>
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-blue">Enable=0</span> freezes counter (all T inputs = 0). <span class="hl-red">Clear</span> resets all FFs to 0</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-red">Hang-up state:</span> unused state that loops to itself or other unused states → counter stuck permanently</div></div>
+      </div>
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-teal">FSM</span> = abstract model with finite states, transitions on events. Counters are a special type of FSM</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">Fix hang-ups by <strong>self-starting design</strong>: every unused state must have a valid next state in the sequence</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right; margin-top:6px; font-family:'Caveat',cursive; font-size:13px; color:#888;">Questions? 😊</div>
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Kalam', cursive;
+    padding: 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fefdf8;
+    border: 3px solid #888;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      #d0e4f0 27px,
+      #d0e4f0 28px
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 72px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 12px 14px 16px 14px;
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .lec-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+    padding: 0 12px;
+  }
+
+  .header-info {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .header-info .course { color: #1a5276; font-weight: 700; }
+  .header-info .date { color: #c0392b; }
+
+  .grid { display: grid; gap: 8px; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .box {
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .box-blue { border-color: #1a5276; background: rgba(214,234,248,0.4); }
+  .box-green { border-color: #1e8449; background: rgba(212,239,223,0.4); }
+  .box-red { border-color: #c0392b; background: rgba(253,228,226,0.4); }
+  .box-purple { border-color: #6c3483; background: rgba(232,218,239,0.4); }
+  .box-orange { border-color: #e67e22; background: rgba(253,235,208,0.4); }
+  .box-yellow { border-color: #d4ac0d; background: rgba(254,249,231,0.6); }
+  .box-teal { border-color: #117a65; background: rgba(212,246,238,0.4); }
+  .box-dark { border-color: #222; background: rgba(240,240,235,0.6); }
+
+  .sec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .box-blue .sec-title { color: #1a5276; }
+  .box-green .sec-title { color: #1e8449; }
+  .box-red .sec-title { color: #c0392b; }
+  .box-purple .sec-title { color: #6c3483; }
+  .box-teal .sec-title { color: #117a65; }
+  .box-orange .sec-title { color: #e67e22; }
+  .box-dark .sec-title { color: #111; }
+  .box .sec-title { color: #333; }
+
+  p, li { font-size: 11px; line-height: 1.55; color: #222; }
+  ul { padding-left: 14px; }
+  li { list-style: disc; }
+  ol { padding-left: 16px; }
+  ol li { list-style: decimal; font-size: 11px; line-height: 1.5; }
+
+  .formula {
+    background: rgba(255,255,230,0.9);
+    border: 2px solid #c9a100;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0;
+    text-align: center;
+  }
+
+  .formula-sm { font-size: 11px; padding: 3px 6px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 10.5px; font-family: 'Kalam', cursive; }
+  th { background: rgba(52,73,94,0.15); border: 1.5px solid #555; padding: 2px 5px; font-weight: 700; font-size: 10.5px; text-align: center; font-family: 'Caveat', cursive; }
+  td { border: 1px solid #888; padding: 2px 5px; text-align: center; font-size: 10.5px; }
+  .td-hl { background: rgba(255,255,150,0.6); font-weight: 700; }
+
+  .hl-red { color: #c0392b; font-weight: 700; }
+  .hl-blue { color: #1a5276; font-weight: 700; }
+  .hl-green { color: #1e8449; font-weight: 700; }
+  .hl-purple { color: #6c3483; font-weight: 700; }
+  .hl-orange { color: #e67e22; font-weight: 700; }
+  .hl-teal { color: #117a65; font-weight: 700; }
+
+  .mb4 { margin-bottom: 4px; }
+  .mb6 { margin-bottom: 6px; }
+  .mb8 { margin-bottom: 8px; }
+
+  .sep { border: none; border-top: 1px dashed #aaa; margin: 4px 0; }
+
+  .ex-box {
+    background: rgba(255,255,240,0.8);
+    border: 1.5px solid #c9a100;
+    border-radius: 3px;
+    padding: 4px 7px;
+    margin: 3px 0;
+  }
+  .ex-title { font-family: 'Caveat', cursive; font-size: 11px; font-weight: 700; color: #8a6d00; margin-bottom: 2px; }
+
+  .notes-box {
+    background: rgba(255,253,220,0.7);
+    border: 1.5px dashed #c9a100;
+    border-radius: 3px;
+    padding: 5px 8px;
+    margin-top: 4px;
+  }
+  .notes-title { font-family: 'Caveat', cursive; font-size: 12px; font-weight: 700; color: #7d5a00; margin-bottom: 3px; }
+
+  .key-box {
+    background: rgba(240,248,255,0.7);
+    border: 2px solid #2980b9;
+    border-radius: 4px;
+    padding: 6px 9px;
+  }
+  .key-title { font-family: 'Caveat', cursive; font-size: 13px; font-weight: 700; color: #2980b9; border-bottom: 1.5px solid #2980b9; margin-bottom: 5px; padding-bottom: 2px; }
+
+  .step { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 3px; }
+  .step-num {
+    min-width: 18px; height: 18px;
+    background: #2980b9;
+    color: #fff;
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { font-size: 11px; line-height: 1.5; }
+
+  .badge {
+    display: inline-block;
+    background: #1a5276;
+    color: #fff;
+    font-family: 'Caveat', cursive;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-right: 3px;
+  }
+  .badge-green { background: #1e8449; }
+  .badge-red { background: #c0392b; }
+  .badge-purple { background: #6c3483; }
+  .badge-orange { background: #e67e22; }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LEC 11</div>
+    <div class="main-title">Registers &amp; Shift Registers</div>
+    <div class="header-info">
+      <span class="course">ECEG-3161 Digital Logic Design</span><br>
+      AAIT — Dept. of ECE<br>
+      <span class="date">Nebyu Yonas</span>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L10_Sequential_Latches_FF_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 10</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L12_notes_sync_counter_design.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 12 →</a>
+</div>
+
+  <!-- ROW 1: Registers overview + types -->
+  <div class="grid grid-2-1 mb6">
+
+    <!-- LEFT: What is a Register -->
+    <div class="box box-blue">
+      <div class="sec-title">① What is a Register?</div>
+      <div class="grid grid-2" style="gap:6px;">
+        <div>
+          <p class="mb4">A <span class="hl-blue">flip-flop</span> stores <strong>one bit</strong> of information. When <strong>n flip-flops</strong> are grouped to store n bits (e.g. an n-bit number), the group is called a <span class="hl-red">register</span>.</p>
+          <ul class="mb4">
+            <li>Two basic functions: <span class="hl-blue">data storage</span> &amp; <span class="hl-green">data movement</span></li>
+            <li>A <span class="hl-blue">common clock</span> drives all flip-flops in the register</li>
+            <li>A register with shifting ability = <span class="hl-red">Shift Register</span></li>
+          </ul>
+          <div class="formula formula-sm">n flip-flops → n-bit register (stores 2ⁿ states)</div>
+        </div>
+        <div>
+          <div class="notes-box">
+            <div class="notes-title">Data Transfer Modes</div>
+            <p style="font-size:10.5px;"><span class="hl-blue">Parallel Transfer:</span> all n bits sent at once using n separate wires — fast!</p>
+            <hr class="sep">
+            <p style="font-size:10.5px;"><span class="hl-red">Serial Transfer:</span> all bits sent one at a time over a single wire, taking n clock cycles — slower but uses fewer wires</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Shift Register Types -->
+    <div class="box box-teal">
+      <div class="sec-title">② Shift Register Types</div>
+      <ul style="list-style:none; padding:0;">
+        <li style="font-size:10.5px; margin-bottom:3px;"><span class="badge">SISO</span> Serial In — Serial Out</li>
+        <li style="font-size:10.5px; margin-bottom:3px;"><span class="badge badge-green">SIPO</span> Serial In — Parallel Out</li>
+        <li style="font-size:10.5px; margin-bottom:3px;"><span class="badge badge-red">PISO</span> Parallel In — Serial Out</li>
+        <li style="font-size:10.5px; margin-bottom:3px;"><span class="badge badge-purple">PIPO</span> Parallel In — Parallel Out</li>
+      </ul>
+      <hr class="sep">
+      <p style="font-size:10px; margin-top:3px;"><span class="hl-teal">Universal:</span> supports all four modes (e.g. 74LS194)</p>
+      <div class="notes-box" style="margin-top:4px;">
+        <div class="notes-title">Common Tasks</div>
+        <p style="font-size:10px; line-height:1.6;">Serial/Parallel data conversion · UART · Time delay · Ring counter · Johnson counter · Memory device</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: SISO + PISO timing tables -->
+  <div class="grid grid-2 mb6">
+
+    <!-- SISO -->
+    <div class="box box-green">
+      <div class="sec-title">③ SISO — Serial In Serial Out</div>
+      <p class="mb4">Data is shifted <strong>in</strong> and <strong>out</strong> one bit at a time (left or right) under clock control.</p>
+      <div class="ex-box mb4">
+        <div class="ex-title">Example: Data IN = 1010 (4-bit SISO)</div>
+        <table>
+          <tr><th>CLK Pulse</th><th>FF0</th><th>FF1</th><th>FF2</th><th>FF3</th></tr>
+          <tr><td>0 (init)</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td class="td-hl">0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>2</td><td class="td-hl">1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>3</td><td class="td-hl">0</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>4</td><td class="td-hl">1</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>5</td><td>0</td><td>1</td><td>0</td><td class="td-hl">1</td></tr>
+          <tr><td>6</td><td>0</td><td>0</td><td>1</td><td class="td-hl">0</td></tr>
+          <tr><td>7</td><td>0</td><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+          <tr><td>8</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:2px; color:#555;">Data OUT = 00001010 &nbsp;(data reappears after n clock cycles)</p>
+      </div>
+      <p style="font-size:10px;"><span class="hl-green">Note:</span> Takes 2n clocks to pass all bits through — useful as a <strong>time-delay element</strong>.</p>
+    </div>
+
+    <!-- PISO + PIPO -->
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div class="box box-purple">
+        <div class="sec-title">④ PISO — Parallel In Serial Out</div>
+        <p class="mb4">All bits loaded simultaneously (parallel), then shifted out one at a time (serial). Converts parallel data → serial stream.</p>
+        <div class="ex-box">
+          <div class="ex-title">Example: Data IN = 1010 (parallel load)</div>
+          <table>
+            <tr><th>CLK</th><th>FF0</th><th>FF1</th><th>FF2</th><th>FF3</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td class="td-hl">1</td><td class="td-hl">0</td><td class="td-hl">1</td><td class="td-hl">0</td></tr>
+            <tr><td>2</td><td>0</td><td>1</td><td>0</td><td class="td-hl">1</td></tr>
+            <tr><td>3</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>4</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="box box-orange">
+        <div class="sec-title">⑤ PIPO — Parallel In Parallel Out</div>
+        <p class="mb4">All bits loaded at once AND all bits appear at output simultaneously. Fastest mode — used as a simple storage buffer.</p>
+        <div class="ex-box">
+          <div class="ex-title">PIPO: Data IN = 1010</div>
+          <table>
+            <tr><th>CLK</th><th>FF0</th><th>FF1</th><th>FF2</th><th>FF3</th></tr>
+            <tr><td>1</td><td class="td-hl">1</td><td class="td-hl">0</td><td class="td-hl">1</td><td class="td-hl">0</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:2px; color:#555;">One clock pulse → all bits stored and available at output!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 3: Universal + Shift-Register Counters -->
+  <div class="grid grid-3 mb6">
+
+    <!-- Universal Shift Register -->
+    <div class="box box-dark">
+      <div class="sec-title">⑥ Universal Shift Register</div>
+      <p class="mb4">Has <span class="hl-blue">both serial and parallel</span> input and output capability — supports all four modes.</p>
+      <ul class="mb4">
+        <li>Examples: <span class="hl-red">74LS194</span>, 74LS195, 74HC194, CMOS 4035</li>
+        <li>Available as 4-bit multi-function devices</li>
+        <li>Bi-directional shifting (left and right)</li>
+      </ul>
+      <div class="notes-box">
+        <div class="notes-title">Why Universal?</div>
+        <p style="font-size:10px;">Used in arithmetic operations — shifting left multiplies by 2, shifting right divides by 2. Eliminates need for separate serial/parallel registers.</p>
+      </div>
+    </div>
+
+    <!-- Ring Counter -->
+    <div class="box box-red">
+      <div class="sec-title">⑦ Ring Counter</div>
+      <p class="mb4">Output of the <span class="hl-red">most significant stage</span> is fed back to the input of the <span class="hl-red">least significant stage</span>.</p>
+      <div class="ex-box mb4">
+        <div class="ex-title">4-bit Ring Counter States</div>
+        <table>
+          <tr><th>State</th><th>FF3</th><th>FF2</th><th>FF1</th><th>FF0</th></tr>
+          <tr><td>0</td><td class="td-hl">1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td class="td-hl">1</td><td>0</td><td>0</td></tr>
+          <tr><td>2</td><td>0</td><td>0</td><td class="td-hl">1</td><td>0</td></tr>
+          <tr><td>3</td><td>0</td><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+        </table>
+      </div>
+      <ul>
+        <li>n-bit ring counter = <span class="hl-red">mod-n counter</span></li>
+        <li>4-bit → only 4 of 16 possible states used (inefficient!)</li>
+        <li><span class="hl-green">Advantage:</span> <strong>Self-decoding</strong> — no extra decode circuit needed</li>
+      </ul>
+    </div>
+
+    <!-- Johnson Counter -->
+    <div class="box box-purple">
+      <div class="sec-title">⑧ Johnson Counter</div>
+      <p class="mb4">Variation of ring counter where the <span class="hl-purple">inverted output</span> of the last stage is fed back to the first stage input. Also called <strong>Twisted-Ring Counter</strong>.</p>
+      <div class="formula formula-sm">n-stage Johnson = mod-2n counter</div>
+      <div class="ex-box mb4">
+        <div class="ex-title">3-bit Johnson Counter (mod-6)</div>
+        <table>
+          <tr><th>State</th><th>Q2</th><th>Q1</th><th>Q0</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+          <tr><td>2</td><td>0</td><td class="td-hl">1</td><td>1</td></tr>
+          <tr><td>3</td><td class="td-hl">1</td><td>1</td><td>1</td></tr>
+          <tr><td>4</td><td>1</td><td>1</td><td class="td-hl">0</td></tr>
+          <tr><td>5</td><td>1</td><td class="td-hl">0</td><td>0</td></tr>
+        </table>
+      </div>
+      <p style="font-size:10px;"><span class="hl-purple">More efficient</span> than ring counter: 2n valid states vs n states.</p>
+    </div>
+
+  </div>
+
+  <!-- ROW 4: Counters + Key Takeaways -->
+  <div class="grid grid-2 mb4">
+
+    <!-- Asynchronous vs Synchronous -->
+    <div class="box" style="border-color:#2980b9; background:rgba(235,245,255,0.5);">
+      <div class="sec-title" style="color:#2980b9; border-bottom-color:#2980b9;">⑨ Counter Types</div>
+      <div class="grid grid-2" style="gap:6px;">
+        <div class="box box-red">
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:3px;">Asynchronous (Ripple)</div>
+          <ul>
+            <li>Flip-flops do <span class="hl-red">NOT</span> share a common clock</li>
+            <li>Each FF clocked by previous FF output</li>
+            <li>Changes propagate with a <span class="hl-red">ripple delay</span></li>
+            <li>Simpler design but slower</li>
+          </ul>
+        </div>
+        <div class="box box-green">
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1e8449; margin-bottom:3px;">Synchronous</div>
+          <ul>
+            <li>All flip-flops share the <span class="hl-green">same clock</span></li>
+            <li>All FFs change state simultaneously</li>
+            <li>No ripple delay — faster &amp; more predictable</li>
+            <li>More complex design</li>
+          </ul>
+        </div>
+      </div>
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">Shift Register vs Binary Counter</div>
+        <p style="font-size:10px;">Shift register counters (ring/Johnson) use feedback from serial output → serial input to produce special count sequences. Much simpler decoding than binary counters!</p>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div>
+      <div class="key-box mb6">
+        <div class="key-title">Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">A register = n flip-flops with a common clock. Two roles: <span class="hl-blue">storage</span> and <span class="hl-green">movement</span></div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Four shift register types: <span class="hl-blue">SISO</span>, <span class="hl-green">SIPO</span>, <span class="hl-red">PISO</span>, <span class="hl-purple">PIPO</span>. Universal SR supports all four modes</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-red">Ring counter:</span> feedback Q_last → D_first. n-bit = mod-n. Self-decoding but state-inefficient</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-purple">Johnson counter:</span> feedback Q̄_last → D_first. n-bit = mod-2n. More efficient than ring counter</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-blue">Async counters</span> have ripple delay (no common clock). <span class="hl-green">Sync counters</span> use one clock — all FFs change together</div>
+        </div>
+      </div>
+      <div class="notes-box">
+        <div class="notes-title">📚 Reading Assignment</div>
+        <p style="font-size:10.5px;">Read about synchronous counter design — <em>Fundamentals of Digital Logic with Verilog Design</em>, Section 8.7, pp. 495–505.</p>
+      </div>
+      <div style="text-align:right; margin-top:6px; font-family:'Caveat',cursive; font-size:13px; color:#888;">Questions? 😊</div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</body>
+</html>

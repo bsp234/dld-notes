@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECEG-3161 — Digital Logic Design Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f0ebe0;
+    font-family: 'Kalam', cursive;
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+  }
+
+  /* ── NOTEBOOK COVER ── */
+  .cover {
+    max-width: 860px;
+    margin: 0 auto 28px;
+    background: #fefdf8;
+    border: 3px solid #555;
+    border-radius: 4px;
+    position: relative;
+    padding: 28px 30px 22px;
+    box-shadow: 4px 4px 0 #bbb;
+  }
+
+  /* lined paper */
+  .cover::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent, transparent 27px, #d0e4f0 27px, #d0e4f0 28px
+    );
+    opacity: 0.25;
+    pointer-events: none; z-index: 0;
+  }
+  /* red margin */
+  .cover::after {
+    content: '';
+    position: absolute; top: 0; bottom: 0; left: 70px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none; z-index: 0;
+  }
+
+  .cover-inner { position: relative; z-index: 1; }
+
+  .cover-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .cover-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .cover-titles {
+    flex: 1;
+    text-align: center;
+    padding: 0 16px;
+  }
+
+  .cover-main {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .cover-sub {
+    font-family: 'Kalam', cursive;
+    font-size: 12px;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  .cover-meta {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .cover-meta .inst { color: #1a5276; font-weight: 700; }
+  .cover-meta .dept { color: #555; }
+
+  /* info strip */
+  .info-strip {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  .info-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(26,82,118,0.07);
+    border: 1.5px solid #1a5276;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 10.5px;
+    color: #1a5276;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+  }
+
+  .info-chip.red { border-color: #c0392b; color: #c0392b; background: rgba(192,57,43,0.06); }
+  .info-chip.green { border-color: #1e8449; color: #1e8449; background: rgba(30,132,73,0.06); }
+  .info-chip.purple { border-color: #6c3483; color: #6c3483; background: rgba(108,52,131,0.06); }
+
+  /* ── TABLE OF CONTENTS ── */
+  .toc-title {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px dashed #aaa;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ── LECTURE CARD ── */
+  .lec-card {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border: 2px solid #333;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.7);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s, box-shadow 0.15s;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .lec-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0 #aaa;
+  }
+
+  .lec-card.blue  { border-color: #1a5276; }
+  .lec-card.green { border-color: #1e8449; }
+  .lec-card.red   { border-color: #c0392b; }
+  .lec-card.purple{ border-color: #6c3483; }
+  .lec-card.orange{ border-color: #e67e22; }
+  .lec-card.teal  { border-color: #117a65; }
+  .lec-card.dark  { border-color: #333; }
+  .lec-card.navy  { border-color: #1a237e; }
+  .lec-card.brown { border-color: #8B4513; }
+  .lec-card.pink  { border-color: #c2185b; }
+  .lec-card.indigo{ border-color: #283593; }
+
+  .lec-num {
+    min-width: 52px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 6px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .lec-num .num-label {
+    font-size: 9px;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Kalam', cursive;
+  }
+
+  .lec-card.blue   .lec-num { background: #1a5276; }
+  .lec-card.green  .lec-num { background: #1e8449; }
+  .lec-card.red    .lec-num { background: #c0392b; }
+  .lec-card.purple .lec-num { background: #6c3483; }
+  .lec-card.orange .lec-num { background: #e67e22; }
+  .lec-card.teal   .lec-num { background: #117a65; }
+  .lec-card.dark   .lec-num { background: #444; }
+  .lec-card.navy   .lec-num { background: #1a237e; }
+  .lec-card.brown  .lec-num { background: #8B4513; }
+  .lec-card.pink   .lec-num { background: #c2185b; }
+  .lec-card.indigo .lec-num { background: #283593; }
+
+  .lec-body {
+    padding: 8px 11px;
+    flex: 1;
+  }
+
+  .lec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 3px;
+    line-height: 1.2;
+  }
+
+  .lec-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 4px;
+  }
+
+  .topic-tag {
+    font-size: 9px;
+    font-family: 'Kalam', cursive;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    padding: 1px 7px;
+    color: #444;
+  }
+
+  .lec-arrow {
+    align-self: center;
+    font-size: 16px;
+    color: #aaa;
+    padding: 0 8px;
+    flex-shrink: 0;
+    transition: color 0.15s;
+  }
+  .lec-card:hover .lec-arrow { color: #333; }
+
+  /* footer note */
+  .footer-note {
+    text-align: center;
+    font-family: 'Kalam', cursive;
+    font-size: 11px;
+    color: #888;
+    margin-top: 14px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    margin-bottom: 14px;
+  }
+  .progress-label {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    color: #555;
+    margin-bottom: 4px;
+  }
+  .progress-track {
+    height: 10px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1e8449 0%, #1a5276 60%, #6c3483 100%);
+    border-radius: 5px;
+    transition: width 0.5s;
+  }
+
+  /* ── LEGEND STRIP ── */
+  .legend {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-family: 'Kalam', cursive;
+    color: #555;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 6px; }
+    .cover { padding: 12px; border: none; box-shadow: none; overflow: visible; }
+    .cover-top { flex-direction: column; align-items: center; text-align: center; }
+    .cover-titles { padding: 8px 0; }
+    .cover-meta { text-align: center; margin-top: 6px; }
+    .cover-badge { white-space: normal; }
+    .toc-grid { grid-template-columns: 1fr; }
+    .lec-card[style*="grid-column"] { grid-column: auto !important; }
+    .lec-num { min-width: 42px; font-size: 16px; }
+    .info-strip { gap: 6px; }
+    .cover-main { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="cover-inner">
+
+    <!-- TOP BAR -->
+    <div class="cover-top">
+      <div class="cover-badge">ECEG-3161</div>
+      <div class="cover-titles">
+        <div class="cover-main">Digital Logic Design</div>
+        <div class="cover-sub">Complete Lecture Notes — AAIT Department of Electrical &amp; Computer Engineering</div>
+      </div>
+      <div class="cover-meta">
+        <span class="inst">Addis Ababa Institute of Technology</span><br>
+        <span class="dept">Dept. of Electrical &amp; Computer Engineering</span><br>
+        Nebyu Yonas &amp; Getachew T.
+      </div>
+    </div>
+
+    <!-- INFO CHIPS -->
+    <div class="info-strip">
+      <div class="info-chip">📚 9 Lectures Covered</div>
+      <div class="info-chip green">✅ All Notes Ready</div>
+      <div class="info-chip red">📌 ECEG-3161</div>
+      <div class="info-chip purple">🎓 B.Sc. — Year 2</div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+      <div class="progress-label">Course Coverage</div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 72%;"></div>
+      </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS TITLE -->
+    <div class="toc-title">📋 Table of Contents</div>
+
+    <!-- LECTURE CARDS -->
+    <div class="toc-grid">
+
+      <!-- L1&2 -->
+      <a class="lec-card navy" href="digital_logic_design_comprehensive_notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          1–2
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Digital Systems &amp; Number Systems</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Binary/Hex/Octal</span>
+            <span class="topic-tag">BCD</span>
+            <span class="topic-tag">Gray Code</span>
+            <span class="topic-tag">2's Complement</span>
+            <span class="topic-tag">ASCII</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L3 -->
+      <a class="lec-card blue" href="Lec03_Switching_Algebra_Logic_Gates_Notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          03
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Switching Algebra &amp; Logic Gates</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Boolean Algebra</span>
+            <span class="topic-tag">De Morgan's</span>
+            <span class="topic-tag">Logic Gates</span>
+            <span class="topic-tag">SOP/POS</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L4 -->
+      <a class="lec-card orange" href="Lec04_Digital_IC_Families_Notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          04
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Digital IC Families</div>
+          <div class="lec-topics">
+            <span class="topic-tag">TTL</span>
+            <span class="topic-tag">CMOS</span>
+            <span class="topic-tag">Bipolar</span>
+            <span class="topic-tag">MOS</span>
+            <span class="topic-tag">Fan-out</span>
+            <span class="topic-tag">Noise Margin</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L5 -->
+      <a class="lec-card green" href="L5_Kmap_Notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          05
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Karnaugh Maps (K-Map)</div>
+          <div class="lec-topics">
+            <span class="topic-tag">2/3/4-variable</span>
+            <span class="topic-tag">Grouping Rules</span>
+            <span class="topic-tag">Don't Cares</span>
+            <span class="topic-tag">SOP/POS Min.</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L6 -->
+      <a class="lec-card teal" href="L6_Combinational_Logic_Notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          06
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Combinational Logic Circuits</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Adders</span>
+            <span class="topic-tag">Decoders</span>
+            <span class="topic-tag">Encoders</span>
+            <span class="topic-tag">MUX/DEMUX</span>
+            <span class="topic-tag">Comparator</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L7 -->
+      <a class="lec-card brown" href="L7_notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          07
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Combinational Logic Circuits (Cont.)</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Adders</span>
+            <span class="topic-tag">Subtractors</span>
+            <span class="topic-tag">Comparators</span>
+            <span class="topic-tag">Decoders</span>
+            <span class="topic-tag">Encoders</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L8 -->
+      <a class="lec-card pink" href="L8_notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          08
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">MUX · DEMUX · Code Converters</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Multiplexers</span>
+            <span class="topic-tag">Demultiplexers</span>
+            <span class="topic-tag">Code Converters</span>
+            <span class="topic-tag">Binary↔Gray</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L9 -->
+      <a class="lec-card indigo" href="L9_notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          09
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Comparators · NAND/NOR · Priority Encoders</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Comparators</span>
+            <span class="topic-tag">NAND/NOR Universal</span>
+            <span class="topic-tag">Multiplexers</span>
+            <span class="topic-tag">Priority Encoders</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L10 -->
+      <a class="lec-card red" href="L10_Sequential_Latches_FF_Notes.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          10
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Sequential Circuits — Latches &amp; Flip-Flops</div>
+          <div class="lec-topics">
+            <span class="topic-tag">SR Latch</span>
+            <span class="topic-tag">D / JK / T FF</span>
+            <span class="topic-tag">Clocking</span>
+            <span class="topic-tag">Edge-triggered</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L11 -->
+      <a class="lec-card purple" href="L11_notes_registers.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          11
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Registers &amp; Shift Registers</div>
+          <div class="lec-topics">
+            <span class="topic-tag">SISO/SIPO</span>
+            <span class="topic-tag">PISO/PIPO</span>
+            <span class="topic-tag">Universal SR</span>
+            <span class="topic-tag">Ring Counter</span>
+            <span class="topic-tag">Johnson Counter</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L12 -->
+      <a class="lec-card dark" href="L12_notes_sync_counter_design.html" target="_blank">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          12
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Synchronous Counter Design</div>
+          <div class="lec-topics">
+            <span class="topic-tag">7-Step Method</span>
+            <span class="topic-tag">State Diagram</span>
+            <span class="topic-tag">Excitation Table</span>
+            <span class="topic-tag">K-Map → Logic</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+      <!-- L13 — full width -->
+      <a class="lec-card blue" href="L13_notes_updown_hangup_fsm.html" target="_blank" style="grid-column: 1 / -1;">
+        <div class="lec-num">
+          <span class="num-label">LEC</span>
+          13
+        </div>
+        <div class="lec-body">
+          <div class="lec-title">Up/Down Counters, Hang-up States &amp; Finite State Machines (FSM)</div>
+          <div class="lec-topics">
+            <span class="topic-tag">Up Counter</span>
+            <span class="topic-tag">Down Counter</span>
+            <span class="topic-tag">Single/Multi Mode</span>
+            <span class="topic-tag">Enable &amp; Clear</span>
+            <span class="topic-tag">Hang-up States</span>
+            <span class="topic-tag">FSM</span>
+            <span class="topic-tag">Traffic Light Controller</span>
+          </div>
+        </div>
+        <div class="lec-arrow">→</div>
+      </a>
+
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#1a237e;"></div>Number Systems</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a5276;"></div>Logic &amp; Algebra</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e67e22;"></div>IC Families</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1e8449;"></div>K-Maps</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#117a65;"></div>Combinational</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c0392b;"></div>Sequential / Latches</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6c3483;"></div>Registers</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#444;"></div>Counter Design</div>
+    </div>
+
+    <div class="footer-note" style="margin-top:14px;">
+      Click any lecture card to open its notes &nbsp;•&nbsp; All files must stay in the same folder &nbsp;•&nbsp; 😊 Good luck!
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

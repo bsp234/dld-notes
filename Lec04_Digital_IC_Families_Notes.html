@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Kalam', cursive;
+    padding: 20px 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 30px auto;
+    background: #fefdf8;
+    border: 3px solid #888;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      #d0e4f0 27px,
+      #d0e4f0 28px
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 72px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 12px 14px 16px 14px;
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .lec-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+    padding: 0 12px;
+  }
+
+  .header-info {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .header-info .course { color: #1a5276; font-weight: 700; }
+  .header-info .date { color: #c0392b; }
+
+  .grid { display: grid; gap: 8px; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .box {
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .box-blue { border-color: #1a5276; background: rgba(214,234,248,0.4); }
+  .box-green { border-color: #1e8449; background: rgba(212,239,223,0.4); }
+  .box-red { border-color: #c0392b; background: rgba(253,228,226,0.4); }
+  .box-purple { border-color: #6c3483; background: rgba(232,218,239,0.4); }
+  .box-orange { border-color: #e67e22; background: rgba(253,235,208,0.4); }
+  .box-yellow { border-color: #d4ac0d; background: rgba(254,249,231,0.6); }
+  .box-teal { border-color: #117a65; background: rgba(212,246,238,0.4); }
+  .box-dark { border-color: #222; background: rgba(240,240,235,0.6); }
+
+  .sec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .box-blue .sec-title { color: #1a5276; }
+  .box-green .sec-title { color: #1e8449; }
+  .box-red .sec-title { color: #c0392b; }
+  .box-purple .sec-title { color: #6c3483; }
+  .box-teal .sec-title { color: #117a65; }
+  .box-orange .sec-title { color: #e67e22; }
+  .box-dark .sec-title { color: #111; }
+  .box-yellow .sec-title { color: #b7950b; }
+
+  p, li { font-size: 11px; line-height: 1.55; color: #222; }
+  ul { padding-left: 14px; }
+  li { list-style: disc; }
+  ol { padding-left: 16px; }
+  ol li { list-style: decimal; }
+
+  .formula {
+    background: rgba(255,255,230,0.9);
+    border: 2px solid #c9a100;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0;
+    text-align: center;
+  }
+
+  .formula-sm { font-size: 11px; padding: 3px 6px; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10.5px;
+    font-family: 'Kalam', cursive;
+  }
+
+  th {
+    background: rgba(52,73,94,0.15);
+    border: 1.5px solid #555;
+    padding: 2px 5px;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+  }
+
+  td {
+    border: 1px solid #888;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 10.5px;
+  }
+
+  .td-hl { background: rgba(255,255,150,0.6); font-weight: 700; }
+  .td-green { background: rgba(200,250,200,0.6); font-weight: 700; }
+  .td-red { background: rgba(255,200,200,0.6); font-weight: 700; }
+
+  .hl-red { color: #c0392b; font-weight: 700; }
+  .hl-blue { color: #1a5276; font-weight: 700; }
+  .hl-green { color: #1e8449; font-weight: 700; }
+  .hl-purple { color: #6c3483; font-weight: 700; }
+  .hl-orange { color: #e67e22; font-weight: 700; }
+  .hl-teal { color: #117a65; font-weight: 700; }
+
+  .mb4 { margin-bottom: 4px; }
+  .mb6 { margin-bottom: 6px; }
+  .mb8 { margin-bottom: 8px; }
+
+  .sep { border: none; border-top: 1px dashed #bbb; margin: 4px 0; }
+
+  .ex-box {
+    background: rgba(255,252,220,0.7);
+    border: 1.5px solid #c9a100;
+    border-radius: 3px;
+    padding: 3px 6px;
+    margin: 3px 0;
+  }
+
+  .ex-title {
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7d6608;
+    margin-bottom: 2px;
+  }
+
+  .notes-box {
+    background: rgba(255,243,205,0.6);
+    border: 1.5px dashed #e0a800;
+    border-radius: 3px;
+    padding: 4px 7px;
+  }
+
+  .notes-title {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b7770d;
+    margin-bottom: 3px;
+  }
+
+  .key-box {
+    background: rgba(232,245,233,0.6);
+    border: 2px solid #2e7d32;
+    border-radius: 4px;
+    padding: 6px 9px;
+  }
+
+  .key-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #2e7d32;
+    padding-bottom: 2px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 3px;
+  }
+
+  .step-num {
+    min-width: 18px;
+    height: 18px;
+    background: #1a5276;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-text { font-size: 11px; line-height: 1.5; color: #222; }
+
+  .family-card {
+    border: 2px solid;
+    border-radius: 4px;
+    padding: 5px 7px;
+    margin-bottom: 4px;
+  }
+
+  .family-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+    .conv-node { width: 46px; height: 46px; font-size: 8px; padding-top: 7px; }
+    .conv-diagram { flex-wrap: wrap; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE 1 ===== -->
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LEC 04</div>
+    <div class="main-title">Digital IC Families</div>
+    <div class="header-info">
+      <div class="course">ECEG-3201 Digital Logic Design</div>
+      <div>AAIT — Dept. of Electrical & Computer Eng.</div>
+      <div class="date">Topic: ICs, Logic Levels, Parameters & Families</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="Lec03_Switching_Algebra_Logic_Gates_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 03</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L5_Kmap_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 05 →</a>
+</div>
+
+  <!-- ROW 1: What is IC + IC Packaging Density -->
+  <div class="grid grid-2 mb8">
+
+    <!-- What is IC -->
+    <div class="box box-blue">
+      <div class="sec-title">① What is an IC?</div>
+      <p class="mb4">An <span class="hl-blue">Integrated Circuit (IC)</span> is a silicon semiconductor crystal (chip) containing the electronic components for constructing digital gates. Various gates are connected internally to form the required circuit.</p>
+      <ul>
+        <li>Logic Gates are the <span class="hl-blue">basic building blocks</span> of digital logic and circuits.</li>
+        <li>ICs are categorized by <span class="hl-red">complexity</span> — measured by the number of logic gates in a single package.</li>
+        <li>Each circuit technology is called a <span class="hl-blue">digital logic family</span>.</li>
+      </ul>
+      <hr class="sep">
+      <div class="notes-box" style="margin-top:4px;">
+        <div class="notes-title">💡 Remember</div>
+        <p style="font-size:10.5px;">The basic circuit in each technology is a <span class="hl-red">NAND</span>, <span class="hl-blue">NOR</span>, or <span class="hl-green">Inverter</span> gate. Each logic family builds all complex circuits from this one basic gate.</p>
+      </div>
+    </div>
+
+    <!-- IC Packaging Density -->
+    <div class="box box-green">
+      <div class="sec-title">② IC Packaging Density</div>
+      <table>
+        <tr><th>Complexity Level</th><th>Abbreviation</th><th>Gates / Chip</th></tr>
+        <tr><td>Small-scale integration</td><td class="td-hl">SSI</td><td>&lt; 12</td></tr>
+        <tr><td>Medium-scale integration</td><td class="td-hl">MSI</td><td>12 – 99</td></tr>
+        <tr><td>Large-scale integration</td><td class="td-hl">LSI</td><td>100 – 9,999</td></tr>
+        <tr><td>Very large-scale integration</td><td class="td-hl">VLSI</td><td>10,000 – 99,999</td></tr>
+        <tr><td>Ultra large-scale integration</td><td class="td-hl">ULSI</td><td>100,000 – 999,999</td></tr>
+        <tr><td>Giga-scale integration</td><td class="td-hl">GSI</td><td class="td-green">1,000,000+</td></tr>
+      </table>
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">📌 Trend</div>
+        <p style="font-size:10px;">Modern CPUs and GPUs are GSI-level, containing billions of transistors. Moore's Law predicted doubling of transistor count every ~2 years.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: Positive/Negative Logic + IC Parameters -->
+  <div class="grid grid-2 mb8">
+
+    <!-- Positive & Negative Logic -->
+    <div class="box box-purple">
+      <div class="sec-title">③ Positive & Negative Logic</div>
+      <p class="mb4">Two conventions exist for assigning binary values to voltage levels:</p>
+      <div class="grid grid-2" style="gap:6px; margin-bottom:5px;">
+        <div style="border:1.5px solid #1a5276; border-radius:3px; padding:4px 6px; background:rgba(214,234,248,0.5);">
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276;">Positive Logic (Active High)</div>
+          <p style="font-size:10.5px;"><span class="hl-blue">Logic 1 = HIGH voltage (H)</span><br>Logic 0 = LOW voltage (L)<br>Most common convention.</p>
+        </div>
+        <div style="border:1.5px solid #c0392b; border-radius:3px; padding:4px 6px; background:rgba(253,228,226,0.5);">
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b;">Negative Logic (Active Low)</div>
+          <p style="font-size:10.5px;"><span class="hl-red">Logic 1 = LOW voltage (L)</span><br>Logic 0 = HIGH voltage (H)<br>Used in some special cases.</p>
+        </div>
+      </div>
+      <div class="ex-box">
+        <div class="ex-title">⚡ Key Insight: AND gate dual</div>
+        <p style="font-size:10.5px;">The <span class="hl-blue">same physical circuit</span> with positive logic implements AND, but with negative logic it implements <span class="hl-red">OR</span>! The truth table rows just get re-mapped.</p>
+      </div>
+    </div>
+
+    <!-- IC Parameters overview -->
+    <div class="box box-orange">
+      <div class="sec-title">④ IC Parameters (Overview)</div>
+      <p class="mb4">Four key electrical parameters determine the performance and suitability of an IC family:</p>
+      <div class="step mb4">
+        <div class="step-num" style="background:#e67e22;">1</div>
+        <div class="step-text"><span class="hl-orange">Fan-Out</span> — How many gate inputs can one gate output drive?</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#c0392b;">2</div>
+        <div class="step-text"><span class="hl-red">Power Dissipation</span> — Energy consumed per gate (affects heat & battery life)</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#1a5276;">3</div>
+        <div class="step-text"><span class="hl-blue">Propagation Delay</span> — Time for output to respond to input change (affects speed)</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#1e8449;">4</div>
+        <div class="step-text"><span class="hl-green">Noise Margin</span> — Tolerance to unwanted electrical noise (affects reliability)</div>
+      </div>
+      <div class="notes-box" style="margin-top:5px;">
+        <p style="font-size:10px; font-style:italic;">⚖️ Trade-off: High speed (low delay) usually means higher power dissipation. Low power (CMOS) trades some speed.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: Fan-Out + Power Dissipation -->
+  <div class="grid grid-2 mb8">
+
+    <!-- Fan-Out -->
+    <div class="box box-teal">
+      <div class="sec-title">⑤ Fan-Out (Loading)</div>
+      <p class="mb4">Fan-Out = the maximum number of <span class="hl-teal">standard loads</span> (gate inputs) that can be connected to a gate output without degrading normal operation.</p>
+      <div class="formula">Fan-Out = Min(I<sub>OH</sub>/I<sub>IH</sub> , I<sub>OL</sub>/I<sub>IL</sub>)</div>
+      <p style="font-size:10.5px; margin: 3px 0;"><span class="hl-teal">I<sub>OH</sub></span> = output current (High state) &nbsp;|&nbsp; <span class="hl-teal">I<sub>IH</sub></span> = input current needed (High)<br>
+      <span class="hl-red">I<sub>OL</sub></span> = output current (Low state) &nbsp;|&nbsp; <span class="hl-red">I<sub>IL</sub></span> = input current needed (Low)</p>
+      <hr class="sep">
+      <div class="ex-box">
+        <div class="ex-title">Ex: Standard TTL Fan-Out</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive;">
+          I<sub>OH</sub> = 400 µA, I<sub>IH</sub> = 40 µA → 400/40 = <strong>10</strong><br>
+          I<sub>OL</sub> = 16 mA, I<sub>IL</sub> = 1.6 mA → 16/1.6 = <strong>10</strong><br>
+          Fan-Out = Min(10, 10) = <span class="hl-teal">10 ✓</span>
+        </p>
+      </div>
+      <p style="font-size:10px; margin-top:3px; color:#555;">⚠️ Exceeding fan-out causes <strong>overloading</strong> → output voltage degrades → logic errors!</p>
+    </div>
+
+    <!-- Power Dissipation -->
+    <div class="box box-red">
+      <div class="sec-title">⑥ Power Dissipation</div>
+      <p class="mb4">Power consumed per gate. Affects thermal design and battery life in portable systems.</p>
+      <div class="formula">P<sub>D</sub>(avg) = I<sub>cc(avg)</sub> × V<sub>CC</sub></div>
+      <div class="formula formula-sm">I<sub>cc(avg)</sub> = (I<sub>CCH</sub> + I<sub>CCL</sub>) / 2</div>
+      <p style="font-size:10.5px; margin:3px 0;">
+        <span class="hl-red">V<sub>CC</sub></span> = supply voltage &nbsp;|&nbsp;
+        <span class="hl-red">I<sub>CCH</sub></span> = current when output HIGH &nbsp;|&nbsp;
+        <span class="hl-red">I<sub>CCL</sub></span> = current when output LOW
+      </p>
+      <hr class="sep">
+      <div class="ex-box">
+        <div class="ex-title">Ex: TTL Package with 4 NAND gates</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive;">
+          V<sub>CC</sub> = 5V, I<sub>CCH</sub> = 1 mA, I<sub>CCL</sub> = 3 mA<br>
+          I<sub>avg</sub> = (1+3)/2 = 2 mA<br>
+          P<sub>D</sub>/gate = 2 mA × 5V = 10 mW<br>
+          Total (4 gates) = 4 × 10 = <span class="hl-red">40 mW ✓</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 4: Propagation Delay + Noise Margin -->
+  <div class="grid grid-2 mb8">
+
+    <!-- Propagation Delay -->
+    <div class="box box-blue">
+      <div class="sec-title">⑦ Propagation Delay</div>
+      <p class="mb4">Time taken for output to respond to a change in input. Limits maximum operating frequency.</p>
+      <div class="formula">t<sub>P(avg)</sub> = (t<sub>PHL</sub> + t<sub>PLH</sub>) / 2</div>
+      <div class="formula formula-sm">t<sub>total</sub> = t<sub>propagation</sub> × N<sub>levels</sub></div>
+      <p style="font-size:10.5px; margin:3px 0;">
+        <span class="hl-blue">t<sub>PHL</sub></span> = delay when output goes High→Low<br>
+        <span class="hl-blue">t<sub>PLH</sub></span> = delay when output goes Low→High<br>
+        <span class="hl-red">N<sub>levels</sub></span> = total number of logic levels in the path
+      </p>
+      <hr class="sep">
+      <div class="ex-box">
+        <div class="ex-title">Speed vs Accuracy</div>
+        <p style="font-size:10.5px;">For high-speed circuits, <span class="hl-red">maximum delay</span> (worst case) is more critical than average. Design must guarantee timing even in worst case.</p>
+      </div>
+    </div>
+
+    <!-- Noise Margin -->
+    <div class="box box-green">
+      <div class="sec-title">⑧ Noise Margin</div>
+      <p class="mb4"><span class="hl-green">Noise</span> = undesirable signal superimposed on normal signal (DC or AC). Noise margin = max noise that can be added without causing a logic error.</p>
+      <div class="formula">NM = Min(V<sub>OH</sub> − V<sub>IH</sub> , V<sub>IL</sub> − V<sub>OL</sub>)</div>
+      <table style="margin-top:4px;">
+        <tr><th>Symbol</th><th>Meaning</th></tr>
+        <tr><td class="hl-blue">V<sub>OH</sub></td><td style="text-align:left;">Min output voltage for logic HIGH</td></tr>
+        <tr><td class="hl-blue">V<sub>IH</sub></td><td style="text-align:left;">Min input voltage recognized as HIGH</td></tr>
+        <tr><td class="hl-red">V<sub>OL</sub></td><td style="text-align:left;">Max output voltage for logic LOW</td></tr>
+        <tr><td class="hl-red">V<sub>IL</sub></td><td style="text-align:left;">Max input voltage recognized as LOW</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px; color:#555;">Design rule: V<sub>IL</sub> &gt; V<sub>OL</sub> and V<sub>IH</sub> &lt; V<sub>OH</sub> for valid noise margin.</p>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<!-- ===== PAGE 2 ===== -->
+<div class="page">
+<div class="content">
+
+  <!-- HEADER PAGE 2 -->
+  <div class="header">
+    <div class="lec-badge">LEC 04 — P.2</div>
+    <div class="main-title">Logic Families: Bipolar & MOS</div>
+    <div class="header-info">
+      <div class="course">ECEG-3201 Digital Logic Design</div>
+      <div>AAIT — Dept. of Electrical & Computer Eng.</div>
+      <div class="date">RTL / DTL / TTL / ECL / MOS / CMOS</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: Bipolar Transistor + RTL + DTL -->
+  <div class="grid grid-3 mb8">
+
+    <!-- Bipolar Transistor -->
+    <div class="box box-dark">
+      <div class="sec-title">① Bipolar Transistor</div>
+      <p class="mb4">All bipolar IC families use <span class="hl-blue">NPN silicon</span> transistors. Three operating regions:</p>
+      <table>
+        <tr><th>Region</th><th>V<sub>BE</sub></th><th>V<sub>CE</sub></th><th>State</th></tr>
+        <tr><td class="hl-red">Cutoff</td><td>&lt; 0.6V</td><td>Open</td><td>OFF (I<sub>B</sub>=I<sub>C</sub>=0)</td></tr>
+        <tr><td class="hl-blue">Active</td><td>0.6–0.7V</td><td>&gt;0.8V</td><td>Amplifier</td></tr>
+        <tr><td class="hl-green">Saturation</td><td>0.7–0.8V</td><td>~0.2V</td><td>ON (switch)</td></tr>
+      </table>
+      <hr class="sep">
+      <p style="font-size:10.5px; margin-top:3px;">
+        <span class="hl-blue">h<sub>FE</sub></span> = DC current gain: I<sub>C</sub> = I<sub>B</sub> × h<sub>FE</sub><br>
+        In digital logic: transistor acts as <span class="hl-green">ON/OFF switch</span> (saturation/cutoff only).
+      </p>
+      <div class="notes-box" style="margin-top:4px;">
+        <p style="font-size:10px;">Saturation condition: I<sub>B</sub> ≥ I<sub>C</sub>/h<sub>FE</sub></p>
+      </div>
+    </div>
+
+    <!-- RTL -->
+    <div class="box box-blue">
+      <div class="sec-title">② RTL — Resistor Transistor Logic</div>
+      <p class="mb4">The earliest and simplest logic family.</p>
+      <ul class="mb4">
+        <li>Basic gate: <span class="hl-blue">NOR gate</span></li>
+        <li>V<sub>CC</sub> = 3.6 V</li>
+        <li>LOW level = <span class="hl-red">0.2 V</span></li>
+        <li>HIGH level = <span class="hl-green">1 – 3.6 V</span></li>
+        <li>Input resistors (~450 Ω) limit base current</li>
+        <li>Collector resistor (~640 Ω) pulls output HIGH</li>
+      </ul>
+      <div class="ex-box">
+        <div class="ex-title">NOR operation</div>
+        <p style="font-size:10px;">If any input = HIGH → that transistor saturates → output pulled LOW.<br>Only when ALL inputs = LOW → all transistors cut off → output = HIGH (via R<sub>C</sub>).</p>
+      </div>
+      <hr class="sep">
+      <p style="font-size:10px; color:#555;">⚠️ Disadvantages: Poor noise margin, low fan-out, slow. Mostly obsolete.</p>
+    </div>
+
+    <!-- DTL -->
+    <div class="box box-purple">
+      <div class="sec-title">③ DTL — Diode Transistor Logic</div>
+      <p class="mb4">Improved on RTL by using diodes for input logic.</p>
+      <ul class="mb4">
+        <li>Basic gate: <span class="hl-purple">NAND gate</span></li>
+        <li>V<sub>CC</sub> = 5 V</li>
+        <li>LOW level = <span class="hl-red">0.2 V</span></li>
+        <li>HIGH level = <span class="hl-green">4 – 5 V</span></li>
+        <li>Input diodes (D1, D2…) replace resistors → better noise margin</li>
+        <li>Output transistor (Q1) switches the output</li>
+      </ul>
+      <div class="ex-box">
+        <div class="ex-title">NAND operation (Y = (ABC)')</div>
+        <p style="font-size:10px;">All inputs HIGH → diodes forward biased → enough base current → Q1 saturates → Y = LOW.<br>Any input LOW → that diode clamps base → Q1 cuts off → Y = HIGH.</p>
+      </div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11px; color:#6c3483;">
+        Modified DTL: adds extra transistor Q2 to supply more base current to Q1 → increases fan-out significantly.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: TTL variants -->
+  <div class="grid grid-3 mb8">
+
+    <!-- TTL -->
+    <div class="box box-teal">
+      <div class="sec-title">④ TTL — Transistor-Transistor Logic</div>
+      <p class="mb4">The dominant bipolar family for decades. Evolved from DTL.</p>
+      <ul class="mb4">
+        <li>Basic gate: <span class="hl-teal">NAND gate</span></li>
+        <li>Multi-emitter input transistor (Q1) replaces DTL input diodes</li>
+        <li>Each emitter forms a pn junction (like DTL diodes)</li>
+        <li>LOW = 0.2 V &nbsp;|&nbsp; HIGH = 2.4 – 5 V</li>
+        <li>V<sub>CC</sub> = 5 V (standard)</li>
+      </ul>
+      <div class="notes-box">
+        <div class="notes-title">TTL Sub-families</div>
+        <p style="font-size:10px;">Standard → Low-power (L) → High-speed (H) → Schottky (S) → Low-power Schottky (LS) → Advanced Schottky (AS, ALS, F)</p>
+      </div>
+    </div>
+
+    <!-- Totem-Pole TTL -->
+    <div class="box box-orange">
+      <div class="sec-title">⑤ Totem-Pole TTL</div>
+      <p class="mb4">Active pull-up replaces passive resistor R<sub>L</sub> → reduced propagation delay.</p>
+      <ul class="mb4">
+        <li>Q4 sits on top of Q3 → "totem-pole" naming</li>
+        <li>Output HIGH: Q4 ON, Q3 OFF → Q4 actively charges load</li>
+        <li>Output LOW: Q3 ON (sat), Q4 OFF → Q3 sinks current</li>
+        <li>Diode D1 between Q4 base and Q3 collector ensures Q4 is OFF when Q3 is saturated (provides voltage drop)</li>
+        <li><span class="hl-red">Cannot wire-AND</span> totem-pole outputs directly!</li>
+      </ul>
+      <div class="ex-box">
+        <div class="ex-title">Why faster?</div>
+        <p style="font-size:10px;">Active Q4 "pushes" current into the load (fast charging). Passive R<sub>L</sub> can only let current "trickle" in → much slower.</p>
+      </div>
+    </div>
+
+    <!-- Schottky + Three-State TTL -->
+    <div class="box box-red">
+      <div class="sec-title">⑥ Schottky & 3-State TTL</div>
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:2px;">Schottky TTL</div>
+      <ul class="mb4">
+        <li>Schottky diode placed <span class="hl-red">base-to-collector</span> on each transistor</li>
+        <li>Diode = metal + semiconductor (V<sub>f</sub> ≈ 0.25V) → <span class="hl-red">prevents deep saturation</span></li>
+        <li>Less stored charge → faster switching</li>
+        <li>Reduces propagation delay <span class="hl-green">without increasing power</span></li>
+      </ul>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:2px;">Three-State (Tri-State) TTL</div>
+      <ul>
+        <li><span class="hl-blue">State 1</span>: LOW (Q3 ON, Q4 OFF)</li>
+        <li><span class="hl-blue">State 2</span>: HIGH (Q4 ON, Q3 OFF)</li>
+        <li><span class="hl-purple">State 3</span>: High-Z (both OFF) — output disconnected</li>
+        <li>Enables <span class="hl-green">bus sharing</span> — multiple gates share one wire</li>
+        <li>Controlled by a separate Enable/Control input</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: ECL + MOS + CMOS -->
+  <div class="grid grid-3 mb8">
+
+    <!-- ECL -->
+    <div class="box box-purple">
+      <div class="sec-title">⑦ ECL — Emitter-Coupled Logic</div>
+      <ul class="mb4">
+        <li><span class="hl-purple">Non-saturated</span> logic family → transistors never saturate → fastest switching</li>
+        <li>Propagation delay: <span class="hl-red">1–2 ns</span> (fastest bipolar family)</li>
+        <li>Used in: mainframe computers, high-speed networking</li>
+        <li>Noise margin: only <span class="hl-red">0.3 V</span> (very poor)</li>
+        <li>Very high power dissipation</li>
+        <li>High fan-out possible</li>
+        <li>Negative supply voltage (V<sub>EE</sub> = −5.2 V)</li>
+      </ul>
+      <div class="notes-box">
+        <p style="font-size:10px; color:#6c3483; font-style:italic;">⚠️ Now largely <strong>obsolete</strong> — replaced by high-speed CMOS which achieves similar speed with far lower power.</p>
+      </div>
+    </div>
+
+    <!-- MOS -->
+    <div class="box box-green">
+      <div class="sec-title">⑧ MOS — Metal-Oxide Semiconductor</div>
+      <p class="mb4">Unipolar (only one carrier type) transistor. Two types:</p>
+      <div class="grid grid-2" style="gap:5px; margin-bottom:5px;">
+        <div style="border:1.5px solid #1e8449; border-radius:3px; padding:3px 5px;">
+          <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1e8449;">pMOS</div>
+          <p style="font-size:10px;">p-channel transistor, n-type substrate. Gate(−) attracts holes to form channel. Slower.</p>
+        </div>
+        <div style="border:1.5px solid #c0392b; border-radius:3px; padding:3px 5px;">
+          <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#c0392b;">nMOS</div>
+          <p style="font-size:10px;">n-channel transistor, p-type substrate. Gate(+) attracts electrons. Faster than pMOS.</p>
+        </div>
+      </div>
+      <ul>
+        <li><span class="hl-green">Low power consumption</span> compared to bipolar</li>
+        <li><span class="hl-green">Small area</span> on silicon → high density</li>
+        <li>Implements: Inverter, NAND, NOR gates</li>
+        <li>Slower than bipolar (TTL, ECL)</li>
+      </ul>
+    </div>
+
+    <!-- CMOS -->
+    <div class="box box-blue">
+      <div class="sec-title">⑨ CMOS — Complementary MOS</div>
+      <p class="mb4">Uses <span class="hl-blue">both pMOS and nMOS</span> transistors in complementary pairs → most important family today.</p>
+      <ul class="mb4">
+        <li>Inverter: pMOS (pull-up) + nMOS (pull-down)</li>
+        <li>NAND: 2 pMOS in parallel + 2 nMOS in series</li>
+        <li>NOR: 2 pMOS in series + 2 nMOS in parallel</li>
+        <li><span class="hl-green">Near-zero static power</span> — only draws current during switching</li>
+        <li>Excellent noise margin (~V<sub>DD</sub>/2)</li>
+        <li>V<sub>DD</sub> = 3.3V, 2.5V, 1.8V, 1.2V (modern)</li>
+      </ul>
+      <div class="notes-box">
+        <div class="notes-title">Why CMOS dominates</div>
+        <p style="font-size:10px;">Low power + high density + good noise immunity + scalability = used in all modern CPUs, GPUs, smartphones, FPGAs.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 4: Family Comparison + Key Takeaways -->
+  <div class="grid grid-2 mb4">
+
+    <!-- Comparison Table -->
+    <div class="box box-dark">
+      <div class="sec-title">⑩ IC Family Comparison</div>
+      <table>
+        <tr><th>Family</th><th>Basic Gate</th><th>V<sub>CC</sub></th><th>Delay</th><th>Power</th><th>Noise Margin</th></tr>
+        <tr><td class="hl-blue">RTL</td><td>NOR</td><td>3.6V</td><td>~12 ns</td><td>Med</td><td class="td-red">Poor</td></tr>
+        <tr><td class="hl-purple">DTL</td><td>NAND</td><td>5V</td><td>~30 ns</td><td>Med</td><td>OK</td></tr>
+        <tr><td class="hl-teal">TTL</td><td>NAND</td><td>5V</td><td>~10 ns</td><td>Med-High</td><td class="td-green">Good</td></tr>
+        <tr><td class="hl-orange">Schottky</td><td>NAND</td><td>5V</td><td>~3 ns</td><td>High</td><td class="td-green">Good</td></tr>
+        <tr><td class="hl-red">ECL</td><td>NOR/OR</td><td>−5.2V</td><td class="td-green">1–2 ns</td><td class="td-red">Very High</td><td class="td-red">Poor</td></tr>
+        <tr><td style="color:#1e8449; font-weight:700;">CMOS</td><td>NAND/NOR</td><td>1.2–5V</td><td>1–5 ns</td><td class="td-green">Very Low</td><td class="td-green">Excellent</td></tr>
+      </table>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="key-box">
+      <div class="key-title">✅ Key Takeaways</div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text">ICs are classified by <span class="hl-blue">gate count</span> (SSI → GSI) and by <span class="hl-blue">technology family</span> (RTL, TTL, CMOS, etc.)</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-blue">Fan-Out</span> = Min(I<sub>OH</sub>/I<sub>IH</sub>, I<sub>OL</sub>/I<sub>IL</sub>). Standard TTL fan-out = <span class="hl-red">10</span>.</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-red">Power</span>: P<sub>D</sub>(avg) = I<sub>cc(avg)</sub> × V<sub>CC</sub>. <span class="hl-red">Delay</span>: t<sub>P(avg)</sub> = (t<sub>PHL</sub>+t<sub>PLH</sub>)/2.</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-green">Totem-pole</span> TTL uses active pull-up for faster switching. <span class="hl-purple">Schottky</span> prevents saturation for even faster speed.</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-red">ECL</span> is fastest (1–2 ns) but high power & poor noise margin → now obsolete.</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-blue">CMOS</span> dominates today: complementary pMOS+nMOS, near-zero static power, excellent noise margin.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#117a65;">✓</div>
+        <div class="step-text"><span class="hl-teal">Three-state</span> TTL enables bus architectures by adding a High-Z (disconnected) output state.</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Kalam', cursive;
+    padding: 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fefdf8;
+    border: 3px solid #888;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      #d0e4f0 27px,
+      #d0e4f0 28px
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 72px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 12px 14px 16px 14px;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .lec-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+    padding: 0 12px;
+  }
+
+  .header-info {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .header-info .course { color: #1a5276; font-weight: 700; }
+  .header-info .date { color: #c0392b; }
+
+  /* ---- GRID LAYOUT ---- */
+  .grid { display: grid; gap: 8px; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .mb4 { margin-bottom: 4px; }
+  .mb6 { margin-bottom: 6px; }
+  .mb8 { margin-bottom: 8px; }
+
+  /* ---- SECTION BOXES ---- */
+  .box {
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .box-blue   { border-color: #1a5276; background: rgba(214,234,248,0.4); }
+  .box-green  { border-color: #1e8449; background: rgba(212,239,223,0.4); }
+  .box-red    { border-color: #c0392b; background: rgba(253,228,226,0.4); }
+  .box-purple { border-color: #6c3483; background: rgba(232,218,239,0.4); }
+  .box-yellow { border-color: #d4ac0d; background: rgba(254,249,231,0.6); }
+  .box-teal   { border-color: #117a65; background: rgba(212,246,238,0.4); }
+  .box-dark   { border-color: #222;    background: rgba(240,240,235,0.6); }
+  .box-orange { border-color: #e67e22; background: rgba(253,235,208,0.4); }
+
+  .sec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .box-blue .sec-title   { color: #1a5276; }
+  .box-green .sec-title  { color: #1e8449; }
+  .box-red .sec-title    { color: #c0392b; }
+  .box-purple .sec-title { color: #6c3483; }
+  .box-teal .sec-title   { color: #117a65; }
+  .box-dark .sec-title   { color: #111; }
+  .box-orange .sec-title { color: #e67e22; }
+  .box-yellow .sec-title { color: #9a7d0a; }
+
+  p, li { font-size: 11px; line-height: 1.55; color: #222; }
+  ul { padding-left: 14px; }
+  li { list-style: disc; }
+  ol { padding-left: 16px; }
+  ol li { list-style: decimal; font-size: 11px; line-height: 1.5; }
+
+  .hl-red    { color: #c0392b; font-weight: 700; }
+  .hl-blue   { color: #1a5276; font-weight: 700; }
+  .hl-green  { color: #1e8449; font-weight: 700; }
+  .hl-purple { color: #6c3483; font-weight: 700; }
+  .hl-teal   { color: #117a65; font-weight: 700; }
+  .hl-orange { color: #e67e22; font-weight: 700; }
+
+  /* ---- FORMULA ---- */
+  .formula {
+    background: rgba(255,255,230,0.9);
+    border: 2px solid #c9a100;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0;
+    text-align: center;
+  }
+  .formula-sm { font-size: 11px; padding: 3px 6px; }
+
+  /* ---- TABLE ---- */
+  table { border-collapse: collapse; width: 100%; font-size: 10.5px; font-family: 'Kalam', cursive; }
+  th { background: rgba(52,73,94,0.15); border: 1.5px solid #555; padding: 2px 5px; font-weight: 700; font-size: 10.5px; text-align: center; font-family: 'Caveat', cursive; }
+  td { border: 1px solid #888; padding: 2px 5px; text-align: center; font-size: 10.5px; }
+  .td-hl { background: rgba(255,255,150,0.6); font-weight: 700; }
+  .td-r  { color: #c0392b; font-weight: 700; }
+
+  /* ---- EXAMPLE BOX ---- */
+  .ex-box {
+    background: rgba(255,253,235,0.8);
+    border: 1.5px solid #c9a100;
+    border-radius: 3px;
+    padding: 4px 6px;
+    margin: 3px 0;
+  }
+  .ex-title {
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7d6608;
+    margin-bottom: 2px;
+  }
+
+  /* ---- STEP / KEY-TAKEAWAY ---- */
+  .step { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 4px; }
+  .step-num {
+    min-width: 18px; height: 18px;
+    background: #1a5276;
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-text { font-size: 10.5px; line-height: 1.5; color: #222; padding-top: 1px; }
+
+  /* ---- NOTES BOX ---- */
+  .notes-box {
+    background: rgba(255,243,205,0.6);
+    border: 1.5px dashed #c9a100;
+    border-radius: 4px;
+    padding: 5px 7px;
+    margin-top: 5px;
+  }
+  .notes-title {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: #7d6608;
+    margin-bottom: 3px;
+  }
+
+  /* ---- KEY BOX ---- */
+  .key-box {
+    background: rgba(212,246,238,0.5);
+    border: 2px solid #117a65;
+    border-radius: 4px;
+    padding: 7px 9px;
+  }
+  .key-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    color: #117a65;
+    border-bottom: 1.5px solid #117a65;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ---- GATE SYMBOL ---- */
+  .gate-box {
+    background: rgba(240,240,255,0.7);
+    border: 1.5px solid #6c3483;
+    border-radius: 3px;
+    padding: 4px 7px;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+    font-size: 14px;
+    font-weight: 700;
+    color: #6c3483;
+  }
+
+  .sep { border: none; border-top: 1px dashed #bbb; margin: 5px 0; }
+
+  /* ---- QUIZ BOX ---- */
+  .quiz-box {
+    background: rgba(253,228,226,0.5);
+    border: 2px solid #c0392b;
+    border-radius: 4px;
+    padding: 7px 9px;
+  }
+  .quiz-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    color: #c0392b;
+    border-bottom: 1.5px solid #c0392b;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ---- TRUTH TABLE COMPACT ---- */
+  .tt { margin: 4px 0; }
+  .tt td, .tt th { padding: 1px 6px; font-size: 10px; }
+
+  /* ---- MUX DIAGRAM ---- */
+  .mux-svg { display: block; margin: 0 auto; }
+
+  /* ---- READING BOX ---- */
+  .reading-box {
+    background: rgba(214,234,248,0.5);
+    border: 2px dashed #1a5276;
+    border-radius: 4px;
+    padding: 6px 9px;
+  }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="lec-badge">LEC 9</div>
+    <div class="main-title">Comparators · NAND/NOR · Multiplexers · Priority Encoders</div>
+    <div class="header-info">
+      <div class="course">ECEG-3201 Digital Logic Design</div>
+      <div>AAIT — Dept. of ECE</div>
+      <div class="date">Nebyu Yonas Sutri</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L8_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 08</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L10_Sequential_Latches_FF_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 10 →</a>
+</div>
+
+  <!-- ===== LEARNING OUTCOMES ===== -->
+  <div class="box box-teal mb6">
+    <div class="sec-title">🎯 Learning Outcomes</div>
+    <div class="grid grid-3">
+      <div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">1</div><div class="step-text"><span class="hl-teal">Comparators</span> — design &amp; circuit</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">2</div><div class="step-text"><span class="hl-teal">NAND gates</span> — universal, DeMorgan</div></div>
+      </div>
+      <div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">3</div><div class="step-text"><span class="hl-teal">NOR gates</span> — universal, DeMorgan</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">4</div><div class="step-text"><span class="hl-teal">Full Adders</span> — Baugh-Wooley mult.</div></div>
+      </div>
+      <div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">5</div><div class="step-text"><span class="hl-teal">Multiplexers</span> — logic synthesis</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">6</div><div class="step-text"><span class="hl-teal">Priority Encoders</span> — design &amp; truth table</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ROW 1: COMPARATORS ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- What is a Comparator -->
+    <div class="box box-blue">
+      <div class="sec-title">① Comparators — Overview</div>
+      <ul class="mb4">
+        <li>Arithmetic circuit that <span class="hl-blue">compares two binary numbers</span> A and B</li>
+        <li>Produces <span class="hl-red">three outputs</span>: <strong>AeqB</strong>, <strong>AgtB</strong>, <strong>AltB</strong></li>
+        <li><span class="hl-blue">AeqB = 1</span> if A = B</li>
+        <li><span class="hl-green">AgtB = 1</span> if A &gt; B</li>
+        <li><span class="hl-red">AltB = 1</span> if A &lt; B</li>
+      </ul>
+      <p class="mb4">For 4-bit numbers: A = a₃a₂a₁a₀, B = b₃b₂b₁b₀</p>
+      <p class="mb4">Define <span class="hl-blue">intermediate signals iₖ</span> — each iₖ = 1 if aₖ = bₖ:</p>
+
+      <div class="formula formula-sm">iₖ = aₖ XNOR bₖ = ā<sub>k</sub>b̄<sub>k</sub> + aₖbₖ</div>
+      <div class="formula formula-sm">AeqB = i₃ · i₂ · i₁ · i₀</div>
+
+      <hr class="sep">
+      <p class="mb4"><strong>AgtB</strong> — check bits from MSB down. First bit-position k where aₖ ≠ bₖ decides:</p>
+      <div class="formula formula-sm">AgtB = a₃b̄₃ + i₃a₂b̄₂ + i₃i₂a₁b̄₁ + i₃i₂i₁a₀b̄₀</div>
+      <div class="formula formula-sm">AltB = 1 − AeqB − AgtB</div>
+
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">💡 Key Idea</div>
+        <p style="font-size:10.5px;">Truth table approach works but gets <span class="hl-red">huge</span> for large n. Pair-by-pair approach is much more efficient!</p>
+      </div>
+    </div>
+
+    <!-- Comparator Intermediate Signals -->
+    <div>
+      <div class="box box-purple mb6">
+        <div class="sec-title">Intermediate Signals (iₖ)</div>
+        <table class="tt">
+          <tr><th>aₖ</th><th>bₖ</th><th>iₖ = aₖ XNOR bₖ</th><th>Meaning</th></tr>
+          <tr><td>0</td><td>0</td><td class="td-hl">1</td><td>equal</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>differ</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>differ</td></tr>
+          <tr><td>1</td><td>1</td><td class="td-hl">1</td><td>equal</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:4px; color:#555; font-style:italic;">iₖ = 1 means the two bits at position k are the same</p>
+      </div>
+
+      <div class="box box-green">
+        <div class="sec-title">AgtB — Derivation Logic</div>
+        <ol>
+          <li>Compare MSB first (bit 3). If a₃=1, b₃=0 → A &gt; B immediately</li>
+          <li>If i₃=1 (MSB equal), check next bit (bit 2)</li>
+          <li>If i₃·i₂=1, check bit 1, and so on…</li>
+          <li>Each term in AgtB covers a <span class="hl-green">new "first-difference" scenario</span></li>
+        </ol>
+        <div class="ex-box" style="margin-top:5px;">
+          <div class="ex-title">Circuit implementation uses:</div>
+          <p style="font-size:10.5px; font-family:'Caveat',cursive;">XNOR gates → iₖ signals<br>
+          AND gates → chain equality checks<br>
+          OR gate → combine all AgtB terms</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 2: NAND / NOR ===== -->
+  <div class="grid grid-3 mb6">
+
+    <!-- NAND -->
+    <div class="box box-red">
+      <div class="sec-title">② NAND Gate</div>
+      <p class="mb4">NAND = AND output <span class="hl-red">complemented</span></p>
+      <div class="formula formula-sm">Y = ̄(x₁ · x₂)</div>
+      <p class="mb4" style="font-size:10.5px;"><strong>DeMorgan's:</strong> NAND of x₁ and x₂ is equivalent to ORing their complements:</p>
+      <div class="formula formula-sm">x̄₁ · x̄₂ → x̄₁ + x̄₂</div>
+
+      <hr class="sep">
+      <p class="mb4" style="font-size:10.5px;"><span class="hl-red">Universal gate</span> — any logic function can be built using only NAND gates.</p>
+      <p style="font-size:10.5px;">Any <span class="hl-blue">SOP</span> (Sum of Products) expression → implementable with only NANDs using <em>double inversion</em>:</p>
+      <div class="formula formula-sm" style="margin-top:4px;">f = x₁x₂ + x₃x₄x₅</div>
+      <p style="font-size:10px; color:#555; font-style:italic; margin-top:3px;">Apply double inversion → two-level NAND-NAND network</p>
+
+      <table class="tt" style="margin-top:5px;">
+        <tr><th>x₁</th><th>x₂</th><th>NAND</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-hl">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-hl">1</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-r">0</td></tr>
+      </table>
+    </div>
+
+    <!-- NOR -->
+    <div class="box box-purple">
+      <div class="sec-title">③ NOR Gate</div>
+      <p class="mb4">NOR = OR output <span class="hl-purple">complemented</span></p>
+      <div class="formula formula-sm">Y = ̄(x₁ + x₂)</div>
+      <p class="mb4" style="font-size:10.5px;"><strong>DeMorgan's:</strong> NOR function = first invert inputs, then AND them:</p>
+      <div class="formula formula-sm">x̄₁ + x̄₂ → x̄₁ · x̄₂</div>
+
+      <hr class="sep">
+      <p class="mb4" style="font-size:10.5px;"><span class="hl-purple">Universal gate</span> — any logic function can be built using only NOR gates.</p>
+      <p style="font-size:10.5px;">Any <span class="hl-blue">POS</span> (Product of Sums) expression → implementable with only NORs:</p>
+      <div class="formula formula-sm" style="margin-top:4px;">f = (x₁+x₂)(x₃+x₄+x₅)</div>
+      <p style="font-size:10px; color:#555; font-style:italic; margin-top:3px;">Apply double inversion → two-level NOR-NOR network</p>
+
+      <table class="tt" style="margin-top:5px;">
+        <tr><th>x₁</th><th>x₂</th><th>NOR</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-r">0</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-r">0</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-r">0</td></tr>
+      </table>
+    </div>
+
+    <!-- NAND vs NOR Comparison -->
+    <div>
+      <div class="box box-dark mb6">
+        <div class="sec-title">NAND vs NOR — Quick Compare</div>
+        <table>
+          <tr><th>Feature</th><th>NAND</th><th>NOR</th></tr>
+          <tr><td>Based on</td><td>AND+NOT</td><td>OR+NOT</td></tr>
+          <tr><td>Universal?</td><td class="td-hl">✓ Yes</td><td class="td-hl">✓ Yes</td></tr>
+          <tr><td>Implements</td><td>SOP</td><td>POS</td></tr>
+          <tr><td>DeMorgan</td><td>→ OR of inv.</td><td>→ AND of inv.</td></tr>
+          <tr><td>Simpler HW?</td><td class="td-hl">✓ Yes</td><td class="td-hl">✓ Yes</td></tr>
+        </table>
+      </div>
+
+      <div class="notes-box">
+        <div class="notes-title">⚠️ Double Inversion Trick</div>
+        <p style="font-size:10.5px;">To implement any expression with only one gate type:</p>
+        <ol>
+          <li style="font-size:10.5px;">Write SOP (for NAND) or POS (for NOR)</li>
+          <li style="font-size:10.5px;">Apply double inversion (adds two bubbles)</li>
+          <li style="font-size:10.5px;">Bubbles cancel on shared wires → pure NAND or NOR network</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 3: BAUGH-WOOLEY + MUX ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- Baugh-Wooley -->
+    <div class="box box-orange">
+      <div class="sec-title">④ Baugh-Wooley Multiplier</div>
+      <p class="mb4" style="font-size:10.5px;">A method for multiplying <span class="hl-orange">two's complement signed</span> binary numbers using only AND gates and adders — no sign correction needed afterward.</p>
+
+      <div class="grid grid-2" style="gap:6px;">
+        <div class="ex-box">
+          <div class="ex-title">Example 1: 10 × 12 = 120</div>
+          <p style="font-family:'Caveat',cursive; font-size:10.5px; line-height:1.8;">
+            1010 × 1100<br>
+            = <strong>1111000₂ = 120₁₀</strong> ✓
+          </p>
+        </div>
+        <div class="ex-box">
+          <div class="ex-title">Example 2: 9 × 6 = 54</div>
+          <p style="font-family:'Caveat',cursive; font-size:10.5px; line-height:1.8;">
+            0110 × 1001<br>
+            = <strong>110110₂ = 54₁₀</strong> ✓
+          </p>
+        </div>
+      </div>
+
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">Why Baugh-Wooley?</div>
+        <ul>
+          <li style="font-size:10.5px;">Handles signed numbers <span class="hl-orange">directly</span></li>
+          <li style="font-size:10.5px;">Uses full adder arrays — regular structure</li>
+          <li style="font-size:10.5px;">More hardware-efficient than sign-extension method</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MUX Synthesis -->
+    <div class="box box-blue">
+      <div class="sec-title">⑤ Logic Synthesis Using Multiplexers</div>
+      <p class="mb4" style="font-size:10.5px;">MUXes can implement any logic function by connecting inputs to fixed 0/1 or variable signals.</p>
+
+      <div class="ex-box mb4">
+        <div class="ex-title">Ex 1: XOR using 4-to-1 MUX (F = w₁ ⊕ w₂)</div>
+        <div class="grid grid-2" style="gap:6px;">
+          <table class="tt">
+            <tr><th>w₁</th><th>w₂</th><th>F</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td class="td-hl">1</td></tr>
+            <tr><td>1</td><td>0</td><td class="td-hl">1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td></tr>
+          </table>
+          <div>
+            <p style="font-size:10.5px; margin-bottom:3px;">Use w₁,w₂ as select lines:</p>
+            <p style="font-family:'Caveat',cursive; font-size:10.5px; line-height:1.8;">
+              I₀=0, I₁=1<br>I₂=1, I₃=0<br>
+              → Connect directly!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-box mb4">
+        <div class="ex-title">Ex 2: XOR using 2-to-1 MUX (F = w₁ ⊕ w₂)</div>
+        <p style="font-family:'Caveat',cursive; font-size:10.5px; line-height:1.7;">
+          Use w₁ as select line:<br>
+          • When w₁=0 → F = w₂ &nbsp;&nbsp;(I₀ = w₂)<br>
+          • When w₁=1 → F = w̄₂ &nbsp;(I₁ = w̄₂)<br>
+          → One 2-to-1 MUX + one inverter!
+        </p>
+      </div>
+
+      <div class="ex-box">
+        <div class="ex-title">Ex 3: 3-input Majority using 4-to-1 MUX</div>
+        <p style="font-family:'Caveat',cursive; font-size:10.5px; line-height:1.7;">
+          F = 1 if majority of w₁,w₂,w₃ = 1<br>
+          Use w₁,w₂ as selects:<br>
+          I₀=0, I₁=w₃, I₂=w₃, I₃=1
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 4: PRIORITY ENCODER + QUIZ + TAKEAWAYS ===== -->
+  <div class="grid grid-3 mb6">
+
+    <!-- Priority Encoder -->
+    <div class="box box-green">
+      <div class="sec-title">⑥ Priority Encoder</div>
+      <ul class="mb4">
+        <li>Each input has an associated <span class="hl-green">priority level</span></li>
+        <li>Outputs indicate the <span class="hl-green">highest-priority active input</span></li>
+        <li>Lower-priority inputs are <span class="hl-red">ignored</span> when a higher one is asserted</li>
+      </ul>
+      <p class="mb4" style="font-size:10.5px;"><strong>Outputs y₁, y₀</strong> → binary number of highest priority active input</p>
+      <p class="mb4" style="font-size:10.5px;"><strong>Output z</strong> → validity flag</p>
+      <div class="formula formula-sm">z = 1 if any input = 1</div>
+      <div class="formula formula-sm">z = 0 if all inputs = 0</div>
+
+      <hr class="sep">
+      <p style="font-size:10.5px; margin-bottom:3px;"><strong>4-input Priority Encoder truth table:</strong></p>
+      <table>
+        <tr><th>w₃</th><th>w₂</th><th>w₁</th><th>w₀</th><th>y₁</th><th>y₀</th><th>z</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>d</td><td>d</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td>d</td><td>0</td><td class="td-hl">1</td><td class="td-hl">1</td></tr>
+        <tr><td>0</td><td>1</td><td>d</td><td>d</td><td class="td-hl">1</td><td>0</td><td class="td-hl">1</td></tr>
+        <tr><td>1</td><td>d</td><td>d</td><td>d</td><td class="td-hl">1</td><td class="td-hl">1</td><td class="td-hl">1</td></tr>
+      </table>
+      <p style="font-size:9.5px; color:#555; font-style:italic; margin-top:3px;">d = don't care (overridden by higher priority)</p>
+    </div>
+
+    <!-- Quiz -->
+    <div>
+      <div class="quiz-box mb6">
+        <div class="quiz-title">📝 Class Quiz — 15 min</div>
+        <p style="font-size:10.5px; margin-bottom:5px;"><strong>Section 3D:</strong></p>
+        <p style="font-size:10.5px; margin-bottom:4px;">Design a combinational logic circuit that takes an unsigned <span class="hl-red">2-bit number X = X₁X₀</span> and computes its <span class="hl-red">square Y = X²</span>.</p>
+        <p style="font-size:10px; color:#555; margin-bottom:6px;">Show all steps: truth table → Boolean expressions → minimization → final circuit.</p>
+
+        <div class="ex-box mb4">
+          <div class="ex-title">Hint: Possible outputs</div>
+          <table class="tt">
+            <tr><th>X₁</th><th>X₀</th><th>X</th><th>Y=X²</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0000</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0001</td></tr>
+            <tr><td>1</td><td>0</td><td>2</td><td>0100</td></tr>
+            <tr><td>1</td><td>1</td><td>3</td><td>1001</td></tr>
+          </table>
+        </div>
+
+        <hr class="sep">
+        <p style="font-size:10.5px; margin-bottom:5px;"><strong>Section 3C:</strong></p>
+        <ol>
+          <li style="font-size:10.5px;">Determine output functions A and B as sums of minterms</li>
+          <li style="font-size:10.5px;">Identify the circuit's functionality — what well-known component does it implement? What are other names for A and B?</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Key Takeaways + Reading -->
+    <div>
+      <div class="key-box mb6">
+        <div class="key-title">✓ Key Takeaways</div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">Comparator uses <span class="hl-blue">XNOR (iₖ)</span> to detect equality bit-by-bit. AeqB = AND of all iₖ</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">AgtB built from <span class="hl-blue">first differing bit</span> — check MSB first, chain downward</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-red">NAND &amp; NOR</span> are <em>universal</em> — any function implementable with either one alone</div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">SOP → NAND-NAND &nbsp;|&nbsp; POS → NOR-NOR &nbsp;|&nbsp; Use <span class="hl-purple">double inversion</span></div></div>
+        <div class="step mb4"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-green">MUX</span> can synthesize any function: connect fixed 0/1 or variable inputs to data lines</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-orange">Priority encoder</span> outputs the binary code of the highest-active input; z=0 means all inputs are 0</div></div>
+      </div>
+
+      <div class="reading-box">
+        <div style="font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#1a5276; margin-bottom:4px;">📖 Reading Assignment</div>
+        <p style="font-size:10.5px; margin-bottom:3px;">Read about:</p>
+        <ul>
+          <li style="font-size:10.5px;"><span class="hl-blue">Flip-Flops</span></li>
+          <li style="font-size:10.5px;"><span class="hl-blue">Registers</span></li>
+          <li style="font-size:10.5px;"><span class="hl-blue">Counters</span></li>
+          <li style="font-size:10.5px;"><span class="hl-blue">Simple Processor</span></li>
+        </ul>
+        <div style="margin-top:4px; font-family:'Caveat',cursive; font-size:10.5px; color:#555;">
+          📚 Fundamentals of Digital Logic with Verilog Design<br>
+          Chapter 7 · Pages <strong>349 – 385</strong>
+        </div>
+      </div>
+
+      <div style="text-align:right; margin-top:6px; font-family:'Caveat',cursive; font-size:13px; color:#888;">
+        Questions? 😊
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</body>
+</html>

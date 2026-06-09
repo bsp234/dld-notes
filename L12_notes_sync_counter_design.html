@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f0e8; font-family: 'Kalam', cursive; padding: 0; }
+
+  .page {
+    width: 100%; max-width: 1100px; margin: 0 auto;
+    background: #fefdf8; border: 3px solid #888;
+    position: relative; overflow: hidden;
+  }
+  .page::before {
+    content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
+    background-image: repeating-linear-gradient(transparent, transparent 27px, #d0e4f0 27px, #d0e4f0 28px);
+    opacity: 0.3; pointer-events: none; z-index: 0;
+  }
+  .page::after {
+    content: ''; position: absolute; top:0; bottom:0; left:72px;
+    border-left: 2px solid rgba(220,80,80,0.3); pointer-events: none; z-index: 0;
+  }
+  .content { position: relative; z-index: 1; padding: 12px 14px 16px 14px; }
+
+  .header { display:flex; align-items:flex-start; justify-content:space-between; border-bottom:2.5px solid #333; padding-bottom:8px; margin-bottom:10px; }
+  .lec-badge { border:2.5px solid #c0392b; color:#c0392b; font-family:'Caveat',cursive; font-size:13px; font-weight:700; padding:2px 8px; border-radius:3px; }
+  .main-title { font-family:'Caveat',cursive; font-size:22px; font-weight:700; text-align:center; color:#111; letter-spacing:1px; text-transform:uppercase; flex:1; padding:0 12px; }
+  .header-info { font-family:'Kalam',cursive; font-size:10.5px; color:#333; text-align:right; line-height:1.5; }
+  .header-info .course { color:#1a5276; font-weight:700; }
+  .header-info .date { color:#c0392b; }
+
+  .grid { display:grid; gap:8px; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-2-1 { grid-template-columns:2fr 1fr; }
+  .grid-1-2 { grid-template-columns:1fr 2fr; }
+
+  .box { border:2px solid #333; border-radius:4px; padding:7px 9px; background:rgba(255,255,255,0.6); }
+  .box-blue { border-color:#1a5276; background:rgba(214,234,248,0.4); }
+  .box-green { border-color:#1e8449; background:rgba(212,239,223,0.4); }
+  .box-red { border-color:#c0392b; background:rgba(253,228,226,0.4); }
+  .box-purple { border-color:#6c3483; background:rgba(232,218,239,0.4); }
+  .box-orange { border-color:#e67e22; background:rgba(253,235,208,0.4); }
+  .box-yellow { border-color:#d4ac0d; background:rgba(254,249,231,0.6); }
+  .box-teal { border-color:#117a65; background:rgba(212,246,238,0.4); }
+  .box-dark { border-color:#222; background:rgba(240,240,235,0.6); }
+
+  .sec-title { font-family:'Caveat',cursive; font-size:13.5px; font-weight:700; text-transform:uppercase; border-bottom:1.5px solid currentColor; margin-bottom:5px; padding-bottom:2px; letter-spacing:0.5px; }
+  .box-blue .sec-title { color:#1a5276; }
+  .box-green .sec-title { color:#1e8449; }
+  .box-red .sec-title { color:#c0392b; }
+  .box-purple .sec-title { color:#6c3483; }
+  .box-teal .sec-title { color:#117a65; }
+  .box-orange .sec-title { color:#e67e22; }
+  .box-dark .sec-title { color:#111; }
+  .box-yellow .sec-title { color:#7d5a00; }
+  .box .sec-title { color:#333; }
+
+  p, li { font-size:11px; line-height:1.55; color:#222; }
+  ul { padding-left:14px; }
+  li { list-style:disc; }
+  ol { padding-left:16px; }
+  ol li { list-style:decimal; font-size:11px; line-height:1.5; }
+
+  .formula { background:rgba(255,255,230,0.9); border:2px solid #c9a100; border-radius:4px; padding:4px 8px; font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#333; margin:4px 0; text-align:center; }
+  .formula-sm { font-size:11px; padding:3px 6px; }
+
+  table { border-collapse:collapse; width:100%; font-size:10.5px; font-family:'Kalam',cursive; }
+  th { background:rgba(52,73,94,0.15); border:1.5px solid #555; padding:2px 5px; font-weight:700; font-size:10.5px; text-align:center; font-family:'Caveat',cursive; }
+  td { border:1px solid #888; padding:2px 5px; text-align:center; font-size:10.5px; }
+  .td-hl { background:rgba(255,255,150,0.6); font-weight:700; }
+  .td-x { color:#aaa; }
+
+  .hl-red { color:#c0392b; font-weight:700; }
+  .hl-blue { color:#1a5276; font-weight:700; }
+  .hl-green { color:#1e8449; font-weight:700; }
+  .hl-purple { color:#6c3483; font-weight:700; }
+  .hl-orange { color:#e67e22; font-weight:700; }
+  .hl-teal { color:#117a65; font-weight:700; }
+
+  .mb4 { margin-bottom:4px; }
+  .mb6 { margin-bottom:6px; }
+  .mb8 { margin-bottom:8px; }
+  .sep { border:none; border-top:1px dashed #aaa; margin:4px 0; }
+
+  .ex-box { background:rgba(255,255,240,0.8); border:1.5px solid #c9a100; border-radius:3px; padding:4px 7px; margin:3px 0; }
+  .ex-title { font-family:'Caveat',cursive; font-size:11px; font-weight:700; color:#8a6d00; margin-bottom:2px; }
+
+  .notes-box { background:rgba(255,253,220,0.7); border:1.5px dashed #c9a100; border-radius:3px; padding:5px 8px; margin-top:4px; }
+  .notes-title { font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#7d5a00; margin-bottom:3px; }
+
+  .key-box { background:rgba(240,248,255,0.7); border:2px solid #2980b9; border-radius:4px; padding:6px 9px; }
+  .key-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#2980b9; border-bottom:1.5px solid #2980b9; margin-bottom:5px; padding-bottom:2px; }
+
+  .step { display:flex; gap:6px; align-items:flex-start; margin-bottom:3px; }
+  .step-num { min-width:18px; height:18px; background:#2980b9; color:#fff; font-family:'Caveat',cursive; font-size:11px; font-weight:700; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .step-text { font-size:11px; line-height:1.5; }
+
+  .flow-step {
+    background: rgba(26,82,118,0.08);
+    border: 1.5px solid #1a5276;
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+  }
+  .flow-num {
+    min-width: 20px; height: 20px;
+    background: #1a5276;
+    color: #fff;
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .flow-text { font-size: 11px; color: #222; }
+  .flow-arrow { text-align:center; color:#1a5276; font-size:14px; margin: -1px 0; }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LEC 12</div>
+    <div class="main-title">Synchronous Counter Design</div>
+    <div class="header-info">
+      <span class="course">ECEG-3161 Digital Logic Design</span><br>
+      AAIT — Dept. of ECE<br>
+      <span class="date">Nebyu Yonas</span>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L11_notes_registers.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 11</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L13_notes_updown_hangup_fsm.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 13 →</a>
+</div>
+
+  <!-- ROW 1: 7-Step Process + Sequential Circuit Overview -->
+  <div class="grid grid-1-2 mb6">
+
+    <!-- Left: 7 Steps -->
+    <div class="box box-blue">
+      <div class="sec-title">The 7-Step Design Process</div>
+      <div class="flow-step"><div class="flow-num">1</div><div class="flow-text"><strong>State Diagram</strong> — visualize state transitions</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">2</div><div class="flow-text"><strong>Next-State Table</strong> — list present &amp; next states</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">3</div><div class="flow-text"><strong>FF Transition Table</strong> — J-K or D inputs for each transition</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">4</div><div class="flow-text"><strong>Circuit Excitation Table</strong> — combine steps 2 &amp; 3</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">5</div><div class="flow-text"><strong>Karnaugh Maps</strong> — simplify each FF input expression</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">6</div><div class="flow-text"><strong>Logic Expressions</strong> — minimized Boolean equations</div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="flow-num">7</div><div class="flow-text"><strong>Counter Implementation</strong> — draw the circuit!</div></div>
+    </div>
+
+    <!-- Right: Sequential Circuit + Step 1 & 2 -->
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div class="box box-teal">
+        <div class="sec-title">Sequential Circuit Basics</div>
+        <div class="grid grid-2" style="gap:5px;">
+          <div>
+            <ul>
+              <li>Depends on a <span class="hl-teal">clock signal</span> and goes through a set sequence of states</li>
+              <li>Also called <strong>State Machines</strong></li>
+              <li>A counter is a type of sequential circuit</li>
+            </ul>
+          </div>
+          <div class="notes-box" style="margin:0;">
+            <div class="notes-title">Structure</div>
+            <p style="font-size:10px;">📦 <span class="hl-blue">Combinational Logic</span> section — computes next state &amp; outputs</p>
+            <p style="font-size:10px; margin-top:2px;">🗄 <span class="hl-red">Memory</span> section — flip-flops hold current state</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="box box-green">
+        <div class="sec-title">Step 1: State Diagram (3-bit Gray Code Counter)</div>
+        <p class="mb4">Shows all states as circles and transitions as arrows. For a 3-bit Gray code counter, 8 states cycle in Gray code order:</p>
+        <div class="formula formula-sm">000 → 001 → 011 → 010 → 110 → 111 → 101 → 100 → 000</div>
+        <p style="font-size:10px; margin-top:3px; color:#555;"><em>Key property of Gray code: only 1 bit changes between consecutive states</em></p>
+      </div>
+
+      <div class="box box-orange">
+        <div class="sec-title">Step 2: Next-State Table (3-bit Gray)</div>
+        <table>
+          <tr><th colspan="3">Present State (Q₂Q₁Q₀)</th><th colspan="3">Next State (Q₂⁺Q₁⁺Q₀⁺)</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="td-hl">1</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td class="td-hl">1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="td-hl">0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td class="td-hl">1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="td-hl">1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td class="td-hl">0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="td-hl">0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td class="td-hl">0</td><td>0</td><td>0</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: JK Transition + Excitation Tables -->
+  <div class="grid grid-2 mb6">
+
+    <!-- JK Flip-Flop Transition Table -->
+    <div class="box box-purple">
+      <div class="sec-title">Step 3: J-K FF Transition Table</div>
+      <p class="mb4">For each possible output transition (Q → Q⁺), determine the required J and K inputs:</p>
+      <table style="margin-bottom:5px;">
+        <tr><th>Present Q</th><th>→</th><th>Next Q⁺</th><th>J (required)</th><th>K (required)</th><th>Mode</th></tr>
+        <tr><td>0</td><td>→</td><td>0</td><td>0</td><td class="td-x">X</td><td style="font-size:9.5px;">No Change</td></tr>
+        <tr><td>0</td><td>→</td><td class="td-hl">1</td><td class="td-hl">1</td><td class="td-x">X</td><td style="font-size:9.5px;">SET</td></tr>
+        <tr><td>1</td><td>→</td><td class="td-hl">0</td><td class="td-x">X</td><td class="td-hl">1</td><td style="font-size:9.5px;">RESET</td></tr>
+        <tr><td>1</td><td>→</td><td>1</td><td class="td-x">X</td><td>0</td><td style="font-size:9.5px;">No Change</td></tr>
+      </table>
+      <div class="notes-box">
+        <div class="notes-title">D Flip-Flop Transition (Simpler!)</div>
+        <table>
+          <tr><th>Q</th><th>→</th><th>Q⁺</th><th>D (required)</th></tr>
+          <tr><td>0</td><td>→</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>→</td><td>1</td><td class="td-hl">1</td></tr>
+          <tr><td>1</td><td>→</td><td>0</td><td class="td-hl">0</td></tr>
+          <tr><td>1</td><td>→</td><td>1</td><td>1</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:3px;"><span class="hl-green">For D FF: D = Q⁺ always!</span> The D input simply equals the desired next state.</p>
+      </div>
+    </div>
+
+    <!-- Excitation Table -->
+    <div class="box box-red">
+      <div class="sec-title">Step 4: Circuit Excitation Table (3-bit Gray, JK)</div>
+      <p class="mb4">Combine the next-state table (Step 2) with the FF transition table (Step 3) to find required J &amp; K inputs:</p>
+      <table>
+        <tr><th colspan="3">Present (Q₂Q₁Q₀)</th><th colspan="3">Next (Q₂⁺Q₁⁺Q₀⁺)</th><th>J₂</th><th>K₂</th><th>J₁</th><th>K₁</th><th>J₀</th><th>K₀</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td class="td-x">X</td><td>0</td><td class="td-x">X</td><td class="td-hl">1</td><td class="td-x">X</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="td-x">X</td><td class="td-hl">1</td><td class="td-x">X</td><td class="td-x">X</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td class="td-x">X</td><td class="td-x">X</td><td>0</td><td class="td-x">X</td><td class="td-hl">1</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="td-hl">1</td><td class="td-x">X</td><td class="td-x">X</td><td>0</td><td>0</td><td class="td-x">X</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="td-x">X</td><td>0</td><td class="td-x">X</td><td>0</td><td class="td-hl">1</td><td class="td-x">X</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td class="td-x">X</td><td>0</td><td class="td-x">X</td><td class="td-hl">1</td><td class="td-x">X</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="td-x">X</td><td>0</td><td>0</td><td class="td-x">X</td><td class="td-x">X</td><td class="td-hl">1</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="td-x">X</td><td class="td-hl">1</td><td>0</td><td class="td-x">X</td><td>0</td><td class="td-x">X</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px; color:#555;"><span class="td-x">X</span> = don't care (can be 0 or 1 — used for K-map simplification!)</p>
+    </div>
+  </div>
+
+  <!-- ROW 3: K-Map Results + Final Expressions + Exercise -->
+  <div class="grid grid-3 mb4">
+
+    <!-- K-Map Simplification -->
+    <div class="box box-yellow">
+      <div class="sec-title">Step 5: Karnaugh Maps</div>
+      <p class="mb4">Plot each J and K column from the excitation table on a 3-variable K-map (variables: Q₂, Q₁, Q₀). Don't-cares (<span class="td-x">X</span>) can be grouped as 0 or 1 — use them to form larger groups!</p>
+      <div class="notes-box" style="margin-bottom:4px;">
+        <div class="notes-title">K-Map Tips</div>
+        <ul>
+          <li>Largest possible groups of 1s (or X treated as 1) = simplest expression</li>
+          <li>Groups must be powers of 2: 1, 2, 4, 8…</li>
+          <li>Wrap-around groups are valid</li>
+          <li>One K-map per FF input (J₂, K₂, J₁, K₁, J₀, K₀)</li>
+        </ul>
+      </div>
+      <p style="font-size:10px; color:#555; font-style:italic;">After simplification: derive minimal SOP/POS expression for each input</p>
+    </div>
+
+    <!-- Step 6: Expressions -->
+    <div class="box box-green">
+      <div class="sec-title">Step 6: Logic Expressions (3-bit Gray, JK)</div>
+      <p class="mb4">From K-map minimization of the excitation table:</p>
+      <div class="formula formula-sm">J₂ = Q₁·Q̄₀ &nbsp;&nbsp;&nbsp;&nbsp; K₂ = Q₁·Q̄₀</div>
+      <div class="formula formula-sm">J₁ = Q̄₂·Q₀ &nbsp;&nbsp;&nbsp;&nbsp; K₁ = Q₂·Q₀</div>
+      <div class="formula formula-sm">J₀ = Q̄₂·Q̄₁ + Q₂·Q₁ &nbsp;&nbsp; K₀ = Q̄₂·Q̄₁ + Q₂·Q₁</div>
+      <hr class="sep">
+      <p class="mb4" style="font-size:10.5px;"><strong>For D Flip-Flop design</strong> (Exercise):</p>
+      <div class="formula formula-sm">D₂ = Q₂⁺ &nbsp; D₁ = Q₁⁺ &nbsp; D₀ = Q₀⁺</div>
+      <p style="font-size:10px; margin-top:3px;">D inputs directly equal next-state values — read from next-state table then K-map simplify!</p>
+      <div class="ex-box" style="margin-top:4px;">
+        <div class="ex-title">D FF Results (3-bit Gray, from K-map)</div>
+        <p style="font-family:'Caveat',cursive; font-size:11px; line-height:1.8;">
+          D₂ = Q̄₂Q₁Q̄₀ + Q₂Q̄₁ + Q₂Q₀<br>
+          D₁ = Q̄₂Q₁Q̄₀ + Q̄₂Q̄₁Q₀ + Q₂Q₁<br>
+          D₀ = Q̄₂Q̄₁ + Q₂Q₁ (= Q₂ ⊕ Q₁ inverted)
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 7 + Exercises -->
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div class="box box-dark">
+        <div class="sec-title">Step 7: Counter Implementation</div>
+        <p class="mb4">From the Boolean expressions, draw the circuit using:</p>
+        <ul class="mb4">
+          <li>J-K or D flip-flops (one per state bit)</li>
+          <li>AND / OR / NOT gates for the input logic</li>
+          <li>All flip-flops driven by the <span class="hl-blue">same clock</span></li>
+        </ul>
+        <div class="notes-box">
+          <div class="notes-title">Circuit Check</div>
+          <p style="font-size:10px;">Verify by tracing the state sequence from 000. Each clock pulse should advance to the correct next Gray code state.</p>
+        </div>
+      </div>
+
+      <div class="box box-red">
+        <div class="sec-title">📝 Exercises &amp; Reading</div>
+        <div class="ex-box mb4">
+          <div class="ex-title">Week Exercises</div>
+          <ol>
+            <li>Design 3-bit Gray code counter using <strong>D flip-flops</strong> (individual)</li>
+            <li>Design <strong>even-bit counter</strong>: sequence 0→2→4→6→8→0</li>
+            <li>Design <strong>odd-bit counter</strong>: sequence 1→3→5→7→9→1</li>
+          </ol>
+        </div>
+        <div class="notes-box">
+          <div class="notes-title">📚 Reading</div>
+          <p style="font-size:10px;"><em>Fundamentals of Digital Logic with Verilog Design</em> — Section 8.7, pp. 495–505 (Synchronous counter design)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY TAKEAWAYS ROW -->
+  <div class="key-box">
+    <div class="key-title">Key Takeaways — Synchronous Counter Design</div>
+    <div class="grid grid-3" style="gap:6px;">
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">The 7 steps are always the same regardless of count sequence or flip-flop type</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-blue">State diagram</span> → circles = states, arrows = clock transitions</div></div>
+      </div>
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-purple">JK transition:</span> 0→1 requires J=1,K=X; 1→0 requires J=X,K=1; no change: 0→0 J=0,K=X or 1→1 J=X,K=0</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-green">D FF is simpler</span> — D input always = desired next state Q⁺</div></div>
+      </div>
+      <div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text"><span class="hl-red">Don't-cares (X)</span> in excitation table come from JK transitions — exploit them in K-maps for simplest expression</div></div>
+        <div class="step"><div class="step-num" style="background:#117a65;">✓</div><div class="step-text">All flip-flops clocked together = synchronous. No propagation delay issues</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right; margin-top:6px; font-family:'Caveat',cursive; font-size:13px; color:#888;">Questions? 😊</div>
+
+</div>
+</div>
+</body>
+</html>

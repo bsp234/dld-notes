@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f0e8; font-family:'Kalam',cursive; padding:0; }
+  .page { width:100%; max-width:1100px; margin:0 auto; background:#fefdf8; border:3px solid #888; position:relative; overflow:hidden; }
+  .page::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background-image:repeating-linear-gradient(transparent,transparent 27px,#d0e4f0 27px,#d0e4f0 28px); opacity:0.3; pointer-events:none; z-index:0; }
+  .page::after { content:''; position:absolute; top:0;bottom:0;left:72px; border-left:2px solid rgba(220,80,80,0.3); pointer-events:none; z-index:0; }
+  .content { position:relative; z-index:1; padding:12px 14px 16px 14px; }
+  .header { display:flex; align-items:flex-start; justify-content:space-between; border-bottom:2.5px solid #333; padding-bottom:8px; margin-bottom:10px; }
+  .lec-badge { border:2.5px solid #c0392b; color:#c0392b; font-family:'Caveat',cursive; font-size:13px; font-weight:700; padding:2px 8px; border-radius:3px; white-space:nowrap; }
+  .main-title { font-family:'Caveat',cursive; font-size:22px; font-weight:700; text-align:center; color:#111; letter-spacing:1px; text-transform:uppercase; flex:1; padding:0 12px; }
+  .header-info { font-family:'Kalam',cursive; font-size:10.5px; color:#333; text-align:right; line-height:1.5; }
+  .header-info .course { color:#1a5276; font-weight:700; } .header-info .date { color:#c0392b; }
+  .grid { display:grid; gap:8px; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns:2fr 1fr; }
+  .grid-1-2 { grid-template-columns:1fr 2fr; }
+  .mb4 { margin-bottom:8px; }
+  .box { border:2px solid #333; border-radius:4px; padding:7px 9px; background:rgba(255,255,255,0.6); }
+  .box-blue { border-color:#1a5276; background:rgba(214,234,248,0.4); }
+  .box-green { border-color:#1e8449; background:rgba(212,239,223,0.4); }
+  .box-red { border-color:#c0392b; background:rgba(253,228,226,0.4); }
+  .box-purple { border-color:#6c3483; background:rgba(232,218,239,0.4); }
+  .box-yellow { border-color:#d4ac0d; background:rgba(254,249,231,0.6); }
+  .box-teal { border-color:#117a65; background:rgba(212,246,238,0.4); }
+  .box-dark { border-color:#222; background:rgba(240,240,235,0.6); }
+  .box-orange { border-color:#e67e22; background:rgba(253,235,208,0.4); }
+  .sec-title { font-family:'Caveat',cursive; font-size:13.5px; font-weight:700; text-transform:uppercase; border-bottom:1.5px solid currentColor; margin-bottom:5px; padding-bottom:2px; letter-spacing:0.5px; }
+  .box-blue .sec-title { color:#1a5276; } .box-green .sec-title { color:#1e8449; } .box-red .sec-title { color:#c0392b; }
+  .box-purple .sec-title { color:#6c3483; } .box-teal .sec-title { color:#117a65; } .box-dark .sec-title { color:#111; }
+  .box-orange .sec-title { color:#e67e22; } .box-yellow .sec-title { color:#b7950b; }
+  p,li { font-size:11px; line-height:1.55; color:#222; }
+  ul { padding-left:14px; } li { list-style:disc; }
+  ol { padding-left:16px; } ol li { list-style:decimal; font-size:11px; line-height:1.5; }
+  .formula { background:rgba(255,255,230,0.9); border:2px solid #c9a100; border-radius:4px; padding:4px 8px; font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#333; margin:4px 0; text-align:center; }
+  .formula-sm { font-size:11px; padding:3px 6px; }
+  table { border-collapse:collapse; width:100%; font-size:10.5px; font-family:'Kalam',cursive; }
+  th { background:rgba(52,73,94,0.15); border:1.5px solid #555; padding:2px 5px; font-weight:700; font-size:10.5px; text-align:center; font-family:'Caveat',cursive; }
+  td { border:1px solid #888; padding:2px 5px; text-align:center; font-size:10.5px; }
+  .td-hl { background:rgba(255,255,150,0.6); font-weight:700; }
+  .td-1 { background:rgba(200,255,200,0.6); font-weight:700; color:#1e8449; }
+  .hl-red { color:#c0392b; font-weight:700; } .hl-blue { color:#1a5276; font-weight:700; }
+  .hl-green { color:#1e8449; font-weight:700; } .hl-purple { color:#6c3483; font-weight:700; }
+  .hl-orange { color:#e67e22; font-weight:700; }
+  .ex-box { background:rgba(255,255,255,0.8); border:1.5px solid #aaa; border-radius:3px; padding:4px 6px; margin-top:4px; }
+  .ex-title { font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#2980b9; margin-bottom:2px; }
+  .step { display:flex; align-items:flex-start; gap:5px; margin-bottom:4px; }
+  .step-num { background:#1a5276; color:#fff; font-family:'Caveat',cursive; font-size:11px; font-weight:700; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text { font-size:10.5px; line-height:1.5; }
+  .key-box { border:2px solid #117a65; border-radius:4px; padding:6px 8px; background:rgba(212,246,238,0.4); }
+  .key-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#117a65; border-bottom:1.5px solid #117a65; margin-bottom:5px; padding-bottom:2px; }
+  .notes-box { border:2px dashed #888; border-radius:4px; padding:5px 8px; background:rgba(255,255,255,0.5); }
+  .notes-title { font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#555; margin-bottom:3px; }
+  .sep { border:none; border-top:1px dashed #ccc; margin:4px 0; }
+  .badge { display:inline-block; border-radius:3px; padding:1px 5px; font-size:9.5px; font-family:'Caveat',cursive; font-weight:700; }
+  .badge-blue { background:#1a5276; color:#fff; }
+  .badge-green { background:#1e8449; color:#fff; }
+  .badge-red { background:#c0392b; color:#fff; }
+  .badge-purple { background:#6c3483; color:#fff; }
+  @media (max-width: 768px) {
+    body { padding-left: 6px; padding-right: 6px; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    body { background: #fefdf8; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+    .conv-node { width: 46px; height: 46px; font-size: 8px; padding-top: 7px; }
+    .conv-diagram { flex-wrap: wrap; gap: 4px; }
+    .bit-cell { width: 18px; height: 18px; font-size: 10px; line-height: 18px; }
+    .bit-label { width: 18px; font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LECTURE 6</div>
+    <div class="main-title">Combinational Logic Circuits</div>
+    <div class="header-info">
+      <div class="course">ECEG-3161 Digital Logic Design</div>
+      <div>AAIT – Dept. of ECE</div>
+      <div class="date">Getachew Teshome</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L5_Kmap_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 05</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L7_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 07 →</a>
+</div>
+
+  <!-- ROW 1: Overview + Analysis vs Design + Decoders -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Overview -->
+    <div class="box box-blue">
+      <div class="sec-title">① Combinational Circuits</div>
+      <p style="margin-bottom:4px;"><span class="hl-blue">Definition:</span> Output depends <strong>only on current inputs</strong> — no feedback, no memory.</p>
+      <div class="formula formula-sm">Output = f(Input) — no history!</div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:3px;">Circuit Analysis vs. Design:</div>
+      <table style="font-size:10px;">
+        <tr><th>Analysis</th><th>Design</th></tr>
+        <tr><td style="text-align:left;">Given circuit → find function (Boolean / Truth Table)</td><td style="text-align:left;">Given function → build circuit</td></tr>
+      </table>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:3px;">Topics Covered:</div>
+      <div style="display:flex; flex-wrap:wrap; gap:3px; margin-bottom:3px;">
+        <span class="badge badge-blue">Decoders</span>
+        <span class="badge badge-green">Encoders</span>
+        <span class="badge badge-red">MUX</span>
+        <span class="badge badge-purple">DEMUX</span>
+        <span class="badge badge-blue">Comparators</span>
+        <span class="badge badge-green">Adders</span>
+        <span class="badge badge-red">Subtractors</span>
+        <span class="badge badge-purple">BCD Adder</span>
+      </div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:2px;">Design Procedure:</div>
+      <ol>
+        <li>Determine number of inputs/outputs</li>
+        <li>Derive the truth table</li>
+        <li>Simplify Boolean expression (K-map)</li>
+        <li>Implement the circuit</li>
+      </ol>
+    </div>
+
+    <!-- Decoders -->
+    <div class="box box-green">
+      <div class="sec-title">② Decoders</div>
+      <p style="margin-bottom:3px;"><span class="hl-green">Function:</span> Extract information from a binary code. <strong>n inputs → 2ⁿ outputs</strong>. Exactly ONE output is HIGH at a time.</p>
+      <div class="ex-box" style="margin-bottom:4px;">
+        <div class="ex-title">2-to-4 Line Decoder</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th>I₁</th><th>I₀</th><th>Y₃</th><th>Y₂</th><th>Y₁</th><th>Y₀</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="td-1">1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td class="td-1">1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td class="td-1">1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td class="td-1">1</td><td>0</td><td>0</td><td>0</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:2px;">Y₀=I₁'I₀' &nbsp; Y₁=I₁'I₀ &nbsp; Y₂=I₁I₀' &nbsp; Y₃=I₁I₀</p>
+      </div>
+      <ul style="margin-bottom:4px;">
+        <li><span class="hl-blue">Enable (E):</span> When E=0, all outputs = 0. When E=1, normal operation.</li>
+        <li><span class="hl-green">Expansion:</span> Two 2-to-4 decoders + 1 inverter = 3-to-8 decoder.</li>
+        <li><span class="hl-red">Active-Low:</span> Outputs are inverted (NAND gates). Active output = 0.</li>
+      </ul>
+      <div class="formula formula-sm">n-to-2ⁿ decoder: implements all n-variable minterms</div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1e8449; margin-bottom:2px;">BCD-to-Excess-3 Code Converter</div>
+      <p style="font-size:10.5px;">Add 3 (0011) to each BCD digit using combinational logic with don't cares for invalid BCD codes (1010–1111).</p>
+      <div class="formula formula-sm" style="font-size:10px;">w=A+BC+BD &nbsp;|&nbsp; x=B'C+B'D+BC'D' &nbsp;|&nbsp; y=C'D'+CD &nbsp;|&nbsp; z=D'</div>
+    </div>
+
+    <!-- Encoders -->
+    <div class="box box-purple">
+      <div class="sec-title">③ Encoders</div>
+      <p style="margin-bottom:3px;"><span class="hl-purple">Function:</span> Put information INTO a binary code. <strong>2ⁿ inputs → n outputs</strong>. Exactly ONE input should be HIGH.</p>
+      <div class="ex-box" style="margin-bottom:4px;">
+        <div class="ex-title">4-to-2 Binary Encoder</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th>I₃</th><th>I₂</th><th>I₁</th><th>I₀</th><th>Y₁</th><th>Y₀</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:2px;"><strong>Y₁ = I₂ + I₃ &nbsp;|&nbsp; Y₀ = I₁ + I₃</strong></p>
+      </div>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#6c3483; margin-bottom:2px;">Priority Encoder</div>
+      <p style="font-size:10.5px; margin-bottom:3px;">Handles <strong>multiple simultaneous inputs</strong>. Highest-priority (highest index) active input determines output. Has validity output <strong>V</strong> (V=0 when no input active).</p>
+      <table style="font-size:9.5px; width:auto;">
+        <tr><th>I₃</th><th>I₂</th><th>I₁</th><th>I₀</th><th>Y₁</th><th>Y₀</th><th>V</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>x</td><td>x</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td>x</td><td>0</td><td>1</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>x</td><td>x</td><td>1</td><td>0</td><td>1</td></tr>
+        <tr><td>1</td><td>x</td><td>x</td><td>x</td><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ROW 2: MUX + DEMUX + Comparator -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Multiplexers -->
+    <div class="box box-red">
+      <div class="sec-title">④ Multiplexers (MUX)</div>
+      <p style="margin-bottom:3px;"><span class="hl-red">Function:</span> <strong>Many inputs → 1 output</strong>. Select lines choose which input passes to output.</p>
+      <div class="formula formula-sm">2ⁿ data inputs + n select inputs → 1 output</div>
+      <div class="ex-box" style="margin-bottom:4px;">
+        <div class="ex-title">2-to-1 MUX</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th>S</th><th>Y</th></tr>
+          <tr><td>0</td><td>I₀</td></tr>
+          <tr><td>1</td><td>I₁</td></tr>
+        </table>
+        <p style="font-size:10.5px; margin-top:2px; font-weight:700;">Y = S'I₀ + SI₁</p>
+      </div>
+      <div class="ex-box" style="margin-bottom:4px;">
+        <div class="ex-title">4-to-1 MUX</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th>S₁</th><th>S₀</th><th>Y</th></tr>
+          <tr><td>0</td><td>0</td><td>I₀</td></tr>
+          <tr><td>0</td><td>1</td><td>I₁</td></tr>
+          <tr><td>1</td><td>0</td><td>I₂</td></tr>
+          <tr><td>1</td><td>1</td><td>I₃</td></tr>
+        </table>
+        <p style="font-size:10.5px; margin-top:2px; font-weight:700;">Y = S₁'S₀'I₀ + S₁'S₀I₁ + S₁S₀'I₂ + S₁S₀I₃</p>
+      </div>
+      <ul>
+        <li><span class="hl-red">MUX as universal function generator</span>: any Boolean function of n variables can be implemented with a 2ⁿ-to-1 MUX.</li>
+        <li>Quad 2-to-1 MUX: 4 independent 2-to-1 MUXes sharing select line.</li>
+      </ul>
+    </div>
+
+    <!-- DeMultiplexers -->
+    <div class="box box-orange">
+      <div class="sec-title">⑤ DeMultiplexers (DEMUX)</div>
+      <p style="margin-bottom:3px;"><span class="hl-orange">Function:</span> Opposite of MUX. <strong>1 input → many outputs</strong>. Select lines route the single input to one of 2ⁿ outputs.</p>
+      <div class="formula formula-sm">1 input + n select lines → 2ⁿ outputs</div>
+      <div class="ex-box" style="margin-bottom:4px;">
+        <div class="ex-title">1-to-4 DEMUX</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th>S₁</th><th>S₀</th><th>Y₃</th><th>Y₂</th><th>Y₁</th><th>Y₀</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>I</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>I</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>I</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>I</td><td>0</td><td>0</td><td>0</td></tr>
+        </table>
+      </div>
+      <ul style="margin-bottom:4px;">
+        <li>A decoder with an enable line = a DEMUX.</li>
+        <li>MUX/DEMUX pairs used for <span class="hl-orange">data transmission</span> over shared lines.</li>
+      </ul>
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#e67e22; margin-bottom:2px;">Three-State (Tri-State) Gates</div>
+      <table style="font-size:10px; width:auto;">
+        <tr><th>C</th><th>A</th><th>Y</th></tr>
+        <tr><td>0</td><td>x</td><td class="td-hl">Hi-Z (float)</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px;"><span class="hl-red">Hi-Z</span> = high impedance (disconnected). Allows multiple outputs on same bus without conflict.</p>
+    </div>
+
+    <!-- Adders -->
+    <div class="box box-teal">
+      <div class="sec-title">⑥ Adders & Subtractors</div>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#117a65; margin-bottom:2px;">Half Adder (HA)</div>
+      <table style="font-size:10px; width:auto; margin-bottom:3px;">
+        <tr><th>A</th><th>B</th><th>S (Sum)</th><th>C (Carry)</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+      </table>
+      <div class="formula formula-sm">S = A⊕B &nbsp;&nbsp; C = AB</div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#117a65; margin-bottom:2px;">Full Adder (FA)</div>
+      <div class="formula formula-sm">S = A⊕B⊕Cᵢₙ &nbsp;&nbsp; Cₒᵤₜ = AB + ACᵢₙ + BCᵢₙ</div>
+      <p style="font-size:10.5px; margin:3px 0;">FA = two HAs + one OR gate.</p>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#c0392b; margin-bottom:2px;">Ripple Carry Adder — Problem!</div>
+      <p style="font-size:10.5px; margin-bottom:3px;">4-bit ripple carry = <span class="hl-red">8 gate levels</span>. N-bit = 2N levels. Slow!</p>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">Carry Look-Ahead (CLA) — Solution!</div>
+      <div class="formula formula-sm" style="font-size:9.5px;">Pᵢ=AᵢBᵢ (propagate) &nbsp;|&nbsp; Gᵢ=AᵢBᵢ (generate)</div>
+      <div class="formula formula-sm" style="font-size:9.5px;">Cᵢ₊₁ = Gᵢ + PᵢCᵢ (all carries in parallel!)</div>
+      <p style="font-size:10px; color:#1a5276; font-weight:700;">All carries computed simultaneously → faster!</p>
+    </div>
+  </div>
+
+  <!-- ROW 3: BCD Adder + Subtractor + Comparator + Key Takeaways -->
+  <div class="grid grid-2-1 mb4">
+
+    <!-- BCD Adder + Subtractor + Overflow -->
+    <div class="box box-dark">
+      <div class="sec-title">⑦ BCD Adder, Subtractor & Overflow</div>
+      <div class="grid grid-2" style="gap:6px;">
+
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:3px;">BCD Adder</div>
+          <p style="font-size:10.5px; margin-bottom:3px;">BCD addition: valid result = 0–9. If result > 9 or carry=1, add <span class="hl-red">+6 (0110)</span> to correct.</p>
+          <table style="font-size:9.5px;">
+            <tr><th>Sum S₃S₂S₁S₀</th><th>Cy</th><th>Error?</th></tr>
+            <tr><td>0000–1001</td><td>0</td><td>No</td></tr>
+            <tr><td>1010–1111</td><td>0</td><td class="td-hl">Yes → +6</td></tr>
+            <tr><td>Any</td><td>1</td><td class="td-hl">Yes → +6</td></tr>
+          </table>
+          <div class="formula formula-sm" style="margin-top:3px;">Err = S₃S₂ + S₃S₁ + Cy</div>
+          <p style="font-size:10px; margin-top:2px;"><span class="hl-blue">Two binary adders:</span> First adds X+Y, second adds +6 if needed.</p>
+        </div>
+
+        <div>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1a5276; margin-bottom:3px;">Binary Subtractor</div>
+          <div class="formula formula-sm">x − y = x + (−y) = x + y' + 1</div>
+          <p style="font-size:10.5px; margin-bottom:3px;">Use 2's complement: invert y bits and set Cᵢₙ=1 to binary adder.</p>
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#1e8449; margin-bottom:2px;">Adder/Subtractor (Mode M):</div>
+          <table style="font-size:10px; width:auto;">
+            <tr><th>M</th><th>Operation</th></tr>
+            <tr><td>0</td><td>F = x + y (ADD)</td></tr>
+            <tr><td>1</td><td>F = x − y (SUB)</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:3px;">M=1: y bits XOR'd with M=1 inverts them; Cᵢₙ=M=1 → 2's complement.</p>
+          <hr class="sep">
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#c0392b; margin-bottom:2px;">Overflow Detection</div>
+          <div class="formula formula-sm" style="font-size:10px;">Overflow = C₄ ⊕ C₃ (for 2's complement)</div>
+          <p style="font-size:10px;">For unsigned: overflow = C₄ (carry out of MSB).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparator + Takeaways -->
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div class="box box-yellow">
+        <div class="sec-title">⑧ Comparator</div>
+        <p style="font-size:10.5px; margin-bottom:3px;">Compares two binary numbers A and B. Outputs: <span class="hl-green">A>B</span>, <span class="hl-red">A&lt;B</span>, <span class="hl-blue">A=B</span>.</p>
+        <table style="font-size:10px;">
+          <tr><th>Condition</th><th>Expression</th></tr>
+          <tr><td>A = B</td><td class="td-1">All bits equal: Eᵢ=AᵢBᵢ+Aᵢ'Bᵢ'</td></tr>
+          <tr><td>A > B</td><td>MSB of (A−B) = 0, result positive</td></tr>
+          <tr><td>A &lt; B</td><td>MSB of (A−B) = 1, result negative</td></tr>
+        </table>
+      </div>
+
+      <div class="key-box">
+        <div class="key-title">Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Combinational circuits: <span class="hl-blue">no feedback</span>, output = f(inputs only).</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Decoder: n→2ⁿ, <span class="hl-green">one-hot output</span>. Encoder: 2ⁿ→n, one-hot input.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">MUX: <span class="hl-red">data selector</span>. DEMUX: <span class="hl-orange">data distributor</span>. They form transmission pairs.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-purple">CLA adder</span> eliminates ripple carry delay: all carries computed in parallel.</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">BCD sum >9 or Cy=1 → add 6 to correct. Subtraction = <span class="hl-red">2's complement addition</span>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

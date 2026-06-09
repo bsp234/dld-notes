@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f0e8; font-family:'Kalam',cursive; padding:0; }
+  .page { width:100%; max-width:1100px; margin:0 auto; background:#fefdf8; border:3px solid #888; position:relative; overflow:hidden; }
+  .page::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background-image:repeating-linear-gradient(transparent,transparent 27px,#d0e4f0 27px,#d0e4f0 28px); opacity:0.3; pointer-events:none; z-index:0; }
+  .page::after { content:''; position:absolute; top:0;bottom:0;left:72px; border-left:2px solid rgba(220,80,80,0.3); pointer-events:none; z-index:0; }
+  .content { position:relative; z-index:1; padding:12px 14px 16px 14px; }
+  .header { display:flex; align-items:flex-start; justify-content:space-between; border-bottom:2.5px solid #333; padding-bottom:8px; margin-bottom:10px; }
+  .lec-badge { border:2.5px solid #c0392b; color:#c0392b; font-family:'Caveat',cursive; font-size:13px; font-weight:700; padding:2px 8px; border-radius:3px; white-space:nowrap; }
+  .main-title { font-family:'Caveat',cursive; font-size:22px; font-weight:700; text-align:center; color:#111; letter-spacing:1px; text-transform:uppercase; flex:1; padding:0 12px; }
+  .header-info { font-family:'Kalam',cursive; font-size:10.5px; color:#333; text-align:right; line-height:1.5; }
+  .header-info .course { color:#1a5276; font-weight:700; }
+  .header-info .date { color:#c0392b; }
+  .grid { display:grid; gap:8px; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns:2fr 1fr; }
+  .grid-1-2 { grid-template-columns:1fr 2fr; }
+  .mb4 { margin-bottom:8px; }
+  .box { border:2px solid #333; border-radius:4px; padding:7px 9px; background:rgba(255,255,255,0.6); }
+  .box-blue { border-color:#1a5276; background:rgba(214,234,248,0.4); }
+  .box-green { border-color:#1e8449; background:rgba(212,239,223,0.4); }
+  .box-red { border-color:#c0392b; background:rgba(253,228,226,0.4); }
+  .box-purple { border-color:#6c3483; background:rgba(232,218,239,0.4); }
+  .box-yellow { border-color:#d4ac0d; background:rgba(254,249,231,0.6); }
+  .box-teal { border-color:#117a65; background:rgba(212,246,238,0.4); }
+  .box-dark { border-color:#222; background:rgba(240,240,235,0.6); }
+  .box-orange { border-color:#e67e22; background:rgba(253,235,208,0.4); }
+  .sec-title { font-family:'Caveat',cursive; font-size:13.5px; font-weight:700; text-transform:uppercase; border-bottom:1.5px solid currentColor; margin-bottom:5px; padding-bottom:2px; letter-spacing:0.5px; }
+  .box-blue .sec-title { color:#1a5276; } .box-green .sec-title { color:#1e8449; } .box-red .sec-title { color:#c0392b; }
+  .box-purple .sec-title { color:#6c3483; } .box-teal .sec-title { color:#117a65; } .box-dark .sec-title { color:#111; }
+  .box-orange .sec-title { color:#e67e22; } .box-yellow .sec-title { color:#b7950b; }
+  p,li { font-size:11px; line-height:1.55; color:#222; }
+  ul { padding-left:14px; } li { list-style:disc; }
+  ol { padding-left:16px; } ol li { list-style:decimal; font-size:11px; line-height:1.5; }
+  .formula { background:rgba(255,255,230,0.9); border:2px solid #c9a100; border-radius:4px; padding:4px 8px; font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#333; margin:4px 0; text-align:center; }
+  .formula-sm { font-size:11px; padding:3px 6px; }
+  table { border-collapse:collapse; width:100%; font-size:10.5px; font-family:'Kalam',cursive; }
+  th { background:rgba(52,73,94,0.15); border:1.5px solid #555; padding:2px 5px; font-weight:700; font-size:10.5px; text-align:center; font-family:'Caveat',cursive; }
+  td { border:1px solid #888; padding:2px 5px; text-align:center; font-size:10.5px; }
+  .td-hl { background:rgba(255,255,150,0.6); font-weight:700; }
+  .td-1 { background:rgba(200,255,200,0.6); font-weight:700; color:#1e8449; }
+  .td-0 { background:rgba(255,220,220,0.4); color:#888; }
+  .td-x { background:rgba(255,240,180,0.6); font-weight:700; color:#e67e22; }
+  .hl-red { color:#c0392b; font-weight:700; } .hl-blue { color:#1a5276; font-weight:700; }
+  .hl-green { color:#1e8449; font-weight:700; } .hl-purple { color:#6c3483; font-weight:700; }
+  .hl-orange { color:#e67e22; font-weight:700; }
+  .ex-box { background:rgba(255,255,255,0.8); border:1.5px solid #aaa; border-radius:3px; padding:4px 6px; margin-top:4px; }
+  .ex-title { font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#2980b9; margin-bottom:2px; }
+  .step { display:flex; align-items:flex-start; gap:5px; margin-bottom:4px; }
+  .step-num { background:#1a5276; color:#fff; font-family:'Caveat',cursive; font-size:11px; font-weight:700; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text { font-size:10.5px; line-height:1.5; }
+  .key-box { border:2px solid #117a65; border-radius:4px; padding:6px 8px; background:rgba(212,246,238,0.4); }
+  .key-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#117a65; border-bottom:1.5px solid #117a65; margin-bottom:5px; padding-bottom:2px; }
+  .notes-box { border:2px dashed #888; border-radius:4px; padding:5px 8px; background:rgba(255,255,255,0.5); }
+  .notes-title { font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#555; margin-bottom:3px; }
+  .sep { border:none; border-top:1px dashed #ccc; margin:4px 0; }
+  .kmap { font-family:'Caveat',cursive; font-size:10.5px; }
+  .kmap-grid { display:inline-grid; border:2px solid #333; }
+  .kmap-cell { border:1px solid #999; width:26px; height:22px; display:flex; align-items:center; justify-content:center; font-size:10px; }
+  .kmap-hdr { font-size:9px; font-weight:700; color:#555; }
+  @media (max-width: 768px) {
+    body { padding-left: 6px; padding-right: 6px; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    body { background: #fefdf8; }
+    table { font-size: 9px; }
+    td, th { padding: 1px 3px; }
+    table { display: block; max-width: 100%; overflow-x: auto; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+    .kmap-cell { width: 22px; height: 18px; font-size: 9px; }
+    .conv-node { width: 46px; height: 46px; font-size: 8px; padding-top: 7px; }
+    .conv-diagram { flex-wrap: wrap; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LECTURE 5</div>
+    <div class="main-title">Karnaugh Maps (K-Map) — Boolean Minimization</div>
+    <div class="header-info">
+      <div class="course">ECEG-3161 Digital Logic Design</div>
+      <div>AAIT – Dept. of ECE</div>
+      <div class="date">Nebyu Yonas Sutri</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="Lec04_Digital_IC_Families_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 04</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L6_Combinational_Logic_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 06 →</a>
+</div>
+
+  <!-- ROW 1: Definitions + K-Map Intro + K-Map Sizes -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Definitions -->
+    <div class="box box-blue">
+      <div class="sec-title">① Key Definitions</div>
+	 <p style="margin-bottom:4px;"><span class="hl-blue">Purpose:</span>The purpose of a K-map is:
+
+To simplify a Boolean expression so the final circuit uses fewer gates, fewer inputs, less hardware, less power, and is easier to build.</p>
+      <p style="margin-bottom:4px;"><span class="hl-blue">Minterm:</span> Product term that is <strong>1</strong> in exactly one row of the truth table.</p>
+      <p style="margin-bottom:4px;"><span class="hl-red">Maxterm:</span> Sum term that is <strong>0</strong> in exactly one row of the truth table.</p>
+      <hr class="sep">
+      <p style="margin-bottom:3px;"><span class="hl-green">Canonic Sum (SOP):</span> Sum of minterms for which the function outputs <strong>1</strong>.</p>
+      <div class="formula formula-sm">F = Σm(minterms where output = 1)</div>
+      <p style="margin-bottom:3px;"><span class="hl-purple">Canonic Product (POS):</span> Product of maxterms for which the function outputs <strong>0</strong>.</p>
+      <div class="formula formula-sm">F = ΠM(maxterms where output = 0)</div>
+      <hr class="sep">
+      <p><span class="hl-blue">K-Map:</span> Graphical tool to simplify Boolean functions. Each cell = one minterm. Number of cells = <span class="hl-red">2ᴺ</span> (N = variables).</p>
+    </div>
+
+    <!-- K-Map Sizes -->
+    <div class="box box-green">
+      <div class="sec-title">② K-Map Layouts</div>
+      <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-green">Key rule:</span> Columns/rows use <strong>Gray code</strong> order (only 1 bit changes between adjacent cells).</p>
+
+      <div style="margin-bottom:5px;">
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">2-Variable (4 cells)</div>
+        <table style="font-size:10px; width:auto;">
+          <tr><th></th><th>B=0</th><th>B=1</th></tr>
+          <tr><td style="font-weight:700;">A=0</td><td>A'B'</td><td>A'B</td></tr>
+          <tr><td style="font-weight:700;">A=1</td><td>AB'</td><td>AB</td></tr>
+        </table>
+      </div>
+
+      <div style="margin-bottom:5px;">
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">3-Variable (8 cells) — Gray code: 00,01,11,10</div>
+        <table style="font-size:9.5px; width:auto;">
+          <tr><th>AB\C</th><th>0</th><th>1</th></tr>
+          <tr><td>00</td><td>A'B'C'</td><td>A'B'C</td></tr>
+          <tr><td>01</td><td>A'BC'</td><td>A'BC</td></tr>
+          <tr><td>11</td><td>ABC'</td><td>ABC</td></tr>
+          <tr><td>10</td><td>AB'C'</td><td>AB'C</td></tr>
+        </table>
+      </div>
+
+      <div>
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">4-Variable (16 cells)</div>
+        <table style="font-size:9px; width:auto;">
+          <tr><th>AB\CD</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+          <tr><td>00</td><td>A'B'C'D'</td><td>A'B'C'D</td><td>A'B'CD</td><td>A'B'CD'</td></tr>
+          <tr><td>01</td><td>A'BC'D'</td><td>A'BC'D</td><td>A'BCD</td><td>A'BCD'</td></tr>
+          <tr><td>11</td><td>ABC'D'</td><td>ABC'D</td><td>ABCD</td><td>ABCD'</td></tr>
+          <tr><td>10</td><td>AB'C'D'</td><td>AB'C'D</td><td>AB'CD</td><td>AB'CD'</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cell Adjacency -->
+    <div class="box box-purple">
+      <div class="sec-title">③ Cell Adjacency Rules</div>
+      <ul style="margin-bottom:5px;">
+        <li>Only <span class="hl-purple">1 bit changes</span> between adjacent cells (Gray code).</li>
+        <li>Adjacent = left, right, top, bottom neighbors.</li>
+        <li><span class="hl-red">Diagonal cells are NOT adjacent.</span></li>
+        <li><span class="hl-green">Top row ↔ Bottom row</span> are adjacent (wrap-around).</li>
+        <li><span class="hl-green">Left column ↔ Right column</span> are adjacent (wrap-around).</li>
+      </ul>
+      <div style="font-family:'Caveat',cursive; font-size:11px; font-weight:700; color:#6c3483; margin-bottom:3px;">Grouping Rules (1's for SOP):</div>
+      <ol>
+        <li>Group size must be <span class="hl-red">power of 2</span>: 1, 2, 4, 8, 16…</li>
+        <li>Each cell in group must be adjacent to at least one other cell in the group.</li>
+        <li>Make groups <span class="hl-green">as large as possible</span>.</li>
+        <li>Every 1 must be in at least one group.</li>
+        <li>Groups can overlap.</li>
+        <li>Wrap-around groups are allowed.</li>
+      </ol>
+      <hr class="sep">
+      <div class="formula formula-sm">Larger group → fewer literals in term → simpler expression</div>
+    </div>
+  </div>
+
+  <!-- ROW 2: SOP Steps + Grouping Examples + Non-Standard -->
+  <div class="grid grid-2-1 mb4">
+
+    <!-- SOP Minimization Procedure -->
+    <div class="box box-dark">
+      <div class="sec-title">④ SOP K-Map Minimization — Step by Step</div>
+      <div class="grid grid-2" style="gap:6px;">
+
+        <div>
+	  <div style="font-family:'Caveat',cursive; font-size:11px; font-weight:700; color:#c0392b; margin-bottom:2px;">Definition:</div>
+          <p style="font-size:10.5px;">Why Do We Need SOP and POS? <br/>
+
+A K-map represents a Boolean function.
+
+After grouping cells, we need a way to write the final answer.
+
+There are two common forms:
+<div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">SOP (Sum of Products): OR together several AND terms, Group the 1s(A = 1, A'=0)</div>
+         </div>
+
+<div class="step">
+<div class="step-num">2</div>
+            <div class="step-text">POS (Product of Sums):AND together several OR terms, Group the 0s(A = 0, A'=1)<br/></div>
+          </div>
+<p>Think of them as two different ways of describing the same circuit.</p>
+          
+          <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#2980b9; margin-bottom:3px;">Procedure:</div>
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Map the expression: write truth table if needed, place <strong>1</strong> in each minterm cell.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Group all 1's into the <strong>largest possible</strong> power-of-2 groups (can overlap).</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">For each group, <strong>eliminate</strong> variables that appear both complemented and uncomplemented.</div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">Write the <strong>minimum SOP</strong>: OR all group terms together.</div>
+          </div>
+          <hr class="sep">
+          <div style="font-family:'Caveat',cursive; font-size:11px; font-weight:700; color:#c0392b; margin-bottom:2px;">Variable Elimination Rule:</div>
+          <p style="font-size:10.5px;">A variable is <span class="hl-red">kept</span> if it appears in the same form in all cells of the group. It is <span class="hl-green">eliminated</span> if it appears as both X and X' within the group.</p>
+          <div class="formula formula-sm">Group of 2 → eliminates 1 variable<br>Group of 4 → eliminates 2 variables<br>Group of 8 → eliminates 3 variables</div>
+        </div>
+
+        <div>
+          <div class="ex-box" style="margin-bottom:5px;">
+            <div class="ex-title">Ex 1: Given truth table → K-map</div>
+            <p style="font-size:10px;">Q: A'B'C' + A'B'C + AB'C' + ABC' + ABC</p>
+            <table style="font-size:9.5px; width:auto; margin-top:3px;">
+              <tr><th>AB\C</th><th>0</th><th>1</th></tr>
+              <tr><td>00</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+              <tr><td>01</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+              <tr><td>11</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+              <tr><td>10</td><td class="td-1">1</td><td class="td-0">0</td></tr>
+            </table>
+            <p style="font-size:10px; margin-top:3px;"><span class="hl-green">Groups:</span> {00,01 col=0}: B'C' ; {00,11}: A'B' ;<br>Result: <strong>Q = A'B' + B'C'</strong> ... wait, see grouping carefully!</p>
+          </div>
+
+          <div class="ex-box">
+            <div class="ex-title">Ex 2: 4-var K-map result</div>
+            <p style="font-size:10px;">Q = A'B'C'D + A'BC'D + ABС'D + AB'C'D + A'BCD'<br>+ A'BCD + ABCD + ABCD'</p>
+            <p style="font-size:10px; margin-top:3px;"><span class="hl-blue">After grouping:</span><br><strong>Q = A'CD + A'C'D + BCD'... → Q = A'D + BCD'</strong></p>
+            <p style="font-size:9.5px; color:#888; font-style:italic;">Always check wrap-around groups!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Non-Standard SOP -->
+    <div class="box box-orange">
+      <div class="sec-title">⑤ Non-Standard SOP</div>
+      <p style="font-size:10.5px; margin-bottom:4px;">Convert to <span class="hl-orange">standard SOP</span> form first by expanding missing variables:</p>
+      <div class="formula formula-sm">X = X·(Y+Y') = XY + XY'</div>
+      <div class="ex-box" style="margin-top:5px;">
+        <div class="ex-title">Ex: Map AD + A'BCD'</div>
+        <p style="font-size:10px;">AD = AD·(B+B')·(C+C') = ABCD + ABCD' + AB'CD + AB'CD'</p>
+        <p style="font-size:10px;">A'BCD' stays as is (already standard 4-var)</p>
+        <p style="font-size:10px; margin-top:2px; color:#e67e22; font-weight:700;">→ Place all expanded minterms on K-map, then group!</p>
+      </div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#e67e22; margin-bottom:2px;">5-Variable K-Map</div>
+      <p style="font-size:10.5px;">Use <strong>two 4-variable maps</strong> side by side — one for A=0, one for A=1. Imagine them stacked; cells in same position are adjacent across the two maps.</p>
+      <div class="formula formula-sm">32 cells total: 2 × 16-cell maps</div>
+<p>When you see:</p>
+
+<p><strong>F = Σm(1,3,5,7)</strong></p>
+
+<p>it means:</p>
+
+<p><strong>F = 1</strong> at minterms 1, 3, 5, and 7</p>
+
+<p>Every other row has:</p>
+
+<p><strong>F = 0</strong></p>
+
+<hr>
+
+<p>When you see:</p>
+
+<p><strong>F = ΠM(0,2,4,6)</strong></p>
+
+<p>it means:</p>
+
+<p><strong>F = 0</strong> at rows 0, 2, 4, and 6</p>
+
+<p>Every other row has:</p>
+
+<p><strong>F = 1</strong></p>
+    </div>
+  </div>
+
+  <!-- ROW 3: Don't Cares + POS Minimization + SOP↔POS Conversion -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Don't Cares -->
+    <div class="box box-yellow">
+      <div class="sec-title">⑥ Don't Care Conditions</div>
+      <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-orange">Don't cares</span> = input combinations that <strong>never occur</strong> or whose output value doesn't matter. Marked as <strong>X</strong> in K-map.</p>
+      <ul style="margin-bottom:5px;">
+        <li>When grouping <strong>1's</strong> (SOP): treat X as <strong>1</strong> — include if it helps enlarge a group.</li>
+        <li>When grouping <strong>0's</strong> (POS): treat X as <strong>0</strong> — include if it helps.</li>
+        <li>Only include X in a group if it <span class="hl-green">simplifies</span> the expression.</li>
+        <li>X cells that don't help → <span class="hl-red">ignore them</span>.</li>
+      </ul>
+      <div class="ex-box">
+        <div class="ex-title">BCD Don't Cares (1010–1111)</div>
+        <table style="font-size:9.5px; width:auto;">
+          <tr><th>AB\CD</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+          <tr><td>00</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+          <tr><td>01</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-0">0</td></tr>
+          <tr><td>11</td><td class="td-x">X</td><td class="td-x">X</td><td class="td-x">X</td><td class="td-x">X</td></tr>
+          <tr><td>10</td><td class="td-1">1</td><td class="td-1">1</td><td class="td-x">X</td><td class="td-x">X</td></tr>
+        </table>
+        <p style="font-size:9.5px; margin-top:3px; color:#e67e22;">Use X's in rows 10,11 to enlarge groups → fewer literals!</p>
+        <p style="font-size:10px; font-weight:700; margin-top:2px;">Result: Q = AB'C' + A'BCD</p>
+      </div>
+      <div class="notes-box" style="margin-top:4px;">
+        <p style="font-size:10px; color:#555;"><strong>Why Don't Cares help:</strong> They let you form larger (power-of-2) groups, eliminating more variables and producing a simpler expression.</p>
+      </div>
+    </div>
+
+    <!-- POS Minimization -->
+    <div class="box box-red">
+      <div class="sec-title">⑦ POS K-Map Minimization</div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#c0392b;">1</div>
+        <div class="step-text">Map the POS expression: place <strong>0</strong> in each maxterm cell.</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#c0392b;">2</div>
+        <div class="step-text">Group all <strong>0's</strong> (same rules as grouping 1's: power of 2, largest possible).</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#c0392b;">3</div>
+        <div class="step-text">From each group, eliminate variables that change — keep those that are constant. Write a <strong>SUM term</strong> (OR). Variables appear <span class="hl-red">uncomplemented</span> if they are 0 in the group, <span class="hl-blue">complemented</span> if they are 1.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#c0392b;">4</div>
+        <div class="step-text">AND all sum terms together → minimum POS.</div>
+      </div>
+      <hr class="sep">
+      <div class="ex-box">
+        <div class="ex-title">Ex: Minimize (A+B+C)(A+B+C')(A+B'+C)(A+B'+C')(A'+B'+C)</div>
+        <table style="font-size:9.5px; width:auto; margin-top:3px;">
+          <tr><th>AB\C</th><th>0</th><th>1</th></tr>
+          <tr><td>00</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+          <tr><td>01</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+          <tr><td>11</td><td class="td-0">0</td><td class="td-1">1</td></tr>
+          <tr><td>10</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:3px;"><span class="hl-red">Groups of 0's:</span> {00,01 C=0}: 4-cell group; {00,01 C=1}+{11 C=0}: overlapping</p>
+        <p style="font-size:10px; font-weight:700; margin-top:2px;">F = A(B + C)</p>
+      </div>
+    </div>
+
+    <!-- SOP↔POS Conversion -->
+    <div class="box box-teal">
+      <div class="sec-title">⑧ SOP ↔ POS Conversion</div>
+      <p style="font-size:10.5px; margin-bottom:4px;">One K-map holds <strong>both</strong> forms — cells with 1's give SOP; cells with 0's give POS.</p>
+      <ul style="margin-bottom:5px;">
+        <li>To get <span class="hl-blue">minimum SOP</span>: group the <strong>1's</strong>.</li>
+        <li>To get <span class="hl-red">minimum POS</span>: group the <strong>0's</strong>.</li>
+        <li>Use conversion to find which form needs fewer gates.</li>
+      </ul>
+      <div class="ex-box">
+        <div class="ex-title">Ex: POS → min POS + min SOP</div>
+        <p style="font-size:10px;">Given: (A'+B'+C+D)(A+B'+C+D)(A+B+C+D')(A+B+C'+D')(A'+B+C+D')(A+B+C'+D)</p>
+        <table style="font-size:9.5px; width:auto; margin-top:3px;">
+          <tr><th>AB\CD</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+          <tr><td>00</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-0">0</td></tr>
+          <tr><td>01</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+          <tr><td>11</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+          <tr><td>10</td><td class="td-1">1</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+        </table>
+        <p style="font-size:10px; margin-top:3px;"><span class="hl-red">Min POS:</span> (B+C+D)(B+C+D')(A+B+C)</p>
+        <p style="font-size:10px;"><span class="hl-blue">Min SOP:</span> B'D + B'C + AC + BD'</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 4: Worked Examples + Key Takeaways -->
+  <div class="grid grid-2 mb4">
+
+    <!-- Worked Examples -->
+    <div class="box" style="border-color:#2980b9; background:rgba(235,245,255,0.5);">
+      <div class="sec-title" style="color:#2980b9; border-bottom-color:#2980b9;">⑨ Worked Examples</div>
+      <div class="grid grid-2" style="gap:6px;">
+
+        <div class="ex-box">
+          <div class="ex-title">Ex A: Q = A'BC + AB'C + AB'C'</div>
+          <table style="font-size:9.5px; width:auto;">
+            <tr><th>AB\C</th><th>0</th><th>1</th></tr>
+            <tr><td>00</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+            <tr><td>01</td><td class="td-0">0</td><td class="td-1">1</td></tr>
+            <tr><td>11</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+            <tr><td>10</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:3px;">Group {01→C=1} and {10→both C}: pair AB'</p>
+          <p style="font-size:10px; font-weight:700;">Min SOP: Q = AB' + A'BC</p>
+        </div>
+
+        <div class="ex-box">
+          <div class="ex-title">Ex B: 4-var — Q = A'C'D + A'BCD' + ABCD + ABCD'</div>
+          <table style="font-size:9.5px; width:auto;">
+            <tr><th>AB\CD</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+            <tr><td>00</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+            <tr><td>01</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-1">1</td></tr>
+            <tr><td>11</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+            <tr><td>10</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:3px; font-weight:700;">Q = A'C'D + A'BCD' + ABCD'</p>
+        </div>
+
+        <div class="ex-box">
+          <div class="ex-title">Ex C: Circuit → Q = A + A'B + A'B'C → Q = ?</div>
+          <table style="font-size:9.5px; width:auto;">
+            <tr><th>AB\C</th><th>0</th><th>1</th></tr>
+            <tr><td>00</td><td class="td-0">0</td><td class="td-1">1</td></tr>
+            <tr><td>01</td><td class="td-0">0</td><td class="td-1">1</td></tr>
+            <tr><td>11</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+            <tr><td>10</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:3px;">Group entire bottom half (A=1) + right column (C=1)</p>
+          <p style="font-size:10px; font-weight:700;">Min SOP: Q = A + C</p>
+        </div>
+
+        <div class="ex-box">
+          <div class="ex-title">Ex D: Don't Cares in action</div>
+          <table style="font-size:9.5px; width:auto;">
+            <tr><th>WX\YZ</th><th>00</th><th>01</th><th>11</th><th>10</th></tr>
+            <tr><td>00</td><td class="td-1">1</td><td class="td-0">0</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+            <tr><td>01</td><td class="td-0">0</td><td class="td-x">X</td><td class="td-1">1</td><td class="td-1">1</td></tr>
+            <tr><td>11</td><td class="td-1">1</td><td class="td-0">0</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+            <tr><td>10</td><td class="td-1">1</td><td class="td-1">1</td><td class="td-0">0</td><td class="td-0">0</td></tr>
+          </table>
+          <p style="font-size:10px; margin-top:3px;"><span class="hl-green">With X:</span> W'Y + WY'Z' + WX'Y' + W'X'Z'<br>
+          <span class="hl-red">Without X:</span> adds W'XZ term</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div>
+      <div class="key-box" style="margin-bottom:6px;">
+        <div class="key-title">Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">K-map rows/columns <span class="hl-blue">must follow Gray code</span> — only 1 bit change between adjacent cells. This is non-negotiable!</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Always form the <span class="hl-green">largest possible</span> groups (power of 2). Bigger groups → fewer literals → simpler circuit.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-red">Wrap-around adjacency</span>: top↔bottom row and left↔right column are adjacent. Corner cells can form a group of 4!</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">SOP → group <strong>1's</strong>; POS → group <strong>0's</strong>. Both derive minimum expressions from the same K-map.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-orange">Don't cares (X)</span>: treat as 1 for SOP grouping or 0 for POS grouping — only if they allow a larger group.</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">After minimization, compare SOP vs POS gate count to choose the <span class="hl-blue">most economical implementation</span>.</div>
+        </div>
+      </div>
+
+      <div class="notes-box">
+        <div class="notes-title">Quick Reference — Grouping Size vs Variables Eliminated</div>
+        <table style="font-size:10.5px;">
+          <tr><th>Group Size</th><th>Cells</th><th>Variables Eliminated</th><th>Literals in Term</th></tr>
+          <tr><td>1</td><td class="td-0">1</td><td class="td-0">0</td><td>N (all)</td></tr>
+          <tr><td>2</td><td>2</td><td>1</td><td>N−1</td></tr>
+          <tr><td class="td-1">4</td><td class="td-1">4</td><td class="td-1">2</td><td class="td-1">N−2</td></tr>
+          <tr><td class="td-hl">8</td><td class="td-hl">8</td><td class="td-hl">3</td><td class="td-hl">N−3</td></tr>
+          <tr><td>2ᴺ</td><td>All</td><td>N</td><td class="td-1">0 (= constant 1)</td></tr>
+        </table>
+        <p style="font-size:9.5px; margin-top:3px; color:#555; font-style:italic;">Homework: Convert A'B'C' + AB'C' + A'BC' + ABC' + A'BC to POS using K-map.</p>
+      </div>
+
+      <div style="text-align:right; margin-top:6px; font-family:'Caveat',cursive; font-size:13px; color:#888;">
+        Reading: Digital Fundamentals, Floyd Ch.4, pp.210–228 😊
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

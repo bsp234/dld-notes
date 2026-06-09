@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Kalam', cursive;
+    padding: 20px 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 30px auto;
+    background: #fefdf8;
+    border: 3px solid #888;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      #d0e4f0 27px,
+      #d0e4f0 28px
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 72px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 12px 14px 16px 14px;
+  }
+
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+
+  .lec-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+    padding: 0 12px;
+  }
+
+  .header-info {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.5;
+  }
+
+  .header-info .course { color: #1a5276; font-weight: 700; }
+  .header-info .date { color: #c0392b; }
+
+  .grid { display: grid; gap: 8px; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+
+  .box {
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+  }
+
+  .box-blue { border-color: #1a5276; background: rgba(214,234,248,0.4); }
+  .box-green { border-color: #1e8449; background: rgba(212,239,223,0.4); }
+  .box-red { border-color: #c0392b; background: rgba(253,228,226,0.4); }
+  .box-purple { border-color: #6c3483; background: rgba(232,218,239,0.4); }
+  .box-orange { border-color: #e67e22; background: rgba(253,235,208,0.4); }
+  .box-yellow { border-color: #d4ac0d; background: rgba(254,249,231,0.6); }
+  .box-teal { border-color: #117a65; background: rgba(212,246,238,0.4); }
+  .box-dark { border-color: #222; background: rgba(240,240,235,0.6); }
+
+  .sec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .box-blue .sec-title { color: #1a5276; }
+  .box-green .sec-title { color: #1e8449; }
+  .box-red .sec-title { color: #c0392b; }
+  .box-purple .sec-title { color: #6c3483; }
+  .box-teal .sec-title { color: #117a65; }
+  .box-orange .sec-title { color: #e67e22; }
+  .box-dark .sec-title { color: #111; }
+  .box-yellow .sec-title { color: #b7950b; }
+
+  p, li { font-size: 11px; line-height: 1.55; color: #222; }
+  ul { padding-left: 14px; }
+  li { list-style: disc; }
+  ol { padding-left: 16px; }
+  ol li { list-style: decimal; }
+
+  .formula {
+    background: rgba(255,255,230,0.9);
+    border: 2px solid #c9a100;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0;
+    text-align: center;
+  }
+
+  .formula-sm { font-size: 11px; padding: 3px 6px; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10.5px;
+    font-family: 'Kalam', cursive;
+  }
+
+  th {
+    background: rgba(52,73,94,0.15);
+    border: 1.5px solid #555;
+    padding: 2px 5px;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+  }
+
+  td {
+    border: 1px solid #888;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 10.5px;
+  }
+
+  .td-hl { background: rgba(255,255,150,0.6); font-weight: 700; }
+  .td-green { background: rgba(200,250,200,0.6); font-weight: 700; }
+  .td-red { background: rgba(255,200,200,0.6); }
+
+  .hl-red { color: #c0392b; font-weight: 700; }
+  .hl-blue { color: #1a5276; font-weight: 700; }
+  .hl-green { color: #1e8449; font-weight: 700; }
+  .hl-purple { color: #6c3483; font-weight: 700; }
+  .hl-orange { color: #e67e22; font-weight: 700; }
+  .hl-teal { color: #117a65; font-weight: 700; }
+
+  .mb4 { margin-bottom: 4px; }
+  .mb6 { margin-bottom: 6px; }
+  .mb8 { margin-bottom: 8px; }
+
+  .sep { border: none; border-top: 1px dashed #bbb; margin: 4px 0; }
+
+  .ex-box {
+    background: rgba(255,252,220,0.7);
+    border: 1.5px solid #c9a100;
+    border-radius: 3px;
+    padding: 3px 6px;
+    margin: 3px 0;
+  }
+
+  .ex-title {
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7d6608;
+    margin-bottom: 2px;
+  }
+
+  .notes-box {
+    background: rgba(255,243,205,0.6);
+    border: 1.5px dashed #e0a800;
+    border-radius: 3px;
+    padding: 4px 7px;
+  }
+
+  .notes-title {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b7770d;
+    margin-bottom: 3px;
+  }
+
+  .key-box {
+    background: rgba(232,245,233,0.6);
+    border: 2px solid #2e7d32;
+    border-radius: 4px;
+    padding: 6px 9px;
+  }
+
+  .key-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1b5e20;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #2e7d32;
+    padding-bottom: 2px;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 3px;
+  }
+
+  .step-num {
+    min-width: 18px;
+    height: 18px;
+    background: #1a5276;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-text { font-size: 11px; line-height: 1.5; color: #222; }
+
+  .rule-row {
+    display: flex;
+    gap: 5px;
+    align-items: flex-start;
+    margin-bottom: 3px;
+  }
+  .rule-num {
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    background: #1a5276;
+    border-radius: 2px;
+    padding: 0px 4px;
+    min-width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .rule-formula {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: #c0392b;
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+  .rule-desc { font-size: 10.5px; color: #333; }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+    .rule-formula { min-width: 0 !important; }
+    .conv-node { width: 46px; height: 46px; font-size: 8px; padding-top: 7px; }
+    .conv-diagram { flex-wrap: wrap; gap: 4px; }
+    .bit-cell { width: 18px; height: 18px; font-size: 10px; line-height: 18px; }
+    .bit-label { width: 18px; font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE 1 ===== -->
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LEC 03</div>
+    <div class="main-title">Switching Algebra & Logic Gates</div>
+    <div class="header-info">
+      <div class="course">ECEG-3161 Digital Logic Design</div>
+      <div>AAIT — Dept. of Electrical & Computer Eng.</div>
+      <div class="date">Boolean Algebra, Gates, Truth Tables, Theorems</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="digital_logic_design_comprehensive_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 1-2</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="Lec04_Digital_IC_Families_Notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 04 →</a>
+</div>
+
+  <!-- ROW 1: Boolean Intro + Truth Tables + AND Gate -->
+  <div class="grid grid-3 mb8">
+
+    <!-- Boolean Algebra Intro -->
+    <div class="box box-blue">
+      <div class="sec-title">① Boolean Algebra</div>
+      <p class="mb4"><span class="hl-blue">Boolean Algebra</span> is the mathematical tool that describes the relationship between a logic circuit's inputs and outputs as an algebraic expression.</p>
+      <ul class="mb4">
+        <li>Only two values: <span class="hl-blue">0</span> and <span class="hl-red">1</span></li>
+        <li>Logic 0 = false, off, low, no, open switch</li>
+        <li>Logic 1 = true, on, high, yes, closed switch</li>
+        <li>Three basic operations: <span class="hl-red">OR</span>, <span class="hl-blue">AND</span>, <span class="hl-green">NOT</span></li>
+        <li>Corresponds to: addition (+), multiplication (·), complement (‾)</li>
+      </ul>
+      <div class="notes-box">
+        <div class="notes-title">Uses of Boolean Algebra</div>
+        <p style="font-size:10px;">Describing circuits • Analyzing behavior • Designing new circuits • Simplifying gate count • Implementing digital systems</p>
+      </div>
+    </div>
+
+    <!-- Truth Tables -->
+    <div class="box box-green">
+      <div class="sec-title">② Truth Tables</div>
+      <p class="mb4">A truth table lists <span class="hl-green">all possible input combinations</span> and the resulting output. N inputs → <span class="hl-red">2<sup>N</sup> rows</span>.</p>
+      <table style="margin-bottom:5px;">
+        <tr><th>Inputs (N)</th><th>Rows (2<sup>N</sup>)</th></tr>
+        <tr><td>1</td><td class="td-hl">2</td></tr>
+        <tr><td>2</td><td class="td-hl">4</td></tr>
+        <tr><td>3</td><td class="td-hl">8</td></tr>
+        <tr><td>4</td><td class="td-hl">16</td></tr>
+        <tr><td>N</td><td class="td-green">2<sup>N</sup></td></tr>
+      </table>
+      <div class="notes-box">
+        <p style="font-size:10px; font-style:italic;">Convention: list inputs in binary counting order (00, 01, 10, 11 for 2 inputs). Output column determined by the logic function.</p>
+      </div>
+    </div>
+
+    <!-- AND Gate -->
+    <div class="box box-teal">
+      <div class="sec-title">③ AND Gate</div>
+      <p class="mb4">Logical <span class="hl-teal">multiplication</span>. Expression: <span class="hl-teal">Z = X · Y</span> or Z = XY</p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z = A·B</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-green">1</td></tr>
+      </table>
+      <div class="ex-box">
+        <div class="ex-title">Logic Rule</div>
+        <p style="font-size:10.5px;">Output = <span class="hl-green">1</span> only when <strong>ALL</strong> inputs are 1.<br>Output = <span class="hl-red">0</span> when <strong>ANY</strong> input is 0.</p>
+      </div>
+      <p style="font-size:10px; margin-top:3px; color:#555;">Timing: output "passes" A only when B=1 (acts as controlled gate).</p>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: OR + NOT + NAND + NOR gates -->
+  <div class="grid grid-4 mb8">
+
+    <!-- OR Gate -->
+    <div class="box box-orange">
+      <div class="sec-title">④ OR Gate</div>
+      <p class="mb4">Logical <span class="hl-orange">addition</span>. Expression: <span class="hl-orange">Z = X + Y</span></p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z=A+B</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-green">1</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px;">Output = 1 when <strong>at least one</strong> input is 1.<br>Note: 1+1=1 in Boolean (not 2!)</p>
+    </div>
+
+    <!-- NOT Gate -->
+    <div class="box box-red">
+      <div class="sec-title">⑤ NOT Gate</div>
+      <p class="mb4">Complement/Inversion. Expression: <span class="hl-red">X = Ā</span></p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>Z = Ā</th></tr>
+        <tr><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td class="td-red">0</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px;">Read: "NOT A", "complement of A", "inverse of A". Small circle (bubble) on symbol = inversion.</p>
+    </div>
+
+    <!-- NAND Gate -->
+    <div class="box box-purple">
+      <div class="sec-title">⑥ NAND Gate</div>
+      <p class="mb4">NOT-AND. <span class="hl-purple">Z = (XY)'</span>. Universal gate!</p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z=(AB)'</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-red">0</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px;">Output = 0 only when ALL inputs are 1. Can implement any Boolean function by itself.</p>
+    </div>
+
+    <!-- NOR Gate -->
+    <div class="box box-green">
+      <div class="sec-title">⑦ NOR Gate</div>
+      <p class="mb4">NOT-OR. <span class="hl-green">Z = (X+Y)'</span>. Universal gate!</p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z=(A+B)'</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-red">0</td></tr>
+      </table>
+      <p style="font-size:10px; margin-top:3px;">Output = 1 only when ALL inputs are 0. Can implement any Boolean function by itself.</p>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: XOR + XNOR + Universal Gates -->
+  <div class="grid grid-3 mb8">
+
+    <!-- XOR Gate -->
+    <div class="box box-blue">
+      <div class="sec-title">⑧ XOR Gate (Exclusive-OR)</div>
+      <p class="mb4">Expression: <span class="hl-blue">F = xy' + x'y = x ⊕ y</span></p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z = A⊕B</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-red">0</td></tr>
+      </table>
+      <p style="font-size:10.5px; margin-top:3px;">Output = 1 when inputs are <span class="hl-blue">DIFFERENT</span>.<br>Output = 0 when inputs are <span class="hl-red">SAME</span>.</p>
+      <div class="notes-box" style="margin-top:3px;">
+        <p style="font-size:10px;">Applications: parity checkers, binary adders, comparators, error detection.</p>
+      </div>
+    </div>
+
+    <!-- XNOR Gate -->
+    <div class="box box-dark">
+      <div class="sec-title">⑨ XNOR Gate (Equivalence)</div>
+      <p class="mb4">Expression: <span class="hl-blue">F = xy + x'y' = (x⊕y)'</span></p>
+      <table style="margin-bottom:4px;">
+        <tr><th>A</th><th>B</th><th>Z=(A⊕B)'</th></tr>
+        <tr><td>0</td><td>0</td><td class="td-green">1</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-red">0</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-green">1</td></tr>
+      </table>
+      <p style="font-size:10.5px; margin-top:3px;">Output = 1 when inputs are <span class="hl-green">SAME</span> (equivalent).<br>Output = 0 when inputs are <span class="hl-red">DIFFERENT</span>.</p>
+      <div class="notes-box" style="margin-top:3px;">
+        <p style="font-size:10px;">Also called "equivalence gate". Used in comparators and parity circuits.</p>
+      </div>
+    </div>
+
+    <!-- Universal Gates: NAND/NOR -->
+    <div class="box box-purple">
+      <div class="sec-title">⑩ Universal Gates: NAND & NOR</div>
+      <p class="mb4">Both NAND and NOR can implement <span class="hl-purple">any Boolean function</span> alone:</p>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">NAND → NOT, AND, OR:</div>
+      <ul style="margin-bottom:4px;">
+        <li>NOT: NAND with inputs tied together: AA' = Ā·Ā = Ā</li>
+        <li>AND: NAND + NOT: (AB)'' = AB</li>
+        <li>OR: NAND each input then NAND: Ā·B̄ = A+B (DeMorgan)</li>
+      </ul>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#c0392b; margin-bottom:2px;">NOR → NOT, OR, AND:</div>
+      <ul>
+        <li>NOT: NOR with inputs tied together</li>
+        <li>OR: NOR + NOT</li>
+        <li>AND: NOR each input then NOR</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<!-- ===== PAGE 2 ===== -->
+<div class="page">
+<div class="content">
+
+  <!-- HEADER PAGE 2 -->
+  <div class="header">
+    <div class="lec-badge">LEC 03 — P.2</div>
+    <div class="main-title">Boolean Algebra: Laws, Rules & De Morgan</div>
+    <div class="header-info">
+      <div class="course">ECEG-3161 Digital Logic Design</div>
+      <div>AAIT — Dept. of Electrical & Computer Eng.</div>
+      <div class="date">12 Rules · 3 Laws · De Morgan · Simplification</div>
+    </div>
+  </div>
+
+  <!-- ROW 1: Boolean Rules 1-8 -->
+  <div class="grid grid-2 mb8">
+
+    <!-- Rules 1-6 -->
+    <div class="box box-blue">
+      <div class="sec-title">① Boolean Rules (1–6)</div>
+      <div class="rule-row"><div class="rule-num">R1</div><div class="rule-formula">A + 0 = A</div><div class="rule-desc">OR with 0 → identity: unchanged</div></div>
+      <div class="rule-row"><div class="rule-num">R2</div><div class="rule-formula">A + 1 = 1</div><div class="rule-desc">OR with 1 → always 1 (annulment)</div></div>
+      <div class="rule-row"><div class="rule-num">R3</div><div class="rule-formula">A · 0 = 0</div><div class="rule-desc">AND with 0 → always 0 (annulment)</div></div>
+      <div class="rule-row"><div class="rule-num">R4</div><div class="rule-formula">A · 1 = A</div><div class="rule-desc">AND with 1 → identity: unchanged</div></div>
+      <div class="rule-row"><div class="rule-num">R5</div><div class="rule-formula">A + A = A</div><div class="rule-desc">OR with itself → idempotent</div></div>
+      <div class="rule-row"><div class="rule-num">R6</div><div class="rule-formula">A + Ā = 1</div><div class="rule-desc">OR with complement → always 1</div></div>
+      <div class="ex-box" style="margin-top:4px;">
+        <div class="ex-title">Proof of R6: A + Ā = 1</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive;">When A=0: 0 + 1 = 1 ✓<br>When A=1: 1 + 0 = 1 ✓</p>
+      </div>
+    </div>
+
+    <!-- Rules 7-12 -->
+    <div class="box box-red">
+      <div class="sec-title">② Boolean Rules (7–12)</div>
+      <div class="rule-row"><div class="rule-num">R7</div><div class="rule-formula">A · A = A</div><div class="rule-desc">AND with itself → idempotent</div></div>
+      <div class="rule-row"><div class="rule-num">R8</div><div class="rule-formula">A · Ā = 0</div><div class="rule-desc">AND with complement → always 0</div></div>
+      <div class="rule-row"><div class="rule-num">R9</div><div class="rule-formula">Ā̄ = A</div><div class="rule-desc">Double complement → original value</div></div>
+      <div class="rule-row"><div class="rule-num">R10</div><div class="rule-formula">A + AB = A</div><div class="rule-desc">Absorption: A dominates AB</div></div>
+      <div class="rule-row"><div class="rule-num">R11</div><div class="rule-formula">A + ĀB = A+B</div><div class="rule-desc">Simplification theorem</div></div>
+      <div class="rule-row"><div class="rule-num">R12</div><div class="rule-formula">(A+B)(A+C)=A+BC</div><div class="rule-desc">Distribution in POS form</div></div>
+      <div class="ex-box" style="margin-top:4px;">
+        <div class="ex-title">Proof of R10: A + AB = A</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive;">A+AB = A(1+B) [distrib] = A·1 [R2] = A [R4] ✓</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 2: Three Laws + De Morgan -->
+  <div class="grid grid-3 mb8">
+
+    <!-- Commutative + Associative Law -->
+    <div class="box box-green">
+      <div class="sec-title">③ Commutative & Associative</div>
+      <div style="font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#1e8449; margin-bottom:3px;">Commutative Law</div>
+      <p style="font-size:10.5px; margin-bottom:2px;">Order of variables does NOT matter:</p>
+      <div class="formula formula-sm">A + B = B + A</div>
+      <div class="formula formula-sm">A · B = B · A</div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#1e8449; margin-bottom:3px;">Associative Law</div>
+      <p style="font-size:10.5px; margin-bottom:2px;">Grouping of variables does NOT matter:</p>
+      <div class="formula formula-sm">A+(B+C) = (A+B)+C</div>
+      <div class="formula formula-sm">A·(B·C) = (A·B)·C</div>
+      <div class="notes-box" style="margin-top:4px;">
+        <p style="font-size:10px;">These allow us to reorder and regroup terms freely when simplifying Boolean expressions.</p>
+      </div>
+    </div>
+
+    <!-- Distributive Law -->
+    <div class="box box-orange">
+      <div class="sec-title">④ Distributive Law</div>
+      <p class="mb4">AND distributes over OR (like regular algebra):</p>
+      <div class="formula">A(B + C) = AB + AC</div>
+      <p class="mb4" style="margin-top:4px;">OR also distributes over AND (unlike regular algebra!):</p>
+      <div class="formula">A + (B·C) = (A+B)·(A+C)</div>
+      <div class="ex-box" style="margin-top:5px;">
+        <div class="ex-title">Simplification Example</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive; line-height:1.7;">
+          F = X̄YZ + X̄YZ̄ + XZ<br>
+          = X̄Y(Z+Z̄) + XZ &nbsp;&nbsp;&nbsp;[distrib]<br>
+          = X̄Y·1 + XZ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[R6]<br>
+          = <span class="hl-red">X̄Y + XZ</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[R4] ✓
+        </p>
+      </div>
+      <p style="font-size:10px; margin-top:3px; color:#555;">Result: 3 AND gates + OR reduced to 2 AND gates + OR = fewer gates!</p>
+    </div>
+
+    <!-- De Morgan's Theorem -->
+    <div class="box box-purple">
+      <div class="sec-title">⑤ De Morgan's Theorems</div>
+      <p class="mb4">Two fundamental theorems relating complements of OR and AND:</p>
+      <div class="formula" style="font-size:14px;">$\overline{A+B} = \bar{A} \cdot \bar{B}$</div>
+      <p style="font-size:10px; text-align:center; margin-bottom:4px; font-family:'Caveat',cursive;">NOR = AND of complements</p>
+      <div class="formula" style="font-size:14px;">$\overline{A \cdot B} = \bar{A} + \bar{B}$</div>
+      <p style="font-size:10px; text-align:center; margin-bottom:4px; font-family:'Caveat',cursive;">NAND = OR of complements</p>
+      <div class="notes-box" style="margin-top:4px;">
+        <div class="notes-title">🔑 How to apply De Morgan</div>
+        <ol style="padding-left:14px;">
+          <li style="font-size:10px;">Complement entire expression</li>
+          <li style="font-size:10px;">Change each AND (·) to OR (+) and vice versa</li>
+          <li style="font-size:10px;">Complement each individual variable</li>
+        </ol>
+      </div>
+      <div class="ex-box" style="margin-top:4px;">
+        <div class="ex-title">Example</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive;">
+          $\overline{ABC(\overline{A+D})}$ with A=0,B=1,C=1,D=1<br>
+          = Ā·B·C·$\overline{(A+D)}$ = 1·1·1·$\overline{1}$ = 1·0 = <span class="hl-red">0</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: Summary Table + Boolean Laws Summary + Key Takeaways -->
+  <div class="grid grid-2 mb8">
+
+    <!-- Full Laws Summary -->
+    <div class="box box-yellow">
+      <div class="sec-title">⑥ Summary: All Laws at a Glance</div>
+      <table>
+        <tr><th>Law</th><th>OR Form</th><th>AND Form</th></tr>
+        <tr><td style="text-align:left; font-weight:700;">Identity</td><td>A + 0 = A</td><td>A · 1 = A</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Annulment</td><td>A + 1 = 1</td><td>A · 0 = 0</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Idempotent</td><td>A + A = A</td><td>A · A = A</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Complement</td><td>A + Ā = 1</td><td>A · Ā = 0</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Double Neg.</td><td colspan="2" style="text-align:center;">Ā̄ = A</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Commutative</td><td>A+B = B+A</td><td>AB = BA</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Associative</td><td>A+(B+C)=(A+B)+C</td><td>A(BC)=(AB)C</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Distributive</td><td>A+(BC)=(A+B)(A+C)</td><td>A(B+C)=AB+AC</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">Absorption</td><td>A+AB = A</td><td>A(A+B) = A</td></tr>
+        <tr><td style="text-align:left; font-weight:700;">De Morgan</td><td class="td-hl">$\overline{A+B}=\bar{A}\bar{B}$</td><td class="td-hl">$\overline{AB}=\bar{A}+\bar{B}$</td></tr>
+      </table>
+    </div>
+
+    <!-- Evaluation Rules + Key Takeaways -->
+    <div>
+      <div class="box box-teal mb6">
+        <div class="sec-title">⑦ Evaluating Boolean Expressions</div>
+        <p class="mb4">Order of operations (like PEMDAS in regular math):</p>
+        <div class="step mb4">
+          <div class="step-num">1</div>
+          <div class="step-text">Invert single variables with complement bars first</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num">2</div>
+          <div class="step-text">Evaluate parenthesized expressions</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num">3</div>
+          <div class="step-text">Perform AND (·) operations before OR (+) — unless parentheses say otherwise</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">For a bar over a group, evaluate inside first, then complement the result</div>
+        </div>
+        <div class="ex-box" style="margin-top:4px;">
+          <div class="ex-title">Note: A+B·C ≠ (A+B)·C</div>
+          <p style="font-size:10px;">Without parentheses, AND is always evaluated first!</p>
+        </div>
+      </div>
+
+      <div class="key-box">
+        <div class="key-title">✅ Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">N-input truth table has <span class="hl-red">2<sup>N</sup></span> rows. AND=all-1, OR=any-1, NOT=flip.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-red">NAND and NOR are universal</span> — any circuit can be built from NAND gates alone (or NOR alone).</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-blue">XOR</span> outputs 1 when inputs differ. <span class="hl-blue">XNOR</span> outputs 1 when inputs are the same.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-green">De Morgan</span>: complement a sum → product of complements; complement a product → sum of complements.</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Simplifying Boolean expressions reduces gate count → smaller, faster, cheaper circuits.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ROW 4: Circuit Implementation Examples -->
+  <div class="box box-dark mb4">
+    <div class="sec-title">⑧ Circuit Implementation — Worked Examples</div>
+    <div class="grid grid-3" style="gap:8px;">
+
+      <div class="ex-box">
+        <div class="ex-title">Ex 1: x = A·B + C</div>
+        <p style="font-size:10.5px; font-family:'Kalam',cursive;">AND gate (A,B) → output AB → feeds OR gate with C → final output x. AND is evaluated before OR (no parentheses needed).</p>
+      </div>
+
+      <div class="ex-box">
+        <div class="ex-title">Ex 2: x = (A+B)·C</div>
+        <p style="font-size:10.5px; font-family:'Kalam',cursive;">OR gate (A,B) → output (A+B) → feeds AND gate with C → final output x. Parentheses force OR first here.</p>
+      </div>
+
+      <div class="ex-box">
+        <div class="ex-title">Ex 3: Simplification</div>
+        <p style="font-size:10.5px; font-family:'Caveat',cursive; line-height:1.7;">
+          y = AC + BC̄ + ĀBC<br>
+          Original: 3 AND gates + 1 OR gate<br>
+          After simplification with Boolean laws:<br>
+          <span class="hl-green">Fewer gates = cheaper & faster!</span>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

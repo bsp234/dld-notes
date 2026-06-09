@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Kalam', cursive;
+    padding: 0;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fefdf8;
+    border: 3px solid #888;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      #d0e4f0 27px,
+      #d0e4f0 28px
+    );
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 72px;
+    border-left: 2px solid rgba(220,80,80,0.3);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    padding: 12px 14px 16px 14px;
+  }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2.5px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+  }
+  .lec-badge {
+    border: 2.5px solid #c0392b;
+    color: #c0392b;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .main-title {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: #111;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    flex: 1;
+    padding: 0 12px;
+  }
+  .header-info {
+    font-family: 'Kalam', cursive;
+    font-size: 10.5px;
+    color: #333;
+    text-align: right;
+    line-height: 1.5;
+  }
+  .header-info .course { color: #1a5276; font-weight: 700; }
+  .header-info .date   { color: #c0392b; }
+
+  /* GRID */
+  .grid { display: grid; gap: 8px; }
+  .grid-3   { grid-template-columns: 1fr 1fr 1fr; }
+  .grid-2   { grid-template-columns: 1fr 1fr; }
+  .grid-4   { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-1-2 { grid-template-columns: 1fr 2fr; }
+  .mb4 { margin-bottom: 4px; }
+  .mb6 { margin-bottom: 6px; }
+  .mb8 { margin-bottom: 8px; }
+
+  /* BOXES */
+  .box {
+    border: 2px solid #333;
+    border-radius: 4px;
+    padding: 7px 9px;
+    background: rgba(255,255,255,0.6);
+  }
+  .box-blue   { border-color: #1a5276; background: rgba(214,234,248,0.4); }
+  .box-green  { border-color: #1e8449; background: rgba(212,239,223,0.4); }
+  .box-red    { border-color: #c0392b; background: rgba(253,228,226,0.4); }
+  .box-purple { border-color: #6c3483; background: rgba(232,218,239,0.4); }
+  .box-orange { border-color: #e67e22; background: rgba(253,235,208,0.4); }
+  .box-yellow { border-color: #d4ac0d; background: rgba(254,249,231,0.6); }
+  .box-teal   { border-color: #117a65; background: rgba(212,246,238,0.4); }
+  .box-dark   { border-color: #222;    background: rgba(240,240,235,0.6); }
+
+  .sec-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid currentColor;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    letter-spacing: 0.5px;
+  }
+  .box-blue   .sec-title { color: #1a5276; }
+  .box-green  .sec-title { color: #1e8449; }
+  .box-red    .sec-title { color: #c0392b; }
+  .box-purple .sec-title { color: #6c3483; }
+  .box-teal   .sec-title { color: #117a65; }
+  .box-orange .sec-title { color: #e67e22; }
+  .box-dark   .sec-title { color: #111; }
+
+  p, li { font-size: 11px; line-height: 1.55; color: #222; }
+  ul { padding-left: 14px; }
+  li { list-style: disc; }
+  ol { padding-left: 16px; }
+  ol li { list-style: decimal; font-size: 11px; line-height: 1.5; }
+
+  .formula {
+    background: rgba(255,255,230,0.9);
+    border: 2px solid #c9a100;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #333;
+    margin: 4px 0;
+    text-align: center;
+  }
+  .formula-sm { font-size: 11px; padding: 3px 6px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 10.5px; font-family: 'Kalam', cursive; }
+  th {
+    background: rgba(52,73,94,0.15);
+    border: 1.5px solid #555;
+    padding: 2px 5px;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-align: center;
+    font-family: 'Caveat', cursive;
+  }
+  td { border: 1px solid #888; padding: 2px 5px; text-align: center; font-size: 10.5px; }
+  .td-hl     { background: rgba(255,255,150,0.6); font-weight: 700; }
+  .td-active { background: rgba(200,255,200,0.6); font-weight: 700; color: #1e8449; }
+  .td-zero   { color: #aaa; }
+  .td-blue   { background: rgba(214,234,248,0.6); font-weight: 700; color: #1a5276; }
+  .td-red    { background: rgba(253,228,226,0.6); font-weight: 700; color: #c0392b; }
+
+  .hl-red    { color: #c0392b; font-weight: 700; }
+  .hl-blue   { color: #1a5276; font-weight: 700; }
+  .hl-green  { color: #1e8449; font-weight: 700; }
+  .hl-purple { color: #6c3483; font-weight: 700; }
+  .hl-orange { color: #e67e22; font-weight: 700; }
+  .hl-teal   { color: #117a65; font-weight: 700; }
+
+  .sep { border: none; border-top: 1px dashed #ccc; margin: 5px 0; }
+
+  .ex-box {
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid #bbb;
+    border-radius: 3px;
+    padding: 4px 6px;
+    margin: 3px 0;
+  }
+  .ex-title {
+    font-family: 'Caveat', cursive;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 2px;
+  }
+
+  .key-box {
+    border: 2px solid #117a65;
+    border-radius: 4px;
+    padding: 6px 8px;
+    background: rgba(212,246,238,0.3);
+  }
+  .key-title {
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    font-weight: 700;
+    color: #117a65;
+    border-bottom: 1.5px solid #117a65;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+  }
+  .notes-box {
+    border: 1.5px dashed #888;
+    border-radius: 3px;
+    padding: 5px 7px;
+    background: rgba(255,255,240,0.6);
+  }
+  .notes-title {
+    font-family: 'Caveat', cursive;
+    font-size: 12px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 3px;
+  }
+
+  .step { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 4px; }
+  .step-num {
+    background: #117a65;
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 50%;
+    min-width: 16px;
+    height: 16px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-text { font-size: 10.5px; line-height: 1.5; }
+
+  /* MUX block diagram helpers */
+  .mux-block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #1a5276;
+    background: rgba(214,234,248,0.5);
+    border-radius: 4px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 11px;
+    color: #1a5276;
+    padding: 4px 8px;
+    min-width: 52px;
+  }
+  .demux-block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #6c3483;
+    background: rgba(232,218,239,0.5);
+    border-radius: 4px;
+    font-family: 'Caveat', cursive;
+    font-weight: 700;
+    font-size: 11px;
+    color: #6c3483;
+    padding: 4px 8px;
+    min-width: 52px;
+  }
+
+  /* homework / exercise box */
+  .hw-box {
+    border: 2px dashed #e67e22;
+    border-radius: 4px;
+    padding: 6px 8px;
+    background: rgba(253,235,208,0.3);
+  }
+  .hw-title {
+    font-family: 'Caveat', cursive;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #e67e22;
+    margin-bottom: 3px;
+  }
+  @media (max-width: 768px) {
+    body { padding: 6px; background: #fefdf8; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="lec-badge">LEC 08</div>
+    <div class="main-title">MUX · DEMUX · Code Converters<br>
+      <span style="font-size:14px;font-weight:400;letter-spacing:0;text-transform:none;">
+        Multiplexers · Demultiplexers · Binary↔Gray Code
+      </span>
+    </div>
+    <div class="header-info">
+      <span class="course">ECEG-3201 Digital Logic Design</span><br>
+      AAIT — Dept. of ECE<br>
+      <span class="date">Nebyu Yonas Sutri</span>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L7_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 07</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L9_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 09 →</a>
+</div>
+
+  <!-- ===== ROW 1: Learning Outcomes + MUX Intro ===== -->
+  <div class="grid grid-2-1 mb6">
+
+    <!-- MUX intro -->
+    <div class="box box-blue">
+      <div class="sec-title">① Multiplexer (MUX)</div>
+      <p class="mb4">A <span class="hl-blue">digital switch</span> — selects one of many input data sources and routes it to a single output channel.</p>
+      <div class="grid grid-3" style="gap:5px; margin-bottom:5px;">
+        <div class="ex-box" style="text-align:center;">
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;">Many → One</div>
+          <div style="font-size:10px;line-height:1.5;">Multiple inputs<br>Single output</div>
+        </div>
+        <div class="ex-box" style="text-align:center;">
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;">Selector Bits</div>
+          <div style="font-size:10px;line-height:1.5;">n select lines<br>→ 2ⁿ inputs</div>
+        </div>
+        <div class="ex-box" style="text-align:center;">
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;">Also called</div>
+          <div style="font-size:10px;line-height:1.5;"><span class="hl-blue">Data Selector</span></div>
+        </div>
+      </div>
+      <ul>
+        <li>Output <strong>X / Z</strong> depends entirely on the <span class="hl-blue">select input code</span></li>
+        <li>Performs <span class="hl-green">multiplexing</span> — many inputs, one output</li>
+        <li>Common types: <span class="hl-red">2-to-1, 4-to-1, 8-to-1, 16-to-1</span></li>
+      </ul>
+
+      <!-- SVG block diagram -->
+      <div style="text-align:center; margin-top:6px;">
+        <svg width="320" height="68" viewBox="0 0 320 68" xmlns="http://www.w3.org/2000/svg" style="font-family:'Kalam',cursive;">
+          <!-- Input lines -->
+          <line x1="10" y1="15" x2="90" y2="22" stroke="#1a5276" stroke-width="1.5"/>
+          <line x1="10" y1="28" x2="90" y2="28" stroke="#1a5276" stroke-width="1.5"/>
+          <line x1="10" y1="41" x2="90" y2="34" stroke="#1a5276" stroke-width="1.5"/>
+          <line x1="10" y1="54" x2="90" y2="40" stroke="#1a5276" stroke-width="1.5"/>
+          <text x="2" y="17" font-size="9" fill="#1a5276" font-weight="bold">I₀</text>
+          <text x="2" y="30" font-size="9" fill="#1a5276" font-weight="bold">I₁</text>
+          <text x="2" y="43" font-size="9" fill="#1a5276" font-weight="bold">I₂</text>
+          <text x="2" y="56" font-size="9" fill="#1a5276" font-weight="bold">I₃</text>
+          <!-- MUX trapezoid -->
+          <polygon points="90,10 90,50 130,38 130,22" fill="rgba(214,234,248,0.7)" stroke="#1a5276" stroke-width="2"/>
+          <text x="101" y="32" font-size="10" fill="#1a5276" font-weight="bold">MUX</text>
+          <!-- Output line -->
+          <line x1="130" y1="30" x2="180" y2="30" stroke="#1e8449" stroke-width="2"/>
+          <text x="182" y="33" font-size="11" fill="#1e8449" font-weight="bold">Z</text>
+          <!-- Select line -->
+          <line x1="110" y1="50" x2="110" y2="64" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="100" y="64" font-size="9" fill="#c0392b" font-weight="bold">S₁ S₀</text>
+          <!-- labels -->
+          <text x="195" y="20" font-size="9" fill="#555">n select lines</text>
+          <text x="195" y="32" font-size="9" fill="#555">→ controls which</text>
+          <text x="195" y="44" font-size="9" fill="#555">input reaches output</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Learning Outcomes -->
+    <div class="box box-teal">
+      <div class="sec-title">Learning Outcomes</div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#1a5276;">1</div>
+        <div class="step-text"><span class="hl-blue">Multiplexers</span> — 2-to-1, 4-to-1, 8-to-1, building larger from smaller</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#6c3483;">2</div>
+        <div class="step-text"><span class="hl-purple">Demultiplexers</span> — 1-to-2, 1-to-4, 1-to-8 DEMUX</div>
+      </div>
+      <div class="step mb4">
+        <div class="step-num" style="background:#1e8449;">3</div>
+        <div class="step-text"><span class="hl-green">Gray→Binary</span> code conversion</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:#c0392b;">4</div>
+        <div class="step-text"><span class="hl-red">Binary→Gray</span> code conversion</div>
+      </div>
+      <div class="notes-box" style="margin-top:6px;">
+        <div class="notes-title">📖 Read Ahead</div>
+        <div style="font-size:10px;font-family:'Caveat',cursive;line-height:1.6;">
+          Ch. 7 — Flip-Flops, Registers,<br>
+          Counters &amp; Simple Processor<br>
+          <span class="hl-blue">pp. 349–385 (Verilog text)</span><br>
+          + revise combinational logic (L6–L8)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 2: 2-to-1 MUX + 4-to-1 MUX ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- 2-to-1 MUX -->
+    <div class="box box-green">
+      <div class="sec-title">② 2-to-1 MUX</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">
+        <span class="hl-green">1 select line (S)</span>, 2 inputs (I₀, I₁), 1 output Z.
+        S chooses which input passes to output.
+      </p>
+
+      <div class="grid grid-2" style="gap:6px;align-items:start;">
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#1e8449;margin-bottom:3px;">Truth Table</div>
+          <table>
+            <tr><th>S</th><th>I₀</th><th>I₁</th><th>Z</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td class="td-zero">0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td class="td-zero">0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td class="td-active">1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td class="td-active">1</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td class="td-zero">0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td class="td-active">1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td class="td-zero">0</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td class="td-active">1</td></tr>
+          </table>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#1e8449;margin-bottom:3px;">Boolean Equation</div>
+          <div class="formula" style="margin-bottom:5px;">Z = S̄·I₀ + S·I₁</div>
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;margin-bottom:3px;">Simplified table:</div>
+          <table>
+            <tr><th>S</th><th>Output Z</th></tr>
+            <tr><td class="td-zero">0</td><td class="td-blue">I₀</td></tr>
+            <tr><td class="td-active">1</td><td class="td-red">I₁</td></tr>
+          </table>
+          <div class="notes-box" style="margin-top:5px;">
+            <div style="font-size:10px;font-family:'Caveat',cursive;line-height:1.6;">
+              <span class="hl-green">S=0</span> → passes I₀<br>
+              <span class="hl-red">S=1</span> → passes I₁<br>
+              Gate impl: 1 NOT + 2 AND + 1 OR
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-to-1 MUX -->
+    <div class="box box-blue">
+      <div class="sec-title">③ 4-to-1 MUX</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">
+        <span class="hl-blue">2 select lines (S₁S₀)</span>, 4 inputs (I₀–I₃), 1 output Z.
+      </p>
+
+      <div class="grid grid-2" style="gap:6px;align-items:start;">
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#1a5276;margin-bottom:3px;">Select Table</div>
+          <table>
+            <tr><th>S₁</th><th>S₀</th><th>Output Z</th></tr>
+            <tr><td>0</td><td>0</td><td class="td-blue">I₀</td></tr>
+            <tr><td>0</td><td>1</td><td class="td-blue">I₁</td></tr>
+            <tr><td>1</td><td>0</td><td class="td-blue">I₂</td></tr>
+            <tr><td>1</td><td>1</td><td class="td-blue">I₃</td></tr>
+          </table>
+          <div class="notes-box" style="margin-top:4px;">
+            <div style="font-size:10px;font-family:'Caveat',cursive;">
+              S₁S₀ = <span class="hl-blue">binary address</span> of the input to select
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#1a5276;margin-bottom:3px;">Boolean Equation</div>
+          <div class="formula formula-sm" style="margin-bottom:4px;">Z = S̄₁S̄₀I₀ + S̄₁S₀I₁ + S₁S̄₀I₂ + S₁S₀I₃</div>
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;margin-bottom:3px;">Gate implementation:</div>
+          <ul>
+            <li>4 AND gates (3-input each)</li>
+            <li>1 OR gate (4-input)</li>
+            <li>2 NOT gates (for S̄₁, S̄₀)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 3: 8-to-1 MUX + Building Larger MUX ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- 8-to-1 MUX -->
+    <div class="box box-purple">
+      <div class="sec-title">④ 8-to-1 MUX</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">
+        <span class="hl-purple">3 select lines (S₂S₁S₀)</span> → selects 1 of 8 inputs.
+      </p>
+
+      <table style="margin-bottom:5px;">
+        <tr><th>S₂</th><th>S₁</th><th>S₀</th><th>Output Z</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td class="td-blue">I₀</td></tr>
+        <tr><td>0</td><td>0</td><td>1</td><td class="td-blue">I₁</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td class="td-blue">I₂</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td class="td-blue">I₃</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td class="td-blue">I₄</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td class="td-blue">I₅</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td class="td-blue">I₆</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td class="td-blue">I₇</td></tr>
+      </table>
+
+      <div class="formula formula-sm">Z = S̄₂S̄₁S̄₀I₀ + S̄₂S̄₁S₀I₁ + ... + S₂S₁S₀I₇</div>
+
+      <div class="notes-box" style="margin-top:5px;">
+        <div class="notes-title">General Rule</div>
+        <div style="font-family:'Caveat',cursive;font-size:11px;line-height:1.7;">
+          <span class="hl-purple">n</span> select lines → <span class="hl-purple">2ⁿ</span> inputs<br>
+          2-to-1: 1 sel &nbsp;|&nbsp; 4-to-1: 2 sel<br>
+          8-to-1: 3 sel &nbsp;|&nbsp; 16-to-1: 4 sel
+        </div>
+      </div>
+    </div>
+
+    <!-- Building larger MUX from smaller -->
+    <div class="box box-orange">
+      <div class="sec-title">⑤ Building Larger MUX from Smaller</div>
+
+      <div style="font-family:'Caveat',cursive;font-size:12px;font-weight:700;color:#e67e22;margin-bottom:4px;">🔧 Class Exercise 1: 4-to-1 from three 2-to-1 MUXes</div>
+      <div class="ex-box" style="margin-bottom:5px;">
+        <div style="font-family:'Caveat',cursive;font-size:10.5px;line-height:1.8;">
+          <span class="hl-orange">Stage 1 (S₀ selects):</span><br>
+          &nbsp;&nbsp;MUX-A: inputs I₀, I₁ → out A &nbsp;(sel = S₀)<br>
+          &nbsp;&nbsp;MUX-B: inputs I₂, I₃ → out B &nbsp;(sel = S₀)<br>
+          <span class="hl-orange">Stage 2 (S₁ selects):</span><br>
+          &nbsp;&nbsp;MUX-C: inputs A, B &nbsp;&nbsp;→ Z &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(sel = S₁)
+        </div>
+      </div>
+
+      <div style="font-family:'Caveat',cursive;font-size:12px;font-weight:700;color:#e67e22;margin-bottom:4px;">🔧 Class Exercise 2: 8-to-1 from two 4-to-1 + one 2-to-1</div>
+      <div class="ex-box" style="margin-bottom:5px;">
+        <div style="font-family:'Caveat',cursive;font-size:10.5px;line-height:1.8;">
+          <span class="hl-orange">MUX-A (4-to-1):</span> I₀–I₃, sel = S₁S₀ → out A<br>
+          <span class="hl-orange">MUX-B (4-to-1):</span> I₄–I₇, sel = S₁S₀ → out B<br>
+          <span class="hl-orange">MUX-C (2-to-1):</span> inputs A, B, sel = S₂ → Z<br>
+          <span style="font-size:10px;color:#888;">(S₂ = MSB chooses which 4-to-1 block)</span>
+        </div>
+      </div>
+
+      <div class="hw-box">
+        <div class="hw-title">📝 Homework</div>
+        <div style="font-size:10.5px;font-family:'Caveat',cursive;line-height:1.6;">
+          Design a <span class="hl-red">16-to-1 MUX</span><br>
+          Inputs: I₀ … I₁₅ &nbsp;|&nbsp; Select: S₃S₂S₁S₀<br>
+          Output: Z &nbsp;(single line)
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 4: DEMUX intro + 1-to-2 ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- DEMUX intro -->
+    <div class="box box-purple">
+      <div class="sec-title">⑥ Demultiplexer (DEMUX)</div>
+      <p style="font-size:10.5px;margin-bottom:4px;"><span class="hl-purple">Reverse of MUX</span> — takes one input and routes it to one of several outputs based on select lines.</p>
+
+      <div class="grid grid-2" style="gap:5px;margin-bottom:5px;">
+        <div class="ex-box" style="text-align:center;">
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#6c3483;">One → Many</div>
+          <div style="font-size:10px;line-height:1.5;">Single input I₀<br>Multiple outputs Q</div>
+        </div>
+        <div class="ex-box" style="text-align:center;">
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#6c3483;">n Select Lines</div>
+          <div style="font-size:10px;line-height:1.5;">→ 2ⁿ outputs<br>Only ONE active</div>
+        </div>
+      </div>
+
+      <ul class="mb4">
+        <li><span class="hl-purple">1 data-input line</span> (I₀)</li>
+        <li><span class="hl-blue">N data-output lines</span> (Q₀, Q₁ … Q_{N-1})</li>
+        <li><span class="hl-red">Select inputs</span> (S₀, S₁ … S_{n-1}) choose active output</li>
+      </ul>
+
+      <!-- SVG DEMUX block -->
+      <div style="text-align:center;margin-top:4px;">
+        <svg width="300" height="72" viewBox="0 0 300 72" xmlns="http://www.w3.org/2000/svg" style="font-family:'Kalam',cursive;">
+          <!-- input -->
+          <line x1="10" y1="36" x2="70" y2="36" stroke="#6c3483" stroke-width="2"/>
+          <text x="2" y="39" font-size="9" fill="#6c3483" font-weight="bold">I₀</text>
+          <!-- DEMUX trapezoid (flipped) -->
+          <polygon points="70,22 70,50 110,62 110,10" fill="rgba(232,218,239,0.7)" stroke="#6c3483" stroke-width="2"/>
+          <text x="74" y="38" font-size="10" fill="#6c3483" font-weight="bold">DEMUX</text>
+          <!-- outputs -->
+          <line x1="110" y1="16" x2="160" y2="12" stroke="#1e8449" stroke-width="1.5"/>
+          <line x1="110" y1="27" x2="160" y2="26" stroke="#1e8449" stroke-width="1.5"/>
+          <line x1="110" y1="44" x2="160" y2="46" stroke="#aaa" stroke-width="1" stroke-dasharray="3,2"/>
+          <line x1="110" y1="55" x2="160" y2="60" stroke="#1e8449" stroke-width="1.5"/>
+          <text x="162" y="14" font-size="9" fill="#1e8449" font-weight="bold">Q₀</text>
+          <text x="162" y="28" font-size="9" fill="#1e8449" font-weight="bold">Q₁</text>
+          <text x="162" y="48" font-size="9" fill="#aaa">...</text>
+          <text x="162" y="62" font-size="9" fill="#1e8449" font-weight="bold">Q_{N-1}</text>
+          <!-- select -->
+          <line x1="90" y1="62" x2="90" y2="71" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="78" y="71" font-size="9" fill="#c0392b" font-weight="bold">S₁ S₀</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 1-to-2 DEMUX -->
+    <div class="box box-red">
+      <div class="sec-title">⑦ 1-to-2 DEMUX</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">
+        <span class="hl-red">1 select line (S)</span> routes single input I₀ to either Q₀ or Q₁.
+      </p>
+
+      <div class="grid grid-2" style="gap:6px;align-items:start;">
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#c0392b;margin-bottom:3px;">Full Truth Table</div>
+          <table style="margin-bottom:4px;">
+            <tr><th>S</th><th>I₀</th><th>Q₀</th><th>Q₁</th></tr>
+            <tr><td>0</td><td>0</td><td class="td-zero">0</td><td class="td-zero">0</td></tr>
+            <tr><td>0</td><td>1</td><td class="td-active">1</td><td class="td-zero">0</td></tr>
+            <tr><td>1</td><td>0</td><td class="td-zero">0</td><td class="td-zero">0</td></tr>
+            <tr><td>1</td><td>1</td><td class="td-zero">0</td><td class="td-active">1</td></tr>
+          </table>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#c0392b;margin-bottom:2px;">Simplified Table</div>
+          <table>
+            <tr><th>S</th><th>Q₀</th><th>Q₁</th></tr>
+            <tr><td class="td-zero">0</td><td class="td-red">I₀</td><td class="td-zero">0</td></tr>
+            <tr><td class="td-active">1</td><td class="td-zero">0</td><td class="td-red">I₀</td></tr>
+          </table>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#c0392b;margin-bottom:3px;">Boolean Equations</div>
+          <div class="formula formula-sm" style="margin-bottom:4px;">Q₀ = S̄ · I₀</div>
+          <div class="formula formula-sm" style="margin-bottom:5px;">Q₁ = S · I₀</div>
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#555;margin-bottom:2px;">Logic gates needed:</div>
+          <ul>
+            <li>1 NOT gate (for S̄)</li>
+            <li>2 AND gates</li>
+          </ul>
+          <div class="notes-box" style="margin-top:4px;">
+            <div style="font-size:10px;font-family:'Caveat',cursive;">
+              <span class="hl-red">S=0</span> → data flows to Q₀<br>
+              <span class="hl-green">S=1</span> → data flows to Q₁
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 5: 1-to-4 DEMUX + Code Converters ===== -->
+  <div class="grid grid-2 mb6">
+
+    <!-- 1-to-4 DEMUX -->
+    <div class="box box-dark">
+      <div class="sec-title">⑧ 1-to-4 DEMUX</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">
+        <span class="hl-blue">2 select lines (S₁S₀)</span> route I₀ to one of Q₀–Q₃.
+      </p>
+
+      <div class="grid grid-2" style="gap:6px;align-items:start;">
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#333;margin-bottom:3px;">Truth Table</div>
+          <table style="margin-bottom:4px;">
+            <tr><th>S₁</th><th>S₀</th><th>I₀</th><th>Q₃</th><th>Q₂</th><th>Q₁</th><th>Q₀</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="td-zero">0</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="td-active">1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td class="td-active">1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td><td class="td-active">1</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td class="td-active">1</td><td>0</td><td>0</td><td>0</td></tr>
+          </table>
+          <div style="font-family:'Caveat',cursive;font-size:11px;font-weight:700;color:#333;margin-bottom:2px;">Simplified:</div>
+          <table>
+            <tr><th>S₁S₀</th><th>Active output</th></tr>
+            <tr><td>0 0</td><td class="td-blue">Q₀ = I₀</td></tr>
+            <tr><td>0 1</td><td class="td-blue">Q₁ = I₀</td></tr>
+            <tr><td>1 0</td><td class="td-blue">Q₂ = I₀</td></tr>
+            <tr><td>1 1</td><td class="td-blue">Q₃ = I₀</td></tr>
+          </table>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:11.5px;font-weight:700;color:#333;margin-bottom:3px;">Boolean Equations</div>
+          <div class="formula formula-sm" style="margin-bottom:3px;">Q₀ = S̄₁·S̄₀·I₀</div>
+          <div class="formula formula-sm" style="margin-bottom:3px;">Q₁ = S̄₁·S₀·I₀</div>
+          <div class="formula formula-sm" style="margin-bottom:3px;">Q₂ = S₁·S̄₀·I₀</div>
+          <div class="formula formula-sm" style="margin-bottom:5px;">Q₃ = S₁·S₀·I₀</div>
+          <div class="hw-box">
+            <div class="hw-title">📝 Homework</div>
+            <div style="font-size:10px;font-family:'Caveat',cursive;line-height:1.6;">
+              Design <span class="hl-red">1-to-8 DEMUX</span><br>
+              (3 select lines S₂S₁S₀)<br><br>
+              Design <span class="hl-red">1-to-16 DEMUX</span><br>
+              (4 select lines S₃S₂S₁S₀)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Code Converters -->
+    <div class="box box-teal">
+      <div class="sec-title">⑨ Code Converters</div>
+      <p style="font-size:10.5px;margin-bottom:4px;">Convert digital data from one coding scheme to another. Most decoders ARE code converters (e.g. BCD-to-7seg).</p>
+
+      <div style="font-family:'Caveat',cursive;font-size:12px;font-weight:700;color:#117a65;margin-bottom:4px;">Binary → Gray Code</div>
+      <div class="ex-box" style="margin-bottom:5px;">
+        <div class="ex-title">Rule: MSB unchanged, each other bit = XOR with previous binary bit</div>
+        <div style="font-family:'Caveat',cursive;font-size:11px;line-height:1.8;">
+          G₁ = B₁ &nbsp;(MSB, unchanged)<br>
+          G₂ = B₁ ⊕ B₂<br>
+          G₃ = B₂ ⊕ B₃<br>
+          G₄ = B₃ ⊕ B₄
+        </div>
+      </div>
+
+      <hr class="sep">
+
+      <div style="font-family:'Caveat',cursive;font-size:12px;font-weight:700;color:#c0392b;margin-bottom:4px;">Gray → Binary Code</div>
+      <div class="ex-box" style="margin-bottom:5px;">
+        <div class="ex-title">Rule: MSB unchanged, each other bit = XOR with previous binary result</div>
+        <div style="font-family:'Caveat',cursive;font-size:11px;line-height:1.8;">
+          B₁ = G₁ &nbsp;(MSB, unchanged)<br>
+          B₂ = B₁ ⊕ G₂<br>
+          B₃ = B₂ ⊕ G₃<br>
+          B₄ = B₃ ⊕ G₄
+        </div>
+      </div>
+
+      <div class="grid grid-2" style="gap:5px;">
+        <div class="ex-box" style="border-color:#1e8449;">
+          <div class="ex-title" style="color:#1e8449;">Ex: Binary 1011 → Gray</div>
+          <div style="font-family:'Caveat',cursive;font-size:10.5px;line-height:1.7;">
+            B: 1–0–1–1<br>
+            G₁ = 1<br>
+            G₂ = 1⊕0 = <span class="hl-green">1</span><br>
+            G₃ = 0⊕1 = <span class="hl-green">1</span><br>
+            G₄ = 1⊕1 = <span class="hl-green">0</span><br>
+            <strong>Gray = 1110</strong>
+          </div>
+        </div>
+        <div class="ex-box" style="border-color:#c0392b;">
+          <div class="ex-title" style="color:#c0392b;">Ex: Gray 1110 → Binary</div>
+          <div style="font-family:'Caveat',cursive;font-size:10.5px;line-height:1.7;">
+            G: 1–1–1–0<br>
+            B₁ = 1<br>
+            B₂ = 1⊕1 = <span class="hl-red">0</span><br>
+            B₃ = 0⊕1 = <span class="hl-red">1</span><br>
+            B₄ = 1⊕0 = <span class="hl-red">1</span><br>
+            <strong>Binary = 1011 ✓</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===== ROW 6: Comparison Table + Key Takeaways ===== -->
+  <div class="grid grid-2 mb4">
+
+    <!-- MUX vs DEMUX comparison + Gray table -->
+    <div>
+      <div class="box box-yellow mb6">
+        <div class="sec-title" style="color:#d4ac0d; border-bottom-color:#d4ac0d;">MUX vs DEMUX — Quick Comparison</div>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th style="color:#1a5276;">MUX</th>
+            <th style="color:#6c3483;">DEMUX</th>
+          </tr>
+          <tr><td>Direction</td><td class="td-blue">Many → One</td><td style="background:rgba(232,218,239,0.4);color:#6c3483;font-weight:700;">One → Many</td></tr>
+          <tr><td>Data inputs</td><td class="td-blue">2ⁿ lines</td><td style="background:rgba(232,218,239,0.4);">1 line</td></tr>
+          <tr><td>Data outputs</td><td class="td-blue">1 line</td><td style="background:rgba(232,218,239,0.4);color:#6c3483;font-weight:700;">2ⁿ lines</td></tr>
+          <tr><td>Select lines</td><td class="td-blue">n lines</td><td style="background:rgba(232,218,239,0.4);">n lines</td></tr>
+          <tr><td>Also called</td><td class="td-blue">Data Selector</td><td style="background:rgba(232,218,239,0.4);">Data Distributor</td></tr>
+          <tr><td>2-input type</td><td class="td-blue">2-to-1</td><td style="background:rgba(232,218,239,0.4);">1-to-2</td></tr>
+        </table>
+      </div>
+
+      <div class="box box-green">
+        <div class="sec-title">Binary ↔ Gray Code Table (4-bit)</div>
+        <table>
+          <tr><th>Decimal</th><th>Binary (B₄B₃B₂B₁)</th><th>Gray (G₄G₃G₂G₁)</th></tr>
+          <tr><td>0</td><td>0000</td><td class="td-active">0000</td></tr>
+          <tr><td>1</td><td>0001</td><td class="td-active">0001</td></tr>
+          <tr><td>2</td><td>0010</td><td class="td-active">0011</td></tr>
+          <tr><td>3</td><td>0011</td><td class="td-active">0010</td></tr>
+          <tr><td>4</td><td>0100</td><td class="td-active">0110</td></tr>
+          <tr><td>5</td><td>0101</td><td class="td-active">0111</td></tr>
+          <tr><td>6</td><td>0110</td><td class="td-active">0101</td></tr>
+          <tr><td>7</td><td>0111</td><td class="td-active">0100</td></tr>
+          <tr><td>8</td><td>1000</td><td class="td-active">1100</td></tr>
+          <tr><td>15</td><td>1111</td><td class="td-active">1000</td></tr>
+        </table>
+        <div class="notes-box" style="margin-top:4px;">
+          <div style="font-size:10px;font-family:'Caveat',cursive;color:#1e8449;font-weight:700;">
+            Key property: only <span class="hl-red">1 bit</span> changes between consecutive Gray codes!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div>
+      <div class="key-box" style="margin-bottom:6px;">
+        <div class="key-title">Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#1a5276;">✓</div>
+          <div class="step-text"><span class="hl-blue">MUX = Data Selector</span>: n select lines → 2ⁿ inputs, routes ONE input to the output. Z = Σ(minterm · Iₙ)</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#1e8449;">✓</div>
+          <div class="step-text">2-to-1 MUX equation: <span class="hl-green">Z = S̄I₀ + SI₁</span>. Each AND term = minterm × data input.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#e67e22;">✓</div>
+          <div class="step-text">Larger MUX from smaller: <span class="hl-orange">two 4-to-1 + one 2-to-1 = 8-to-1.</span> MSB selects between blocks.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#6c3483;">✓</div>
+          <div class="step-text"><span class="hl-purple">DEMUX = Data Distributor</span>: reverses MUX. One input → selected output. Qᵢ = (minterm of select) · I₀</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#c0392b;">✓</div>
+          <div class="step-text">1-to-4 DEMUX: <span class="hl-red">Q₀=S̄₁S̄₀I₀, Q₁=S̄₁S₀I₀, Q₂=S₁S̄₀I₀, Q₃=S₁S₀I₀</span></div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#1e8449;">✓</div>
+          <div class="step-text"><span class="hl-green">Binary→Gray</span>: MSB stays; each Gₙ = Bₙ₋₁ ⊕ Bₙ (XOR adjacent binary bits)</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#c0392b;">✓</div>
+          <div class="step-text"><span class="hl-red">Gray→Binary</span>: MSB stays; each Bₙ = Bₙ₋₁ ⊕ Gₙ (XOR previous <em>binary</em> result with Gray bit)</div>
+        </div>
+      </div>
+
+      <div class="notes-box">
+        <div class="notes-title">Quick Reference Formulas</div>
+        <div style="font-family:'Caveat',cursive;font-size:11px;line-height:2;">
+          <span class="hl-blue">2-to-1 MUX:</span> Z = S̄I₀ + SI₁<br>
+          <span class="hl-blue">4-to-1 MUX:</span> Z = S̄₁S̄₀I₀ + S̄₁S₀I₁ + S₁S̄₀I₂ + S₁S₀I₃<br>
+          <span class="hl-purple">1-to-2 DEMUX:</span> Q₀=S̄I₀, Q₁=SI₀<br>
+          <span class="hl-green">Bin→Gray:</span> G₁=B₁; Gₙ=Bₙ₋₁⊕Bₙ (n≥2)<br>
+          <span class="hl-red">Gray→Bin:</span> B₁=G₁; Bₙ=Bₙ₋₁⊕Gₙ (n≥2)
+        </div>
+      </div>
+
+      <div style="text-align:right;margin-top:6px;font-family:'Caveat',cursive;font-size:13px;color:#888;">
+        Questions? 😊
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+</body>
+</html>

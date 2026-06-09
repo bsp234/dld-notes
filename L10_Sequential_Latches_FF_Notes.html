@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#f5f0e8; font-family:'Kalam',cursive; padding:0; }
+  .page { width:100%; max-width:1100px; margin:0 auto; background:#fefdf8; border:3px solid #888; position:relative; overflow:hidden; }
+  .page::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background-image:repeating-linear-gradient(transparent,transparent 27px,#d0e4f0 27px,#d0e4f0 28px); opacity:0.3; pointer-events:none; z-index:0; }
+  .page::after { content:''; position:absolute; top:0;bottom:0;left:72px; border-left:2px solid rgba(220,80,80,0.3); pointer-events:none; z-index:0; }
+  .content { position:relative; z-index:1; padding:12px 14px 16px 14px; }
+  .header { display:flex; align-items:flex-start; justify-content:space-between; border-bottom:2.5px solid #333; padding-bottom:8px; margin-bottom:10px; }
+  .lec-badge { border:2.5px solid #c0392b; color:#c0392b; font-family:'Caveat',cursive; font-size:13px; font-weight:700; padding:2px 8px; border-radius:3px; white-space:nowrap; }
+  .main-title { font-family:'Caveat',cursive; font-size:22px; font-weight:700; text-align:center; color:#111; letter-spacing:1px; text-transform:uppercase; flex:1; padding:0 12px; }
+  .header-info { font-family:'Kalam',cursive; font-size:10.5px; color:#333; text-align:right; line-height:1.5; }
+  .header-info .course { color:#1a5276; font-weight:700; } .header-info .date { color:#c0392b; }
+  .grid { display:grid; gap:8px; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr 1fr 1fr; }
+  .grid-2-1 { grid-template-columns:2fr 1fr; }
+  .grid-1-2 { grid-template-columns:1fr 2fr; }
+  .mb4 { margin-bottom:8px; }
+  .box { border:2px solid #333; border-radius:4px; padding:7px 9px; background:rgba(255,255,255,0.6); }
+  .box-blue { border-color:#1a5276; background:rgba(214,234,248,0.4); }
+  .box-green { border-color:#1e8449; background:rgba(212,239,223,0.4); }
+  .box-red { border-color:#c0392b; background:rgba(253,228,226,0.4); }
+  .box-purple { border-color:#6c3483; background:rgba(232,218,239,0.4); }
+  .box-yellow { border-color:#d4ac0d; background:rgba(254,249,231,0.6); }
+  .box-teal { border-color:#117a65; background:rgba(212,246,238,0.4); }
+  .box-dark { border-color:#222; background:rgba(240,240,235,0.6); }
+  .box-orange { border-color:#e67e22; background:rgba(253,235,208,0.4); }
+  .sec-title { font-family:'Caveat',cursive; font-size:13.5px; font-weight:700; text-transform:uppercase; border-bottom:1.5px solid currentColor; margin-bottom:5px; padding-bottom:2px; letter-spacing:0.5px; }
+  .box-blue .sec-title { color:#1a5276; } .box-green .sec-title { color:#1e8449; } .box-red .sec-title { color:#c0392b; }
+  .box-purple .sec-title { color:#6c3483; } .box-teal .sec-title { color:#117a65; } .box-dark .sec-title { color:#111; }
+  .box-orange .sec-title { color:#e67e22; } .box-yellow .sec-title { color:#b7950b; }
+  p,li { font-size:11px; line-height:1.55; color:#222; }
+  ul { padding-left:14px; } li { list-style:disc; }
+  ol { padding-left:16px; } ol li { list-style:decimal; font-size:11px; line-height:1.5; }
+  .formula { background:rgba(255,255,230,0.9); border:2px solid #c9a100; border-radius:4px; padding:4px 8px; font-family:'Caveat',cursive; font-size:12.5px; font-weight:700; color:#333; margin:4px 0; text-align:center; }
+  .formula-sm { font-size:11px; padding:3px 6px; }
+  table { border-collapse:collapse; width:100%; font-size:10.5px; font-family:'Kalam',cursive; }
+  th { background:rgba(52,73,94,0.15); border:1.5px solid #555; padding:2px 5px; font-weight:700; font-size:10.5px; text-align:center; font-family:'Caveat',cursive; }
+  td { border:1px solid #888; padding:2px 5px; text-align:center; font-size:10.5px; }
+  .td-hl { background:rgba(255,255,150,0.6); font-weight:700; }
+  .td-1 { background:rgba(200,255,200,0.6); font-weight:700; color:#1e8449; }
+  .td-x { background:rgba(255,200,200,0.5); font-weight:700; color:#c0392b; }
+  .hl-red { color:#c0392b; font-weight:700; } .hl-blue { color:#1a5276; font-weight:700; }
+  .hl-green { color:#1e8449; font-weight:700; } .hl-purple { color:#6c3483; font-weight:700; }
+  .hl-orange { color:#e67e22; font-weight:700; }
+  .ex-box { background:rgba(255,255,255,0.8); border:1.5px solid #aaa; border-radius:3px; padding:4px 6px; margin-top:4px; }
+  .ex-title { font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#2980b9; margin-bottom:2px; }
+  .step { display:flex; align-items:flex-start; gap:5px; margin-bottom:4px; }
+  .step-num { background:#1a5276; color:#fff; font-family:'Caveat',cursive; font-size:11px; font-weight:700; border-radius:50%; width:18px; height:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .step-text { font-size:10.5px; line-height:1.5; }
+  .key-box { border:2px solid #117a65; border-radius:4px; padding:6px 8px; background:rgba(212,246,238,0.4); }
+  .key-title { font-family:'Caveat',cursive; font-size:13px; font-weight:700; color:#117a65; border-bottom:1.5px solid #117a65; margin-bottom:5px; padding-bottom:2px; }
+  .notes-box { border:2px dashed #888; border-radius:4px; padding:5px 8px; background:rgba(255,255,255,0.5); }
+  .notes-title { font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#555; margin-bottom:3px; }
+  .sep { border:none; border-top:1px dashed #ccc; margin:4px 0; }
+  .timing-bar { height:10px; border-radius:2px; margin:1px 0; }
+  .clk-high { background:#1a5276; }
+  .clk-low { background:#ddd; border:1px solid #aaa; }
+  .badge { display:inline-block; border-radius:3px; padding:1px 5px; font-size:9.5px; font-family:'Caveat',cursive; font-weight:700; margin:1px; }
+  .badge-blue { background:#1a5276; color:#fff; }
+  .badge-green { background:#1e8449; color:#fff; }
+  .badge-red { background:#c0392b; color:#fff; }
+  .badge-purple { background:#6c3483; color:#fff; }
+  .badge-orange { background:#e67e22; color:#fff; }
+  @media (max-width: 768px) {
+    body { padding-left: 6px; padding-right: 6px; }
+    .grid-3, .grid-2, .grid-4, .grid-2-1, .grid-1-2 { grid-template-columns: 1fr !important; }
+    .header { flex-direction: column; align-items: center; text-align: center; gap: 6px; }
+    .header-info { text-align: center; }
+    .content { padding: 6px 6px; }
+    .page { border: none; overflow-x: visible; }
+    body { background: #fefdf8; }
+    table { font-size: 9px; display: block; max-width: 100%; overflow-x: auto; }
+    td, th { padding: 1px 3px; }
+    .lec-badge { white-space: normal; font-size: 11px; }
+    [style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="content">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="lec-badge">LECTURE 10</div>
+    <div class="main-title">Sequential Circuits — Latches & Flip-Flops</div>
+    <div class="header-info">
+      <div class="course">ECEG-3161 Digital Logic Design</div>
+      <div>AAIT – Dept. of ECE</div>
+      <div class="date">Getachew Teshome</div>
+    </div>
+  </div>
+
+<!-- prev/next navigation -->
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding:6px 0; border-bottom:2px dashed #ccc; font-family:'Caveat',cursive;">
+  <a href="L9_notes.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">← Lec 09</a>
+  <a href="index.html" style="text-decoration:none; color:#555; font-size:12px;">📋 Table of Contents</a>
+  <a href="L11_notes_registers.html" style="text-decoration:none; color:#1a5276; font-weight:700; font-size:14px;">Lec 11 →</a>
+</div>
+
+  <!-- ROW 1: Sequential Intro + Latches Overview + SR Latch -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Sequential Logic Intro -->
+    <div class="box box-blue">
+      <div class="sec-title">① Sequential vs Combinational</div>
+      <table style="font-size:10px; margin-bottom:5px;">
+        <tr><th>Feature</th><th>Combinational</th><th>Sequential</th></tr>
+        <tr><td>Output</td><td>f(inputs)</td><td class="td-1">f(inputs + state)</td></tr>
+        <tr><td>Memory</td><td class="td-x">No</td><td class="td-1">Yes</td></tr>
+        <tr><td>Feedback</td><td class="td-x">None</td><td class="td-1">Has feedback</td></tr>
+        <tr><td>Same input</td><td>Always same output</td><td>May differ!</td></tr>
+      </table>
+      <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-blue">Sequential circuits</span> have one or more outputs fed back to inputs. This feedback creates <strong>memory</strong> — the circuit "remembers" past states.</p>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">Real-World Examples:</div>
+      <div style="display:flex; flex-wrap:wrap; gap:3px; margin-bottom:4px;">
+        <span class="badge badge-blue">Traffic Lights</span>
+        <span class="badge badge-green">Clocks</span>
+        <span class="badge badge-red">Timers</span>
+        <span class="badge badge-purple">Counters</span>
+        <span class="badge badge-orange">Registers</span>
+      </div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1a5276; margin-bottom:2px;">Multivibrators:</div>
+      <ul>
+        <li><span class="hl-red">Astable:</span> No stable state — oscillates (clock generator)</li>
+        <li><span class="hl-orange">Monostable:</span> One stable state — pulse generator</li>
+        <li><span class="hl-green">Bistable:</span> Two stable states → <strong>LATCH / FLIP-FLOP</strong></li>
+      </ul>
+    </div>
+
+    <!-- Latches Overview -->
+    <div class="box box-green">
+      <div class="sec-title">② Latches Overview</div>
+      <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-green">Latch:</span> Bistable memory element. Has two stable states (0 or 1). Does NOT need a clock — changes state directly with inputs.</p>
+      <table style="font-size:10px; margin-bottom:5px;">
+        <tr><th>Type</th><th>Inputs</th><th>Gate Type</th></tr>
+        <tr><td>SR Latch (Active-High)</td><td>S, R</td><td>NOR gates</td></tr>
+        <tr><td>SR Latch (Active-Low)</td><td>S̄, R̄</td><td>NAND gates</td></tr>
+        <tr><td>Gated SR Latch</td><td>S, R, EN</td><td>NOR/NAND</td></tr>
+        <tr><td>D Latch</td><td>D, EN</td><td>NAND gates</td></tr>
+      </table>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#1e8449; margin-bottom:2px;">Latch vs Flip-Flop:</div>
+      <table style="font-size:10px;">
+        <tr><th>Latch</th><th>Flip-Flop</th></tr>
+        <tr><td>Level-sensitive (EN=1 → transparent)</td><td>Edge-sensitive (clock edge)</td></tr>
+        <tr><td>Changes while EN is high</td><td>Changes only at clock edge</td></tr>
+        <tr><td>Asynchronous</td><td>Synchronous</td></tr>
+      </table>
+      <hr class="sep">
+      <p style="font-size:10.5px;"><span class="hl-blue">Outputs:</span> Q and Q̄ — always complement each other.</p>
+    </div>
+
+    <!-- SR Latch -->
+    <div class="box box-red">
+      <div class="sec-title">③ SR Latch (Active-High / NOR)</div>
+      <p style="font-size:10.5px; margin-bottom:3px;">Built from <span class="hl-blue">two cross-coupled NOR gates</span>. S=SET output HIGH; R=RESET output LOW.</p>
+      <table style="font-size:10px; margin-bottom:4px;">
+        <tr><th>S</th><th>R</th><th>Q</th><th>Q̄</th><th>State</th></tr>
+        <tr><td>0</td><td>0</td><td>Q</td><td>Q̄</td><td>Hold (no change)</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-1">1</td><td>0</td><td>SET</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td class="td-1">1</td><td>RESET</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-x">X</td><td class="td-x">X</td><td class="td-x">FORBIDDEN!</td></tr>
+      </table>
+      <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#c0392b; margin-bottom:2px;">Active-Low SR Latch (NAND)</div>
+      <table style="font-size:10px; margin-bottom:4px;">
+        <tr><th>S̄</th><th>R̄</th><th>Q</th><th>State</th></tr>
+        <tr><td>1</td><td>1</td><td>Q</td><td>Hold</td></tr>
+        <tr><td>0</td><td>1</td><td class="td-1">1</td><td>SET</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>RESET</td></tr>
+        <tr><td>0</td><td>0</td><td class="td-x">X</td><td class="td-x">FORBIDDEN!</td></tr>
+      </table>
+      <div class="notes-box">
+        <p style="font-size:10px;"><span class="hl-red">Active-Low:</span> inputs are inverted. Active (asserted) when LOW (0). Active-high is active when HIGH (1).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: Gated SR + D Latch + Flip-Flop Introduction -->
+  <div class="grid grid-3 mb4">
+
+    <!-- Gated SR Latch -->
+    <div class="box box-purple">
+      <div class="sec-title">④ Gated SR & D Latches</div>
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#6c3483; margin-bottom:2px;">Gated SR Latch</div>
+      <p style="font-size:10.5px; margin-bottom:3px;">Adds an <span class="hl-purple">Enable (EN/CLK)</span> input. Latch only responds when EN=1.</p>
+      <table style="font-size:10px; margin-bottom:4px;">
+        <tr><th>EN</th><th>S</th><th>R</th><th>Q</th><th>State</th></tr>
+        <tr><td>0</td><td>x</td><td>x</td><td>Q</td><td>Hold (locked)</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>Q</td><td>Hold</td></tr>
+        <tr><td>1</td><td>1</td><td>0</td><td class="td-1">1</td><td>SET</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>RESET</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td class="td-x">X</td><td class="td-x">Forbidden</td></tr>
+      </table>
+      <p style="font-size:10px; color:#6c3483; margin-bottom:5px;">NOR-based: S,R active high. NAND-based: S,R active low through AND gates at EN.</p>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#6c3483; margin-bottom:2px;">Gated D Latch</div>
+      <p style="font-size:10.5px; margin-bottom:3px;"><span class="hl-purple">D (Data/Delay)</span> latch: single data input. Eliminates the forbidden state by tying S = D and R = D'.</p>
+      <table style="font-size:10px;">
+        <tr><th>EN</th><th>D</th><th>Q</th><th>State</th></tr>
+        <tr><td>0</td><td>x</td><td>Q</td><td>Hold</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>RESET</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-1">1</td><td>SET (Q follows D)</td></tr>
+      </table>
+      <div class="formula formula-sm" style="margin-top:3px;">When EN=1: Q = D (transparent)</div>
+      <p style="font-size:10px; color:#6c3483; margin-top:2px;">Used as data register, data storage, pipeline stage.</p>
+    </div>
+
+    <!-- Flip-Flop Intro + SR FF -->
+    <div class="box box-teal">
+      <div class="sec-title">⑤ Flip-Flops — Edge Triggered</div>
+      <p style="font-size:10.5px; margin-bottom:3px;"><span class="hl-blue">Flip-Flop:</span> Changes state only at the <strong>clock edge</strong> — not during the entire clock HIGH period like a latch.</p>
+      <div style="margin-bottom:4px;">
+        <span class="badge badge-green">↑ Positive Edge (Rising)</span> — clock input has <strong>no bubble</strong><br>
+        <span class="badge badge-red" style="margin-top:2px; display:inline-block;">↓ Negative Edge (Falling)</span> — clock input has a <strong>bubble (∘)</strong>
+      </div>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#117a65; margin-bottom:2px;">SR Flip-Flop</div>
+      <table style="font-size:10px; margin-bottom:4px;">
+        <tr><th>S</th><th>R</th><th>Q(next)</th><th>Action</th></tr>
+        <tr><td>0</td><td>0</td><td>Q</td><td>Hold</td></tr>
+        <tr><td>1</td><td>0</td><td class="td-1">1</td><td>SET</td></tr>
+        <tr><td>0</td><td>1</td><td>0</td><td>RESET</td></tr>
+        <tr><td>1</td><td>1</td><td class="td-x">X</td><td class="td-x">Forbidden</td></tr>
+      </table>
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#117a65; margin-bottom:2px;">D Flip-Flop</div>
+      <table style="font-size:10px; margin-bottom:3px;">
+        <tr><th>D</th><th>Q(next)</th><th>Action</th></tr>
+        <tr><td>0</td><td>0</td><td>Reset</td></tr>
+        <tr><td>1</td><td class="td-1">1</td><td>Set</td></tr>
+      </table>
+      <div class="formula formula-sm">Q(next) = D</div>
+      <p style="font-size:10px; color:#117a65; margin-top:2px;">Simplest FF — captures data at clock edge. Most widely used!</p>
+    </div>
+
+    <!-- Master-Slave D FF + T FF -->
+    <div class="box box-orange">
+      <div class="sec-title">⑥ Master-Slave D FF & T FF</div>
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#e67e22; margin-bottom:2px;">Master-Slave D Flip-Flop</div>
+      <p style="font-size:10.5px; margin-bottom:3px;">Two Gated D latches in series. Solves the transparency problem.</p>
+      <table style="font-size:10px; margin-bottom:4px;">
+        <tr><th>CLK</th><th>Master (Qm)</th><th>Slave (Qs)</th></tr>
+        <tr><td>= 1 (HIGH)</td><td class="td-1">Tracks D input</td><td>Locked (holds)</td></tr>
+        <tr><td>= 0 (LOW)</td><td>Locked (holds)</td><td class="td-1">Tracks Qm</td></tr>
+      </table>
+      <p style="font-size:10px; margin-bottom:4px; color:#e67e22;">Result: Output Qs only updates when CLK transitions 1→0. Clean edge behavior!</p>
+      <hr class="sep">
+      <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#e67e22; margin-bottom:2px;">T (Toggle) Flip-Flop</div>
+      <p style="font-size:10.5px; margin-bottom:3px;"><span class="hl-orange">T</span> = Toggle. Built with a D flip-flop and XOR gate: D = T⊕Q.</p>
+      <table style="font-size:10px; margin-bottom:3px;">
+        <tr><th>T</th><th>Q(next)</th><th>Action</th></tr>
+        <tr><td>0</td><td>Q</td><td>Hold (no change)</td></tr>
+        <tr><td>1</td><td>Q'</td><td class="td-1">Toggle!</td></tr>
+      </table>
+      <div class="formula formula-sm">Q(next) = T⊕Q</div>
+      <p style="font-size:10px; color:#e67e22; margin-top:2px;">Used in counters — toggles on every clock if T=1.</p>
+    </div>
+  </div>
+
+  <!-- ROW 3: JK Flip-Flop + Operating Characteristics + Applications + Key Takeaways -->
+  <div class="grid grid-2-1 mb4">
+
+    <div class="grid" style="grid-template-columns:1fr 1fr; gap:8px;">
+      <!-- JK Flip-Flop -->
+      <div class="box box-dark">
+        <div class="sec-title">⑦ JK Flip-Flop</div>
+        <p style="font-size:10.5px; margin-bottom:3px;">Most versatile FF. Solves the <span class="hl-red">forbidden state</span> of SR FF — J=K=1 now <strong>toggles</strong> the output!</p>
+        <table style="font-size:10px; margin-bottom:4px;">
+          <tr><th>J</th><th>K</th><th>Q(next)</th><th>Action</th></tr>
+          <tr><td>0</td><td>0</td><td>Q</td><td>Hold</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>RESET</td></tr>
+          <tr><td>1</td><td>0</td><td class="td-1">1</td><td>SET</td></tr>
+          <tr><td>1</td><td>1</td><td class="td-1">Q'</td><td>TOGGLE ✓</td></tr>
+        </table>
+        <div class="formula formula-sm" style="font-size:10px;">Q(next) = JQ' + K'Q</div>
+        <hr class="sep">
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#c0392b; margin-bottom:2px;">JK with Preset & Clear (Async)</div>
+        <p style="font-size:10.5px; margin-bottom:2px;">Active-LOW asynchronous inputs — work <strong>independently of clock</strong>.</p>
+        <table style="font-size:10px;">
+          <tr><th>Preset (PRE)</th><th>Clear (CLR)</th><th>Q</th></tr>
+          <tr><td>0 (active)</td><td>1</td><td class="td-1">1 (forced HIGH)</td></tr>
+          <tr><td>1</td><td>0 (active)</td><td>0 (forced LOW)</td></tr>
+          <tr><td>1</td><td>1</td><td>Normal clocked operation</td></tr>
+          <tr><td>0</td><td>0</td><td class="td-x">Forbidden</td></tr>
+        </table>
+        <div class="notes-box" style="margin-top:4px;">
+          <p style="font-size:10px; color:#555;">Positive-edge triggered: no bubble on CLK input. Negative-edge: bubble (∘) on CLK input.</p>
+        </div>
+      </div>
+
+      <!-- Operating Characteristics -->
+      <div class="box box-yellow">
+        <div class="sec-title">⑧ Operating Characteristics</div>
+        <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#b7950b; margin-bottom:3px;">① Propagation Delay (tₚ)</div>
+        <p style="font-size:10.5px; margin-bottom:2px;">Time from clock edge to output change.</p>
+        <table style="font-size:10px; margin-bottom:4px;">
+          <tr><th>Symbol</th><th>Direction</th></tr>
+          <tr><td>t<sub>PLH</sub></td><td>Output: LOW → HIGH</td></tr>
+          <tr><td>t<sub>PHL</sub></td><td>Output: HIGH → LOW</td></tr>
+        </table>
+
+        <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#b7950b; margin-bottom:2px;">② Setup Time (tₛ)</div>
+        <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-red">Minimum</span> time inputs must be stable <strong>BEFORE</strong> the triggering clock edge. Input must arrive ≥ tₛ before clock edge.</p>
+        <div class="formula formula-sm" style="margin-bottom:4px;">Data must be stable for tₛ BEFORE ↑ clock edge</div>
+
+        <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#b7950b; margin-bottom:2px;">③ Hold Time (tₕ)</div>
+        <p style="font-size:10.5px; margin-bottom:4px;"><span class="hl-red">Minimum</span> time inputs must remain stable <strong>AFTER</strong> the triggering clock edge.</p>
+        <div class="formula formula-sm" style="margin-bottom:4px;">Data must remain stable for tₕ AFTER ↑ clock edge</div>
+
+        <div style="font-family:'Caveat',cursive; font-size:12px; font-weight:700; color:#b7950b; margin-bottom:2px;">Other Parameters:</div>
+        <ul>
+          <li>Maximum clock frequency: fmax = 1/(tₛ + tₕ + tₚ)</li>
+          <li>Pulse widths: minimum HIGH/LOW times</li>
+          <li>Power dissipation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FF Summary + Key Takeaways -->
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div class="box box-purple" style="flex:1;">
+        <div class="sec-title">⑨ FF Summary & Applications</div>
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#6c3483; margin-bottom:3px;">All Flip-Flop Types at a Glance:</div>
+        <table style="font-size:9.5px;">
+          <tr><th>Type</th><th>Inputs</th><th>Q(next)</th><th>Special</th></tr>
+          <tr><td>SR</td><td>S, R</td><td>Set/Reset/Hold</td><td class="td-x">Forbidden S=R=1</td></tr>
+          <tr><td>D</td><td>D</td><td>= D</td><td>Simplest</td></tr>
+          <tr><td>T</td><td>T</td><td>Hold/Toggle</td><td>Counters</td></tr>
+          <tr><td class="td-1">JK</td><td class="td-1">J, K</td><td class="td-1">Set/Reset/Hold/Toggle</td><td class="td-1">Most versatile</td></tr>
+        </table>
+        <hr class="sep">
+        <div style="font-family:'Caveat',cursive; font-size:11.5px; font-weight:700; color:#6c3483; margin-bottom:2px;">Applications:</div>
+        <ul>
+          <li><span class="hl-blue">Data Registers</span> — store parallel data</li>
+          <li><span class="hl-green">Shift Registers</span> — serial data transfer</li>
+          <li><span class="hl-red">Counters</span> — count clock pulses (T FF)</li>
+          <li><span class="hl-orange">Frequency Divider</span> — divide clock by 2</li>
+        </ul>
+      </div>
+
+      <div class="key-box">
+        <div class="key-title">Key Takeaways</div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Sequential circuits have <span class="hl-blue">memory via feedback</span>. Output depends on inputs AND current state.</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Latches are <span class="hl-green">level-sensitive</span> (change while EN=1). Flip-flops are <span class="hl-red">edge-sensitive</span> (change at clock edge only).</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-red">SR FF forbidden state</span> (S=R=1) solved by JK FF (toggles instead).</div>
+        </div>
+        <div class="step mb4">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text">Master-Slave FF: master samples while CLK=1, slave outputs when CLK=0. Clean edge-triggered behavior.</div>
+        </div>
+        <div class="step">
+          <div class="step-num" style="background:#117a65;">✓</div>
+          <div class="step-text"><span class="hl-orange">Setup/Hold time</span> violations cause unreliable operation (metastability). Always meet timing specs!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:right; font-family:'Caveat',cursive; font-size:12px; color:#888;">
+    Reading: Fundamentals of Digital Logic with Verilog Design, pp. 368–378 (Registers &amp; Counters) 😊
+  </div>
+
+</div>
+</div>
+</body>
+</html>
